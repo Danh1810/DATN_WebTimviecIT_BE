@@ -37,8 +37,11 @@ module.exports = {
       },
       Soluongnophoso: {
         type: Sequelize.INTEGER,
+<<<<<<< HEAD
         allowNull: false,
         defaultValue: 1,
+=======
+>>>>>>> e171d5e8fd0cae2d9bb661344d2c03f303cc9614
       },
     });
   },

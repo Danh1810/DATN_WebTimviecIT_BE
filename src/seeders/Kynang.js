@@ -4,7 +4,6 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     return queryInterface.bulkInsert("Kynang", [
-<<<<<<< HEAD
       { ten: "Java" },
       { ten: "Python" },
       { ten: "JavaScript" },
@@ -25,7 +24,6 @@ module.exports = {
       { ten: "Cybersecurity" },
       { ten: "Networking" },
       { ten: "Linux" },
-=======
       { ten: "Java", createdAt: new Date(), updatedAt: new Date() },
       { ten: "Python", createdAt: new Date(), updatedAt: new Date() },
       { ten: "JavaScript", createdAt: new Date(), updatedAt: new Date() },
@@ -46,7 +44,6 @@ module.exports = {
       { ten: "Cybersecurity", createdAt: new Date(), updatedAt: new Date() },
       { ten: "Networking", createdAt: new Date(), updatedAt: new Date() },
       { ten: "Linux", createdAt: new Date(), updatedAt: new Date() },
->>>>>>> e171d5e8fd0cae2d9bb661344d2c03f303cc9614
     ]);
   },
 

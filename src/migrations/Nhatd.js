@@ -31,12 +31,9 @@ module.exports = {
         },
         Soluongdangbai: {
           type: Sequelize.INTEGER,
-<<<<<<< HEAD
           type: Sequelize.INTEGER,
           allowNull: false,
           defaultValue: 3,
-=======
->>>>>>> e171d5e8fd0cae2d9bb661344d2c03f303cc9614
         },
       },
       {

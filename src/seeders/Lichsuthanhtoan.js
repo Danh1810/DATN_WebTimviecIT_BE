@@ -11,11 +11,8 @@ module.exports = {
         sotien: 100.0,
         Ngaythanhtoan: new Date(),
         Soluongmua: 5,
-<<<<<<< HEAD
-=======
         createdAt: new Date(),
         updatedAt: new Date(),
->>>>>>> e171d5e8fd0cae2d9bb661344d2c03f303cc9614
       },
       {
         nhatuyendung_id: 2,
@@ -24,11 +21,9 @@ module.exports = {
         sotien: 200.0,
         Ngaythanhtoan: null,
         Soluongmua: 10,
-<<<<<<< HEAD
-=======
+
         createdAt: new Date(),
         updatedAt: new Date(),
->>>>>>> e171d5e8fd0cae2d9bb661344d2c03f303cc9614
       },
     ]);
   },

@@ -1,7 +1,7 @@
 const db = require("../models/index");
 const { Op } = require("sequelize");
 
-const getAllJobpost = async () => {
+const getAllTintd = async () => {
   console.log("sdad");
 
   // Fetch the user from the database based on username and include their associated role (Group)
@@ -34,7 +34,7 @@ const getAllJobpost = async () => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
-const getJobpostByID = async (id) => {
+const getTinTdByID = async (id) => {
   // Fetch the user from the database based on username and include their associated role (Group)
   const jbp = await db.Tintuyendung.findOne({
     where: { id: id },
@@ -57,7 +57,6 @@ const getJobpostByID = async (id) => {
       // },
     ],
   });
-  console.log("🚀 ~ getJobpostByID ~ jbp:", jbp);
   console.log("fdsf", jbp);
   if (jbp) {
     return { status: 200, code: 0, message: "success", data: jbp };
@@ -65,7 +64,7 @@ const getJobpostByID = async (id) => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
-const searchJobPostsByKeyword = async (keyword) => {
+const searchTinTDd = async (keyword) => {
   const jobPosts = await db.Tintuyendung.findAll({
     include: [
       {
@@ -105,4 +104,4 @@ const searchJobPostsByKeyword = async (keyword) => {
   }
 };
 
-module.exports = { getAllJobpost, getJobpostByID, searchJobPostsByKeyword };
+module.exports = { getAllTintd, getTinTdByID, searchTinTDd };

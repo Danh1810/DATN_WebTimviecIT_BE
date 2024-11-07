@@ -11,8 +11,6 @@ module.exports = {
         diachi: "123 Main St, Tech City",
         Nguoidung_id: 6, // Assume this ID corresponds to a user in Nguoidung
         logo: "techcorp_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "Innovate Solutions",
@@ -21,8 +19,6 @@ module.exports = {
         diachi: "456 Side Rd, Innovation Hub",
         Nguoidung_id: 7,
         logo: "innovate_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "DevHub LLC",
@@ -31,8 +27,6 @@ module.exports = {
         diachi: "789 Tech Park, Developer Town",
         Nguoidung_id: 8,
         logo: "devhub_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "CodeBase Ltd.",
@@ -41,8 +35,6 @@ module.exports = {
         diachi: "102 Startup St, Code Valley",
         Nguoidung_id: 9,
         logo: "codebase_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "Binary Solutions",
@@ -51,8 +43,6 @@ module.exports = {
         diachi: "303 High-Tech Ave, Binary City",
         Nguoidung_id: 10,
         logo: "binary_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "AlgoMatrix",
@@ -61,8 +51,6 @@ module.exports = {
         diachi: "202 Logic Ln, Algorithm Plains",
         Nguoidung_id: 11,
         logo: "algomatrix_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "DataBits Inc.",
@@ -71,8 +59,6 @@ module.exports = {
         diachi: "555 Data Blvd, Bit Heights",
         Nguoidung_id: 12,
         logo: "databits_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "Tech Innovators",
@@ -81,8 +67,6 @@ module.exports = {
         diachi: "666 Innovation Dr, Tech Village",
         Nguoidung_id: 13,
         logo: "techinnovators_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "NextGen Tech",
@@ -91,8 +75,6 @@ module.exports = {
         diachi: "777 Future St, Gen City",
         Nguoidung_id: 14,
         logo: "nextgen_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "Quantum Creations",
@@ -101,8 +83,6 @@ module.exports = {
         diachi: "888 Quantum Rd, Creativity Town",
         Nguoidung_id: 15,
         logo: "quantumcreations_logo.png",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
     ]);
   },

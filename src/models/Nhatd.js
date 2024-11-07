@@ -53,6 +53,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      Soluongdangbai: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,

@@ -18,14 +18,6 @@ module.exports = {
           allowNull: true,
           type: Sequelize.JSON,
         },
-        createdAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-        },
-        updatedAt: {
-          allowNull: false,
-          type: Sequelize.DATE,
-        },
       },
       {
         charset: "utf8", // Set the character set for the entire table

@@ -1,42 +1,33 @@
-'use strict';
+"use strict";
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert('Kynang', [
-      {
-        id: 1,
-        ten: 'JavaScript',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 2,
-        ten: 'Python',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 3,
-        ten: 'Java',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 4,
-        ten: 'SQL',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        id: 5,
-        ten: 'DevOps',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-    ], {});
+    return queryInterface.bulkInsert("Kynang", [
+      { ten: "Java" },
+      { ten: "Python" },
+      { ten: "JavaScript" },
+      { ten: "SQL" },
+      { ten: "C#" },
+      { ten: "C++" },
+      { ten: "PHP" },
+      { ten: "Ruby" },
+      { ten: "HTML" },
+      { ten: "CSS" },
+      { ten: "React" },
+      { ten: "Angular" },
+      { ten: "Node.js" },
+      { ten: "Machine Learning" },
+      { ten: "Data Analysis" },
+      { ten: "DevOps" },
+      { ten: "Cloud Computing" },
+      { ten: "Cybersecurity" },
+      { ten: "Networking" },
+      { ten: "Linux" },
+    ]);
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('Kynang', null, {});
-  }
+    return queryInterface.bulkDelete("Kynang", null, {});
+  },
 };

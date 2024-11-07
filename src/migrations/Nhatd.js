@@ -20,7 +20,6 @@ module.exports = {
         sdt: {
           type: Sequelize.STRING,
         },
-
         diachi: {
           type: Sequelize.STRING,
         },
@@ -30,13 +29,11 @@ module.exports = {
         logo: {
           type: Sequelize.STRING,
         },
-        createdAt: {
-          allowNull: true,
-          type: Sequelize.DATE,
-        },
-        updatedAt: {
-          allowNull: true,
-          type: Sequelize.DATE,
+        Soluongdangbai: {
+          type: Sequelize.INTEGER,
+          type: Sequelize.INTEGER,
+          allowNull: false,
+          defaultValue: 3,
         },
       },
       {

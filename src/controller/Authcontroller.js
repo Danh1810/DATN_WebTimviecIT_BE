@@ -64,26 +64,7 @@ const logout = (req, res) => {
 
     .json({ message: "logout success", code: 0, data: { isAuth: false } });
 };
-const changePassword = async (req, res) => {
-  try {
-    if (!req.body.username || !req.body.password) {
-      return res
-        .status(200)
-        .json({ message: "missing value", code: 2, data: {} });
-    }
-    if (req.body.password.length < 6) {
-      return res
-        .status(200)
-        .json({ message: "password has short", code: 2, data: {} });
-    }
-    let data = await authService.changePassword(req.body);
-    return res
-      .status(data.status)
-      .json({ message: data.message, code: data.code, data: {} });
-  } catch (error) {
-    return res.status(500).json({ message: error.message, code: -1, data: {} });
-  }
-};
+
 const getUserAccount = async (req, res) => {
   return res.status(200).json({
     code: 0,
@@ -110,7 +91,6 @@ module.exports = {
   register,
   Login,
   logout,
-  changePassword,
   getUserAccount,
   forgotPassword,
 };

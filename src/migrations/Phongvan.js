@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "Kynang",
+      "Tinnhan",
       {
         id: {
           allowNull: false,
@@ -11,8 +11,17 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER,
         },
-        ten: {
+        Noidung: {
           type: Sequelize.STRING,
+        },
+        Ngay: {
+          type: Sequelize.DATE,
+        },
+        nhatuyendung_id: {
+          type: Sequelize.INTEGER,
+        },
+        nguoitimviec_id: {
+          type: Sequelize.INTEGER,
         },
       },
       {
@@ -22,6 +31,6 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Kynang");
+    await queryInterface.dropTable("Tinnhan");
   },
 };

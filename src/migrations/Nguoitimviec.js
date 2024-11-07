@@ -1,18 +1,15 @@
 "use strict";
 
+const { toDefaultValue } = require("sequelize/lib/utils");
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Nguoitimviec", {
-      numericId: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        allowNull: false,
-        unique: true,
-        primaryKey: true,
-      },
       id: {
-        type: Sequelize.STRING,
-        allowNull: true, // Temporarily allow `id` to be null for initial creation
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
       },
       email: {
         type: Sequelize.STRING,
@@ -38,15 +35,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      createdAt: {
+      Soluongnophoso: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW,
+        defaultValue: 1,
       },
     });
   },

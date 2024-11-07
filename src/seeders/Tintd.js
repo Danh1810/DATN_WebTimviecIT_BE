@@ -12,8 +12,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "123 Tech Way",
         mucluong: "$70,000 - $90,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Frontend Developer",
@@ -23,8 +21,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "456 Code Street",
         mucluong: "$60,000 - $80,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Backend Developer",
@@ -34,8 +30,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "789 Dev Road",
         mucluong: "$75,000 - $95,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Data Scientist",
@@ -45,8 +39,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "234 Data Ave",
         mucluong: "$85,000 - $105,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Full Stack Developer",
@@ -56,8 +48,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "567 Stack Blvd",
         mucluong: "$80,000 - $100,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "DevOps Engineer",
@@ -67,8 +57,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "890 Cloud Path",
         mucluong: "$90,000 - $110,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Project Manager",
@@ -78,8 +66,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "321 PM Rd",
         mucluong: "$100,000 - $120,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "UX/UI Designer",
@@ -89,8 +75,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "654 Design St",
         mucluong: "$65,000 - $85,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Product Owner",
@@ -100,8 +84,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "987 Product Rd",
         mucluong: "$95,000 - $115,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Tech Support",
@@ -111,8 +93,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "101 Support Ln",
         mucluong: "$50,000 - $70,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Business Analyst",
@@ -122,8 +102,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "202 Business St",
         mucluong: "$70,000 - $90,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Mobile Developer",
@@ -133,8 +111,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "303 Mobile Ln",
         mucluong: "$85,000 - $105,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Network Security Engineer",
@@ -144,8 +120,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "404 Secure Blvd",
         mucluong: "$95,000 - $115,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "System Administrator",
@@ -155,8 +129,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "505 SysAdmin Ave",
         mucluong: "$75,000 - $95,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Database Administrator",
@@ -166,8 +138,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "606 Data Rd",
         mucluong: "$85,000 - $105,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "IT Technician",
@@ -177,8 +147,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "707 Tech Ln",
         mucluong: "$55,000 - $75,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Quality Assurance Tester",
@@ -188,8 +156,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "808 QA Cir",
         mucluong: "$65,000 - $85,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Cybersecurity Specialist",
@@ -199,8 +165,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "909 Cyber St",
         mucluong: "$90,000 - $110,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "AI/ML Engineer",
@@ -210,8 +174,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "505 AI Ave",
         mucluong: "$120,000 - $140,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         tieude: "Cloud Solutions Architect",
@@ -221,8 +183,6 @@ module.exports = {
         trangthai: "Open",
         diachi: "606 Cloud Blvd",
         mucluong: "$105,000 - $125,000",
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
     ]);
   },

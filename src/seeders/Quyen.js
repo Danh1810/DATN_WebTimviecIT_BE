@@ -7,20 +7,14 @@ module.exports = {
       {
         ten: "admin",
         URL: JSON.stringify(["/jb", "/search"]),
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "ntd",
         URL: JSON.stringify(["/jb", "/search"]),
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
       {
         ten: "ntv",
         URL: JSON.stringify(["/jb", "/search"]),
-        createdAt: new Date(),
-        updatedAt: new Date(),
       },
     ]);
   },

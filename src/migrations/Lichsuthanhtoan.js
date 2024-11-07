@@ -3,7 +3,7 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "Kynang",
+      "Lichsuthanhtoan",
       {
         id: {
           allowNull: false,
@@ -11,8 +11,24 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER,
         },
-        ten: {
+        nhatuyendung_id: {
+          type: Sequelize.INTEGER,
+        },
+        thanhtoan_id: {
+          type: Sequelize.INTEGER,
+        },
+        trangthai: {
           type: Sequelize.STRING,
+        },
+        sotien: {
+          type: Sequelize.DECIMAL(10, 2),
+        },
+        Ngaythanhtoan: {
+          allowNull: true,
+          type: Sequelize.DATE,
+        },
+        Soluongmua: {
+          type: Sequelize.INTEGER,
         },
       },
       {
@@ -22,6 +38,6 @@ module.exports = {
     );
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Kynang");
+    await queryInterface.dropTable("Lichsuthanhtoan");
   },
 };

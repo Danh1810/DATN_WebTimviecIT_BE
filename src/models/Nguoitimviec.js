@@ -42,6 +42,9 @@ module.exports = (sequelize, DataTypes) => {
       fileCV: {
         type: DataTypes.STRING,
       },
+      Soluongnophoso: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       sequelize,

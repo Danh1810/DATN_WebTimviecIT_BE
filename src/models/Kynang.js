@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Kynang.belongsToMany(models.Tintuyendung, {
         through: "Kynangtuyendung",
-        foreignKey: "kynang_id",
+        foreignKey: "MaKN",
         as: "jobPosts",
       });
     }

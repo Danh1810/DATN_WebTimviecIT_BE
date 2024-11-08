@@ -20,7 +20,7 @@ module.exports = {
         Ngayhethan: {
           type: Sequelize.DATE,
         },
-        nhatuyendung_id: {
+        MaNTD: {
           type: Sequelize.INTEGER,
         },
         trangthai: {

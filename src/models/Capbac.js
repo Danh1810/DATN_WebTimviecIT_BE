@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // Define associations here if needed
       Capbac.belongsToMany(models.Tintuyendung, {
         through: "Vitrituyendung",
-        foreignKey: "capbac_id",
+        foreignKey: "MaCB",
         as: "jobPosts",
       });
     }
@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Capbac",
       tableName: "Capbac",
-      timestamps: true, // Sẽ tự động thêm createdAt và updatedAt
+      timestamps: false,
+      freezeTableName: true, // Sẽ tự động thêm createdAt và updatedAt
     }
   );
   return Capbac;

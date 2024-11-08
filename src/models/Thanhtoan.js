@@ -23,7 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "Thanhtoan",
       charset: "utf8",
       collate: "utf8_general_ci",
-      timestamps: true, // Set to false if you don't need createdAt/updatedAt
+      timestamps: false,
+      freezeTableName: true,
     }
   );
   return Thanhtoan;

@@ -23,7 +23,7 @@ module.exports = {
         diachi: {
           type: Sequelize.STRING,
         },
-        Nguoidung_id: {
+        MaND: {
           type: Sequelize.INTEGER,
         },
         logo: {
@@ -31,9 +31,13 @@ module.exports = {
         },
         Soluongdangbai: {
           type: Sequelize.INTEGER,
-          type: Sequelize.INTEGER,
           allowNull: false,
           defaultValue: 3,
+        },
+        trangthai: {
+          type: Sequelize.STRING,
+          allowNull: false,
+          defaultValue: "Chờ duyệt",
         },
       },
       {

@@ -22,11 +22,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Luucongviec.init(
     {
-      tintuyendung_id: {
+      MaTTD: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      nguoitimviec_id: {
+      MaNTV: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
@@ -35,7 +35,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Luucongviec",
       tableName: "Luucongviec",
-      timestamps: true, // Sẽ tự động thêm createdAt và updatedAt
+      ttimestamps: false,
+      freezeTableName: true,
     }
   );
   return Luucongviec;

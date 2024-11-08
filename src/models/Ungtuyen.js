@@ -1,5 +1,5 @@
-'use strict';
-const { Model } = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Ungtuyen extends Model {
     /**
@@ -7,38 +7,30 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      // Một Application thuộc về một JobPost
-      // Applications.belongsTo(models.JobPost, {
-      //   foreignKey: 'JobPost_id',
-      //   as: 'jobPost',
-      // });
-
-      // Một Application thuộc về một JobSeeker
-      // Applications.belongsTo(models.JobSeeker, {
-      //   foreignKey: 'seeker_id',
-      //   as: 'jobSeeker',
-      // });
-    }
+    static associate(models) {}
   }
-  Ungtuyen.init({
-    file: {
-      type: DataTypes.STRING,
+  Ungtuyen.init(
+    {
+      file: {
+        type: DataTypes.STRING,
+      },
+      NgayNop: {
+        type: DataTypes.DATE,
+      },
+      MaNTV: {
+        type: DataTypes.INTEGER,
+      },
+      MaTTD: {
+        type: DataTypes.INTEGER,
+      },
     },
-    NgayNop: {
-      type: DataTypes.DATE,
-    },
-    ungvien_id: {
-      type: DataTypes.INTEGER,
-    },
-    tintuyendung_id: {
-      type: DataTypes.INTEGER,
-    },
-  }, {
-    sequelize,
-    modelName: 'Ungtuyen',
-    tableName: 'Ungtuyen',
-    timestamps: true, // Sẽ tự động thêm createdAt và updatedAt
-  });
+    {
+      sequelize,
+      modelName: "Ungtuyen",
+      tableName: "Ungtuyen",
+      timestamps: false,
+      freezeTableName: true,
+    }
+  );
   return Ungtuyen;
 };

@@ -10,29 +10,20 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Một JobPost thuộc về một Employer
       Tintuyendung.belongsTo(models.Nhatuyendung, {
-        foreignKey: "nhatuyendung_id",
+        foreignKey: "MaNTD",
         as: "employer",
       });
       Tintuyendung.belongsToMany(models.Kynang, {
         through: "Kynangtuyendung",
-        foreignKey: "tintuyendung_id",
+        foreignKey: "MaTTD",
         as: "skills",
       });
 
       Tintuyendung.belongsToMany(models.Capbac, {
         through: "Vitrituyendung",
-        foreignKey: "tintuyendung_id",
+        foreignKey: "MaTTD",
         as: "levels",
       });
-
-      //  JobPosts.hasMany(models. Application,{
-      //     foreignKey : 'JobPost_id',
-      //     as :'jobPost'
-      //  })
-      //   JobPosts.hasMany(models.SaveJob, {
-      //     foreignKey: 'Jobpost_id',
-      //     as: 'jobP',
-      //   });
     }
   }
   Tintuyendung.init(
@@ -53,15 +44,20 @@ module.exports = (sequelize, DataTypes) => {
       mucluong: {
         type: DataTypes.STRING,
       },
-      nhatuyendung_id: {
+      MaNTD: {
         type: DataTypes.INTEGER,
+      },
+      Ngaytao: {
+        allowNull: true,
+        type: DataTypes.DATE,
       },
     },
     {
       sequelize,
       modelName: "Tintuyendung",
       tableName: "Tintuyendung",
-      timestamps: true, // Tự động thêm createdAt và updatedAt
+      timestamps: false,
+      freezeTableName: true,
     }
   );
   return Tintuyendung;

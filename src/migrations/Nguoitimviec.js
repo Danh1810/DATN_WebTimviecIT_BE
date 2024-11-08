@@ -23,12 +23,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      Nguoidung_id: {
+      MaND: {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
       gioitinh: {
         type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      image: {
+        type: Sequelize.STRING,
         allowNull: true,
       },
       fileCV: {

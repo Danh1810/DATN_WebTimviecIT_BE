@@ -66,8 +66,8 @@ const db = require("../models/index");
 // };
 const getNTDById = async (id) => {
   try {
-    const res = await db.Employers.findOne({
-      where: { id: id },
+    const res = await db.NhaTuyenDung.findOne({
+      where: { MaNTD: id },
     });
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };

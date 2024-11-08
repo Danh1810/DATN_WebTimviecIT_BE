@@ -10,14 +10,14 @@ module.exports = (sequelize, DataTypes) => {
 
   Vitrituyendung.init(
     {
-      tintuyendung_id: {
+      MaTTD: {
         type: DataTypes.INTEGER,
         references: {
           model: "Tintuyendung",
           key: "id",
         },
       },
-      capbac_id: {
+      MaCB: {
         type: DataTypes.INTEGER,
         references: {
           model: "Capbac",
@@ -29,7 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Vitrituyendung",
       tableName: "Vitrituyendung",
-      timestamps: true,
+      timestamps: false,
+      freezeTableName: true,
     }
   );
 

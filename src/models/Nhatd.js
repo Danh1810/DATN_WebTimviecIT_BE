@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Một Employer có nhiều JobPosts
       Nhatuyendung.hasMany(models.Tintuyendung, {
-        foreignKey: "nhatuyendung_id",
+        foreignKey: "MaNTD",
         as: "jobPosts",
       });
 
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
 
       // Một Employer thuộc về một User
       Nhatuyendung.belongsTo(models.Nguoidung, {
-        foreignKey: "Nguoidung_id",
+        foreignKey: "MaND",
         as: "user",
       });
     }
@@ -45,7 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      Nguoidung_id: {
+      MaND: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
@@ -61,7 +61,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Nhatuyendung",
       tableName: "Nhatuyendung",
-      timestamps: true, // Sẽ tự động thêm createdAt và updatedAt
+      timestamps: false,
+      freezeTableName: true,
     }
   );
   return Nhatuyendung;

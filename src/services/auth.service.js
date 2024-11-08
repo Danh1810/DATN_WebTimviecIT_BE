@@ -58,10 +58,10 @@ const login = async (data) => {
         const payload = {
           email: user.email,
           username: user.username,
-          group_id: user.Quyen_id,
-          role: user.Group.ten, // Access the role name from the 'Group' association
-          id: user.id,
-          name: user.username,
+          Quyen: user.MaQuyen,
+          TenQuyen: user.Group.ten, // Access the role name from the 'Group' association
+          id: user.MaND,
+          ten: user.username,
         };
 
         // Log the payload for debugging
@@ -78,11 +78,11 @@ const login = async (data) => {
           data: {
             email: user.email,
             username: user.username,
-            id: user.id,
+            MaND: user.MaND,
             access_token: token,
-            group_id: user.Quyen_id,
-            role: user.Group.ten,
-            name: user.username,
+            Quyen: user.MaQuyen,
+            TenQuyen: user.Group.ten,
+            ten: user.username,
           },
         };
       }

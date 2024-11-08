@@ -5,15 +5,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Một User có nhiều Employers
       Nguoidung.hasMany(models.Nhatuyendung, {
-        foreignKey: "Nguoidung_id",
+        foreignKey: "MaND",
         as: "user",
       });
       Nguoidung.hasMany(models.Nguoitimviec, {
-        foreignKey: "Nguoidung_id",
+        foreignKey: "MaND",
         as: "user_seeker",
       });
       Nguoidung.belongsTo(models.Quyen, {
-        foreignKey: "Quyen_id",
+        foreignKey: "MaQuyen",
         as: "Group",
       });
     }
@@ -23,12 +23,14 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       password: DataTypes.STRING,
       username: DataTypes.STRING,
-      Quyen_id: DataTypes.INTEGER,
+      MaQuyen: DataTypes.INTEGER,
       Trangthai: DataTypes.STRING,
     },
     {
       sequelize,
       modelName: "Nguoidung",
+      timestamps: false,
+      freezeTableName: true,
     }
   );
   return Nguoidung;

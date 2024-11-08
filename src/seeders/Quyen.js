@@ -6,15 +6,15 @@ module.exports = {
     return queryInterface.bulkInsert("Quyen", [
       {
         ten: "admin",
-        URL: JSON.stringify(["/jb", "/search"]),
+        URL: JSON.stringify(["/home", "/search"]),
       },
       {
         ten: "ntd",
-        URL: JSON.stringify(["/jb", "/search"]),
+        URL: JSON.stringify(["/home", "/search"]),
       },
       {
         ten: "ntv",
-        URL: JSON.stringify(["/jb", "/search"]),
+        URL: JSON.stringify(["/search", "/search"]),
       },
     ]);
   },

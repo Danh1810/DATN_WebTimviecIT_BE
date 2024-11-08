@@ -11,10 +11,10 @@ module.exports = {
           primaryKey: true,
           type: Sequelize.INTEGER,
         },
-        tintuyendung_id: {
+        MaTTD: {
           type: Sequelize.INTEGER,
         },
-        nguoitimviec_id: {
+        MaNTV: {
           type: Sequelize.INTEGER,
         },
       },

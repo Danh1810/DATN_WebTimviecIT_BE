@@ -4,9 +4,9 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert("Thanhtoan", [
-      { ten: "Payment Method 1" },
-      { ten: "Payment Method 2" },
-      { ten: "Payment Method 3" },
+      { ten: "thanh toan 1" },
+      { ten: "thanh toán  2" },
+      { ten: "thanh toan  3" },
     ]);
   },
 

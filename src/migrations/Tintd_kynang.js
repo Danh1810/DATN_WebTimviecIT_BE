@@ -9,11 +9,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      tintuyendung_id: {
+      MaTTD: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      kynang_id: {
+      MaKN: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },

@@ -17,10 +17,10 @@ module.exports = {
         Ngay: {
           type: Sequelize.DATE,
         },
-        nhatuyendung_id: {
+        MaNTD: {
           type: Sequelize.INTEGER,
         },
-        nguoitimviec_id: {
+        MaNTV: {
           type: Sequelize.INTEGER,
         },
       },

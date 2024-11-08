@@ -10,22 +10,22 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // Associations can be defined here
       Lichsuthanhtoan.belongsTo(models.Nhatuyendung, {
-        foreignKey: "nhatuyendung_id",
+        foreignKey: "MaNTT",
         as: "employer",
       });
       Lichsuthanhtoan.belongsTo(models.Thanhtoan, {
-        foreignKey: "thanhtoan_id",
+        foreignKey: "MaTT",
         as: "payment",
       });
     }
   }
   Lichsuthanhtoan.init(
     {
-      nhatuyendung_id: {
+      MaNTT: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      thanhtoan_id: {
+      MaTT: {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
@@ -54,7 +54,8 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "Lichsuthanhtoan",
       charset: "utf8",
       collate: "utf8_general_ci",
-      timestamps: true,
+      timestamps: false,
+      freezeTableName: true,
     }
   );
   return Lichsuthanhtoan;

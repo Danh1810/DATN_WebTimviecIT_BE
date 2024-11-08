@@ -18,10 +18,10 @@ module.exports = {
           type: Sequelize.DATE,
         },
 
-        ungvien_id: {
+        MaNTV: {
           type: Sequelize.INTEGER,
         },
-        tintuyendung_id: {
+        MaTTD: {
           type: Sequelize.INTEGER,
         },
       },

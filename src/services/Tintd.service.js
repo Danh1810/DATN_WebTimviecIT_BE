@@ -15,17 +15,16 @@ const getAllTintd = async () => {
         model: db.Kynang, // Assuming Roles is the table for user roles
         as: "skills",
         through: { attributes: [] }, // Không hiển thị bảng trung gian
-        attributes: ["id", "ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+        attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
       },
       {
         model: db.Capbac, // Assuming Roles is the table for user roles
         as: "levels",
         through: { attributes: [] }, // Không hiển thị bảng trung gian
-        attributes: ["id", "ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+        attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
       },
     ],
   });
-  console.log("🚀 ~ getAllJobpost ~ jbp:", jbp);
 
   console.log("sasd", JSON.stringify(jbp, null, 2));
   if (jbp) {
@@ -37,7 +36,7 @@ const getAllTintd = async () => {
 const getTinTdByID = async (id) => {
   // Fetch the user from the database based on username and include their associated role (Group)
   const jbp = await db.Tintuyendung.findOne({
-    where: { id: id },
+    where: { MaTTD: id },
 
     include: [
       {
@@ -95,7 +94,6 @@ const searchTinTDd = async (keyword) => {
       ],
     },
   });
-  console.log("serchec", jobPosts);
 
   if (jobPosts) {
     return { status: 200, code: 0, message: "Thành công", data: jobPosts };

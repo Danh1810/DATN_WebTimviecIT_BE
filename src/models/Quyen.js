@@ -8,12 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Quyen.hasMany(models.Nguoidung, { foreignKey: "Quyen_id", as: "Group" });
-      //   Role.belongsToMany(models.Roles, {
-      //     as: "Group_Roles",
-      //     through: "Group_Role",
-      //     foreignKey: "group_id",
-      //   });
+      Quyen.hasMany(models.Nguoidung, { foreignKey: "MaQuyen", as: "Group" });
     }
   }
   Quyen.init(
@@ -24,6 +19,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Quyen",
+      timestamps: false,
+      freezeTableName: true,
     }
   );
   return Quyen;

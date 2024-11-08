@@ -24,11 +24,10 @@ module.exports = {
           type: Sequelize.STRING,
           defaultValue: "Hoạt Động",
         },
-        Quyen_id: {
+        MaQuyen: {
           type: Sequelize.INTEGER,
           defaultValue: 3,
         },
-
         createdAt: {
           allowNull: true,
           type: Sequelize.DATE,

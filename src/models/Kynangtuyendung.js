@@ -10,14 +10,14 @@ module.exports = (sequelize, DataTypes) => {
 
   Kynangtuyendung.init(
     {
-      tintuyendung_id: {
+      MaTTD: {
         type: DataTypes.INTEGER,
         references: {
           model: "Tintuyendung", // Name of the target model
           key: "id", // Key in the target model
         },
       },
-      kynang_id: {
+      MaKN: {
         type: DataTypes.INTEGER,
         references: {
           model: "Kynang", // Name of the target model
@@ -29,7 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Kynangtuyendung",
       tableName: "Kynangtuyendung",
-      timestamps: true,
+      timestamps: false,
+      freezeTableName: true,
     }
   );
 

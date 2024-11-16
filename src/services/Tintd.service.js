@@ -102,4 +102,71 @@ const searchTinTDd = async (keyword) => {
   }
 };
 
-module.exports = { getAllTintd, getTinTdByID, searchTinTDd };
+const getTtd = async () => {
+  const res = await db.Tintuyendung.findAll({});
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+const createTtd = async (data) => {
+  try {
+    const res = await db.Tintuyendung.create(data);
+    if (res) {
+      return { status: 200, code: 0, message: "success", data: res };
+    } else {
+      return { status: 500, code: 1, message: "fail", data: "" };
+    }
+  } catch (error) {
+    return { status: 500, code: -1, message: error.message, data: "" };
+  }
+};
+
+const updateTtd = async (data) => {
+  console.log(data);
+  const res = await db.Tintuyendung.update(data, {
+    where: { id: data.id },
+  });
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+const XoaTtd = async (id) => {
+  const res = await db.Tintuyendung.destroy({
+    where: { id: id },
+  });
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+
+const getTtdById = async (id) => {
+  try {
+    const res = await db.Tintuyendung.findOne({
+      where: { id: id },
+    });
+    if (res) {
+      return { status: 200, code: 0, message: "success", data: res };
+    } else {
+      return { status: 500, code: -1, message: "error", data: "" };
+    }
+  } catch (error) {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+
+module.exports = {
+  getAllTintd,
+  getTinTdByID,
+  searchTinTDd,
+  getTtd,
+  getTtdById,
+  createTtd,
+  updateTtd,
+  XoaTtd,
+};

@@ -4,7 +4,18 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Nguoitimviec extends Model {
     static associate(models) {
-      // Define associations if necessary
+      Nguoitimviec.hasMany(models.Luucongviec, {
+        foreignKey: "MaNTV",
+        as: "LCV_NTV",
+      });
+      Nguoitimviec.hasMany(models.Ungtuyen, {
+        foreignKey: "MaNTV",
+        as: "NTV_UT",
+      });
+      Nguoitimviec.belongsTo(models.Nguoidung, {
+        foreignKey: "MaND",
+        as: "NTV_ND",
+      });
     }
   }
 

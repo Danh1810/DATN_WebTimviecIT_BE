@@ -14,6 +14,9 @@ module.exports = {
         ten: {
           type: Sequelize.STRING,
         },
+        mota: {
+          type: Sequelize.STRING,
+        },
         URL: {
           allowNull: true,
           type: Sequelize.JSON,

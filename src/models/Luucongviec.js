@@ -9,15 +9,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Một SaveJob thuộc về một JobPost
-      // SaveJobs.belongsTo(models.JobPost, {
-      //   foreignKey: 'Jobpost_id',
-      //   as: 'jobPost',
-      // });
-      // Một SaveJob thuộc về một JobSeeker
-      // SaveJobs.belongsTo(models.JobSeekers, {
-      //   foreignKey: 'seeker_id',
-      //   as: 'jobSeeker',
-      // });
+      Luucongviec.belongsTo(models.Tintuyendung, {
+        foreignKey: "MaTTD",
+        as: "TTD_LCV",
+      });
+
+      Luucongviec.belongsTo(models.Nguoitimviec, {
+        foreignKey: "MaNTV",
+        as: "NTV_LCV",
+      });
     }
   }
   Luucongviec.init(
@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: "Luucongviec",
       tableName: "Luucongviec",
-      ttimestamps: false,
+      timestamps: false,
       freezeTableName: true,
     }
   );

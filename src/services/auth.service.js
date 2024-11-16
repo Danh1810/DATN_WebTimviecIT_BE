@@ -13,7 +13,7 @@ const hashPassword = (password) => {
 
 const register = async (data) => {
   try {
-    const user = await db.Users.bulkCreate(
+    const user = await db.Users.create(
       data.map((item) => ({ ...item, password: hashPassword(item.password) }))
     );
     if (user) {
@@ -101,4 +101,4 @@ const login = async (data) => {
     return { status: 500, message: "Lỗi đăng nhập", code: -1, data: {} };
   }
 };
-module.exports = { register, login };
+module.exports = { register, login, hashPassword };

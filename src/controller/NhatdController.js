@@ -1,19 +1,64 @@
-const db = require("../models/index");
-const em = require("../services/Nhatd.service");
-const getEmployersById = async (req, res) => {
-  try {
-    console.log("id", req.query.id);
-    const response = await em.getEmployersById(req.query.id);
+const ntdService = require("../services/Nhatd.service");
 
-    console.log("res", response);
-    if (response) {
-      res.json({ status: 200, code: 0, message: "success", data: response });
-    } else {
-      res.json({ status: 500, code: 1, message: "fail", data: "" });
-    }
+const getAllNtd = async (req, res) => {
+  try {
+    const data = await ntdService.getAllNtd();
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
   } catch (error) {
-    res.json({ status: 500, code: -1, message: error.message, data: "" });
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
 
-module.exports = { getEmployersById };
+const addNtd = async (req, res) => {
+  try {
+    const data = await ntdService.createNtd(req.body);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
+
+const updateNtd = async (req, res) => {
+  try {
+    const data = await ntdService.updateNtd(req.body);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
+
+const deleteNtd = async (req, res) => {
+  try {
+    const data = await ntdService.XoaNtd(req.body.id);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
+
+const getNtdById = async (req, res) => {
+  try {
+    const data = await ntdService.getNtdById(req.query.id);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
+
+module.exports = {
+  getAllNtd,
+  addNtd,
+  updateNtd,
+  deleteNtd,
+  getNtdById,
+};

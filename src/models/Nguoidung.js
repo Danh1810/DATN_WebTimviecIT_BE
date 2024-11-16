@@ -6,11 +6,11 @@ module.exports = (sequelize, DataTypes) => {
       // Một User có nhiều Employers
       Nguoidung.hasMany(models.Nhatuyendung, {
         foreignKey: "MaND",
-        as: "user",
+        as: "ND_NTD",
       });
       Nguoidung.hasMany(models.Nguoitimviec, {
         foreignKey: "MaND",
-        as: "user_seeker",
+        as: "ND_NTV",
       });
       Nguoidung.belongsTo(models.Quyen, {
         foreignKey: "MaQuyen",

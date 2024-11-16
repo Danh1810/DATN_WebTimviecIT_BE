@@ -37,5 +37,59 @@ const getTintdByID = async (req, res) => {
 //   // }
 
 // };
+const getTtd = async (req, res) => {
+  try {
+    const data = await jbpservice.getTtd();
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
+const addTtd = async (req, res) => {
+  try {
+    const data = await jbpservice.createTtd(req.body);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
+const delTtd = async (req, res) => {
+  try {
+    const data = await jbpservice.delTtd(req.body);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
+const getTtdById = async (req, res) => {
+  try {
+    const data = await jbpservice.getTtdById(req.query.id);
+    return res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {}
+};
+const updateTtd = async (req, res) => {
+  try {
+    const data = await jbpservice.updateTtd(req.body);
+    return res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {}
+};
 
-module.exports = { getAllTintd, getTintdByID };
+module.exports = {
+  getAllTintd,
+  getTintdByID,
+  getTtd,
+  addTtd,
+  delTtd,
+  getTtdById,
+  updateTtd,
+};

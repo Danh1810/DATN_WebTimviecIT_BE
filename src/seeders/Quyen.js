@@ -6,14 +6,17 @@ module.exports = {
     return queryInterface.bulkInsert("Quyen", [
       {
         ten: "admin",
+        mota: "ADMIN",
         URL: JSON.stringify(["/home", "/search"]),
       },
       {
         ten: "ntd",
+        mota: "Nhà tuyển dụng",
         URL: JSON.stringify(["/home", "/search"]),
       },
       {
         ten: "ntv",
+        mota: "Người tìm việc",
         URL: JSON.stringify(["/search", "/search"]),
       },
     ]);

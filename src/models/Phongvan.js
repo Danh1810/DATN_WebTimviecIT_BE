@@ -1,34 +1,36 @@
 "use strict";
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
-  class Tinnhan extends Model {
+  class Phongvan extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // Một Message thuộc về một Employer
-      // Messages.belongsTo(models.Employer, {
-      //   foreignKey: 'employers_id',
-      //   as: 'employer',
-      // });
-      // // Một Message thuộc về một JobSeeker
-      // Messages.belongsTo(models.JobSeekers, {
-      //   foreignKey: 'seeker_id',
-      //   as: 'jobSeeker',
-      // });
+      // Define the associations with Nhatuyendung (Employer) and Nguoitimviec (Job Seekers)
+      Phongvan.belongsTo(models.Nhatuyendung, {
+        foreignKey: "MaNTD",
+        as: "PV_NTD",
+      });
+      Phongvan.belongsTo(models.Nguoitimviec, {
+        foreignKey: "MaNTV",
+        as: "PV_NTV",
+      });
     }
   }
-  Tinnhan.init(
+
+  Phongvan.init(
     {
       Noidung: {
         type: DataTypes.STRING,
-        allowNull: false, // Có thể chỉnh sửa tùy thuộc vào yêu cầu của bạn
+        allowNull: false,
       },
       Ngay: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: DataTypes.NOW,
       },
       MaNTD: {
         type: DataTypes.INTEGER,
@@ -41,11 +43,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Tinnhan",
-      tableName: "Tinnhan",
+      modelName: "Phongvan",
+      tableName: "Phongvan",
       timestamps: false,
       freezeTableName: true,
     }
   );
-  return Tinnhan;
+
+  return Phongvan;
 };

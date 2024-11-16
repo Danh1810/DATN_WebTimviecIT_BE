@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Quyen.init(
     {
       ten: DataTypes.STRING,
+      mota: DataTypes.STRING,
       URL: DataTypes.JSON,
     },
     {

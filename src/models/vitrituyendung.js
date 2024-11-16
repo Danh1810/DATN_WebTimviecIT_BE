@@ -12,17 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       MaTTD: {
         type: DataTypes.INTEGER,
-        references: {
-          model: "Tintuyendung",
-          key: "id",
-        },
       },
       MaCB: {
         type: DataTypes.INTEGER,
-        references: {
-          model: "Capbac",
-          key: "id",
-        },
       },
     },
     {

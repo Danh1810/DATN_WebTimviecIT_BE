@@ -50,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       Ngaytao: {
         allowNull: true,
         type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
       },
     },
     {

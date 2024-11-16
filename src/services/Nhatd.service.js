@@ -1,74 +1,16 @@
 const db = require("../models/index");
 
-// const getAllClass = async (limit, page, grade_id, schoolyear_id) => {
-//   if (!limit) limit = 10;
-//   if (!page) page = 1;
-//   const offset = (page - 1) * limit;
-//   try {
-//     const condition1 = grade_id ? { grade_id: grade_id } : {};
-//     const condition2 = schoolyear_id ? { schoolyear_id: schoolyear_id } : {};
-//     const { count, rows } = await db.Classes.findAndCountAll({
-//       where: { ...condition1, ...condition2, ishidden: 0 },
-//       include: [
-//         {
-//           model: db.Users,
-//           as: "GVCN",
-//           include: {
-//             model: db.Profiles,
-//             attributes: ["firstname", "lastname"],
-//           },
-//         },
-//         {
-//           model: db.Schoolyears,
-//           attributes: ["name"],
-//         },
-//       ],
-//       limit: +limit,
-//       offset: +offset,
-//       raw: true,
-//       nest: true,
-//     });
-
-//     return {
-//       status: 200,
-//       code: 0,
-//       message: "success",
-//       data: { rows, count },
-//     };
-//   } catch (error) {
-//     return { status: 500, code: -1, message: error.message, data: "" };
-//   }
-// };
-// const getClasses = async () => {
-//   try {
-//     const res = await db.Classes.findAll({
-//       where: { ishidden: 0 },
-//       include: [
-//         {
-//           model: db.Users,
-//           as: "GVCN",
-//           include: {
-//             model: db.Profiles,
-//             attributes: ["firstname", "lastname"],
-//           },
-//         },
-//         { model: db.Schoolyears, attributes: ["name"] },
-//       ],
-//     });
-//     if (res) {
-//       return { status: 200, code: 0, message: "success", data: res };
-//     } else {
-//       return { status: 500, code: 1, message: "fail", data: "" };
-//     }
-//   } catch (error) {
-//     return { status: 500, code: -1, message: error.message, data: "" };
-//   }
-// };
-const getNTDById = async (id) => {
+const getAllNtd = async () => {
+  const res = await db.Nhatuyendung.findAll({});
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+const createNtd = async (data) => {
   try {
-    const res = await db.NhaTuyenDung.findOne({
-      where: { MaNTD: id },
-    });
+    const res = await db.Nhatuyendung.create(data);
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
     } else {
@@ -79,6 +21,48 @@ const getNTDById = async (id) => {
   }
 };
 
+const updateNtd = async (data) => {
+  console.log(data);
+  const res = await db.Nhatuyendung.update(data, {
+    where: { id: data.id },
+  });
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+const XoaNtd = async (id) => {
+  const res = await db.Nhatuyendung.destroy({
+    where: { id: id },
+  });
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+
+const getNtdById = async (id) => {
+  try {
+    const res = await db.Nhatuyendung.findOne({
+      where: { id: id },
+      attributes: ["id", "URL", "description"],
+    });
+    if (res) {
+      return { status: 200, code: 0, message: "success", data: res };
+    } else {
+      return { status: 500, code: -1, message: "error", data: "" };
+    }
+  } catch (error) {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+
 module.exports = {
-  getNTDById,
+  getAllNtd,
+  getNtdById,
+  createNtd,
+  updateNtd,
+  XoaNtd,
 };

@@ -41,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       Ngaythanhtoan: {
         type: DataTypes.DATE,
         allowNull: true,
+        defaultValue: DataTypes.NOW,
       },
       Soluongmua: {
         type: DataTypes.INTEGER,

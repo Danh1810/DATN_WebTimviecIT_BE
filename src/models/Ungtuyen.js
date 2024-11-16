@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class Ungtuyen extends Model {
     /**
@@ -7,21 +8,37 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {}
+    static associate(models) {
+      // Association with Nguoitimviec (Job Seekers)
+      Ungtuyen.belongsTo(models.Nguoitimviec, {
+        foreignKey: "MaNTV",
+        as: "UT_NTV",
+      });
+      Ungtuyen.belongsTo(models.Tintuyendung, {
+        foreignKey: "MaTTD",
+        as: "UT_TTD",
+      });
+    }
   }
+
   Ungtuyen.init(
     {
       file: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
       NgayNop: {
         type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: DataTypes.NOW, // Defaults to current date
       },
       MaNTV: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       MaTTD: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
     },
     {
@@ -32,5 +49,6 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     }
   );
+
   return Ungtuyen;
 };

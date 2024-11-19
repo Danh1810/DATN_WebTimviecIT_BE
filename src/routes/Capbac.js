@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const CapbacController = require("../controller/Capbac.controller");
+import CapbacController from "../controller/Capbac.controller";
 
 // Define routes for Capbac
 router.get("/", CapbacController.getCapbac); // Get all Capbac

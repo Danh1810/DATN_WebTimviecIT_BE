@@ -1,46 +1,46 @@
 "use strict";
 
-const { toDefaultValue } = require("sequelize/lib/utils");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("Nguoitimviec", {
       id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
       },
-      email: {
+      anhDaiDien: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      ten: {
+      hoVaTen: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      ngaySinh: {
+        type: Sequelize.DATE,
+        allowNull: true,
+      },
+      thanhPho: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      SDT: {
+      diaChi: {
         type: Sequelize.STRING,
         allowNull: true,
+      },
+      gioiTinh: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      soDienThoai: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       MaND: {
+        // Khoá ngoại liên kết với bảng Nguoidung
         type: Sequelize.INTEGER,
         allowNull: true,
-      },
-      gioitinh: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
-      image: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      fileCV: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      Soluongnophoso: {
-        type: Sequelize.INTEGER,
       },
     });
   },

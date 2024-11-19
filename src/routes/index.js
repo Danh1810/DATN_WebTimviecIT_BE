@@ -30,7 +30,7 @@ const initApiRoutes = (app) => {
   router.get("/account", authController.getUserAccount);
   router.get("/search", emCtl.getNtdById);
   router.get("/jb", jbpCtl.getAllTintd);
-  router.post("/sea", jbpCtl.getTintdByID);
+  router.get("/sea", jbpCtl.getTintdByID);
   // router.get(
   //   "/google",
   //   passport.authenticate("google", {

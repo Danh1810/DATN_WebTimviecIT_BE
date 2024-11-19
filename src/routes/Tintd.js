@@ -12,13 +12,13 @@ router.get("/:id", tintdController.getTintdByID);
 router.get("/", tintdController.getAllTintd);
 
 // Route to add a new TTD
-router.post("/", tintdController.addTtd);
+router.post("/", tintdController.addJobPostWithDetails);
 
 // Route to delete a TTD by ID
 router.delete("/delete", tintdController.delTtd);
 
 // Route to get TTD by ID
-router.get("/details/:id", tintdController.getTtdById);
+router.get("/details", tintdController.getTtdById);
 
 // Route to update a TTD
 router.put("/update", tintdController.updateTtd);

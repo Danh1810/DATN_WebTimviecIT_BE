@@ -1,49 +1,54 @@
 "use strict";
-/** @type {import('sequelize-cli').Migration} */
+
 module.exports = {
-  async up(queryInterface, Sequelize) {
-    await queryInterface.createTable(
-      "Tintuyendung",
-      {
-        id: {
-          allowNull: false,
-          autoIncrement: true,
-          primaryKey: true,
-          type: Sequelize.INTEGER,
-        },
-        tieude: {
-          type: Sequelize.STRING,
-        },
-        mota: {
-          type: Sequelize.STRING,
-        },
-        Ngayhethan: {
-          type: Sequelize.DATE,
-        },
-        MaNTD: {
-          type: Sequelize.INTEGER,
-        },
-        trangthai: {
-          type: Sequelize.STRING,
-        },
-        diachi: {
-          type: Sequelize.STRING,
-        },
-        mucluong: {
-          type: Sequelize.STRING,
-        },
-        Ngaytao: {
-          allowNull: true,
-          type: Sequelize.DATE,
-        },
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable("Tintuyendung", {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER,
       },
-      {
-        charset: "utf8", // Set the character set for the entire table
-        collate: "utf8_general_ci", // Set the collation for the entire table
-      }
-    );
+      tieude: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      mota: {
+        type: Sequelize.STRING,
+      },
+      Ngayhethan: {
+        type: Sequelize.DATE,
+      },
+      trangthai: {
+        type: Sequelize.STRING,
+      },
+      mucluong: {
+        type: Sequelize.STRING,
+      },
+      MaNTD: {
+        type: Sequelize.INTEGER,
+      },
+      Ngaytao: {
+        allowNull: true,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
+      },
+      loaiHopdong: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      diaChiLamviec: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      kinhNghiem: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+    });
   },
-  async down(queryInterface, Sequelize) {
+
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable("Tintuyendung");
   },
 };

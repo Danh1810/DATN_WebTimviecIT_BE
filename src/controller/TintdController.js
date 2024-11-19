@@ -13,7 +13,7 @@ const getAllTintd = async (req, res) => {
 };
 const getTintdByID = async (req, res) => {
   try {
-    const data = await jbpservice.getTinTdByID(req.body.id);
+    const data = await jbpservice.getTinTdByID(req.query.id);
     res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
@@ -70,6 +70,7 @@ const delTtd = async (req, res) => {
 const getTtdById = async (req, res) => {
   try {
     const data = await jbpservice.getTtdById(req.query.id);
+    console.log("🚀 ~ getTtdById ~ req:", req.query.id);
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
@@ -83,8 +84,53 @@ const updateTtd = async (req, res) => {
       .json({ code: data.code, message: data.message, data: data.data });
   } catch (error) {}
 };
+const addJobPostWithDetails = async (req, res) => {
+  try {
+    const {
+      tieude,
+      mota,
+      Ngayhethan,
+      trangthai,
+      mucluong,
+      MaNTD,
+      skills,
+      loaiHopdong,
+      diaChiLamviec,
+      kinhNghiem,
+    } = req.body;
+    const newJobPost = await db.Tintuyendung.create({
+      tieude,
+      mota,
+      Ngayhethan,
+      trangthai,
+      mucluong,
+      MaNTD,
+      loaiHopdong,
+      diaChiLamviec,
+      kinhNghiem,
+    });
+
+    const jobSkillLinks = skills.map((skillId) => ({
+      MaTTD: newJobPost.id,
+      MaKN: skillId,
+    }));
+
+    await db.Kynangtuyendung.bulkCreate(jobSkillLinks);
+
+    res.status(201).json({
+      message: "Job post created successfully with additional details.",
+      jobPost: newJobPost,
+    });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while creating the job post." });
+  }
+};
 
 module.exports = {
+  addJobPostWithDetails,
   getAllTintd,
   getTintdByID,
   getTtd,

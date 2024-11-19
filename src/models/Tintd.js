@@ -1,14 +1,9 @@
 "use strict";
 const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   class Tintuyendung extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // Một JobPost thuộc về một Employer
       Tintuyendung.belongsTo(models.Nhatuyendung, {
         foreignKey: "MaNTD",
         as: "employer",
@@ -18,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "MaTTD",
         as: "skills",
       });
-
       Tintuyendung.belongsToMany(models.Capbac, {
         through: "Vitrituyendung",
         foreignKey: "MaTTD",
@@ -26,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
+
   Tintuyendung.init(
     {
       tieude: {
@@ -52,6 +47,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
+      // Thêm các trường mới
+      loaiHopdong: {
+        type: DataTypes.STRING, // Ví dụ: Toàn thời gian, Bán thời gian
+        allowNull: true,
+      },
+      diaChiLamviec: {
+        type: DataTypes.STRING, // Ví dụ: Hà Nội, TP.HCM
+        allowNull: true,
+      },
+      kinhNghiem: {
+        type: DataTypes.STRING, // Ví dụ: 1-2 năm, 3-5 năm
+        allowNull: true,
+      },
     },
     {
       sequelize,
@@ -61,5 +69,6 @@ module.exports = (sequelize, DataTypes) => {
       freezeTableName: true,
     }
   );
+
   return Tintuyendung;
 };

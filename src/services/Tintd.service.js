@@ -36,7 +36,7 @@ const getAllTintd = async () => {
 const getTinTdByID = async (id) => {
   // Fetch the user from the database based on username and include their associated role (Group)
   const jbp = await db.Tintuyendung.findOne({
-    where: { MaTTD: id },
+    where: { id: id },
 
     include: [
       {
@@ -56,9 +56,9 @@ const getTinTdByID = async (id) => {
       // },
     ],
   });
-  console.log("fdsf", jbp);
+  console.log("fdsf", jbp.dataValues);
   if (jbp) {
-    return { status: 200, code: 0, message: "success", data: jbp };
+    return { status: 200, code: 0, message: "success", data: jbp.dataValues };
   } else {
     return { status: 500, code: -1, message: "error", data: "" };
   }
@@ -138,6 +138,7 @@ const XoaTtd = async (id) => {
   const res = await db.Tintuyendung.destroy({
     where: { id: id },
   });
+  console.log("🚀 ~ XoaTtd ~ id:", id);
   if (res) {
     return { status: 200, code: 0, message: "success", data: res };
   } else {
@@ -150,6 +151,8 @@ const getTtdById = async (id) => {
     const res = await db.Tintuyendung.findOne({
       where: { id: id },
     });
+    console.log("🚀 ~ getTtdById ~ id:", id);
+    console.log("res", res);
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
     } else {

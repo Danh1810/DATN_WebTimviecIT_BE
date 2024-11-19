@@ -25,6 +25,7 @@ const nonSecurePaths = [
   "/Ut",
   "/vtri",
   "/lcv",
+  "/tintd/details",
   // "/reset-password",
   // "/news/getnewsbysort",
   // "/payment/callback",

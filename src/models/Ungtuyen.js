@@ -27,6 +27,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      trangthai: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: "Đã nộp",
+      },
       NgayNop: {
         type: DataTypes.DATE,
         allowNull: false,

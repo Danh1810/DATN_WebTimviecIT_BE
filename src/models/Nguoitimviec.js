@@ -21,32 +21,13 @@ module.exports = (sequelize, DataTypes) => {
 
   Nguoitimviec.init(
     {
-      email: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      ten: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      SDT: {
-        type: DataTypes.STRING,
-      },
-      image: {
-        type: DataTypes.STRING,
-      },
-      MaND: {
-        type: DataTypes.INTEGER,
-      },
-      gioitinh: {
-        type: DataTypes.INTEGER,
-      },
-      fileCV: {
-        type: DataTypes.STRING,
-      },
-      Soluongnophoso: {
-        type: DataTypes.INTEGER,
-      },
+      anhDaiDien: DataTypes.STRING,
+      hoVaTen: DataTypes.STRING,
+      ngaySinh: DataTypes.DATE,
+      thanhPho: DataTypes.STRING,
+      diaChi: DataTypes.STRING,
+      gioiTinh: DataTypes.STRING,
+      soDienThoai: DataTypes.STRING,
     },
     {
       sequelize,

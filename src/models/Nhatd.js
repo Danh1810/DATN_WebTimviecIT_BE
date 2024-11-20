@@ -41,6 +41,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      website: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      linhvuc: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       diachi: {
         type: DataTypes.STRING,
         allowNull: true,

@@ -11,7 +11,20 @@ const getNTV = async (req, res) => {
 };
 const addNTV = async (req, res) => {
   try {
-    const data = await NTVService.createNtv(req.body);
+    const { hoVaTen, ngaySinh, thanhPho, diaChi, gioiTinh, soDienThoai } =
+      req.body;
+
+    const anhDaiDien = req.fileUrl;
+    const data = await NTVService.createNtv({
+      anhDaiDien,
+      hoVaTen,
+      ngaySinh,
+      thanhPho,
+      diaChi,
+      gioiTinh,
+      soDienThoai,
+      MaND: 1,
+    });
     res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });

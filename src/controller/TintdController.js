@@ -92,40 +92,74 @@ const addJobPostWithDetails = async (req, res) => {
       Ngayhethan,
       trangthai,
       mucluong,
-      MaNTD,
-      skills,
+      Kynang = [], // Default empty array
+      Capbac = [], // Default empty array
       loaiHopdong,
       diaChiLamviec,
       kinhNghiem,
     } = req.body;
+
+    console.log("🚀 ~ Creating Job Post with Title:", tieude);
+
+    // Create the main job post
     const newJobPost = await db.Tintuyendung.create({
       tieude,
       mota,
       Ngayhethan,
       trangthai,
       mucluong,
-      MaNTD,
+      MaNTD: 1, // Default employer ID; adjust as needed
       loaiHopdong,
       diaChiLamviec,
       kinhNghiem,
     });
 
-    const jobSkillLinks = skills.map((skillId) => ({
-      MaTTD: newJobPost.id,
-      MaKN: skillId,
-    }));
+    // Validate and process skills
+    const validSkills = Array.isArray(Kynang)
+      ? Kynang.filter((id) => id != null)
+      : [];
+    console.log("🚀 ~ Valid Skills:", validSkills);
+    if (validSkills.length > 0) {
+      const jobSkillLinks = validSkills.map((skillId) => ({
+        MaTTD: newJobPost.id,
+        MaCB: skillId,
+      }));
+      await db.Vitrituyendung.bulkCreate(jobSkillLinks);
+      console.log("🚀 ~ Successfully inserted skills:", jobSkillLinks);
+    } else {
+      console.warn("⚠️ ~ No valid skills provided. Skipping skill insertion.");
+    }
 
-    await db.Kynangtuyendung.bulkCreate(jobSkillLinks);
+    // Validate and process levels
+    const validLevels = Array.isArray(Capbac)
+      ? Capbac.filter((id) => id != null)
+      : [];
+    console.log("🚀 ~ Valid Levels after filter:", validLevels);
+    if (validLevels.length > 0) {
+      const jobLevelLinks = validLevels.map((levelId) => ({
+        MaTTD: newJobPost.id,
+        MaKN: levelId,
+      }));
+      await db.Kynangtuyendung.bulkCreate(jobLevelLinks);
+      console.log("🚀 ~ Successfully inserted levels:", jobLevelLinks);
+    } else {
+      console.warn("⚠️ ~ No valid levels provided. Skipping level insertion.");
+    }
 
     res.status(201).json({
       message: "Job post created successfully with additional details.",
       jobPost: newJobPost,
+      details: {
+        skills: validSkills,
+        levels: validLevels,
+      },
     });
   } catch (error) {
-    console.error(error);
-    res
-      .status(500)
-      .json({ message: "An error occurred while creating the job post." });
+    console.error("Error in addJobPostWithDetails:", error);
+    res.status(500).json({
+      message: "An error occurred while creating the job post.",
+      error: error.message,
+    });
   }
 };
 

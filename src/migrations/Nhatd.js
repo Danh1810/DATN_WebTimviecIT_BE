@@ -29,6 +29,12 @@ module.exports = {
         logo: {
           type: Sequelize.STRING,
         },
+        website: {
+          type: Sequelize.STRING,
+        },
+        linhvuc: {
+          type: Sequelize.STRING,
+        },
         Soluongdangbai: {
           type: Sequelize.INTEGER,
           allowNull: false,

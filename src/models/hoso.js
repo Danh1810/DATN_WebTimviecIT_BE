@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  Hoso.init(
+  Hosocanhan.init(
     {
       tenhoso: DataTypes.STRING,
       kyNangLapTrinh: DataTypes.JSON,

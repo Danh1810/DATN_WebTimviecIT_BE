@@ -6,6 +6,9 @@ const getAllTintd = async () => {
 
   // Fetch the user from the database based on username and include their associated role (Group)
   const jbp = await db.Tintuyendung.findAll({
+    where: {
+      trangthai: "Đã duyệt",
+    },
     include: [
       {
         model: db.Nhatuyendung, // Assuming Roles is the table for user roles
@@ -26,7 +29,6 @@ const getAllTintd = async () => {
     ],
   });
 
-  console.log("sasd", JSON.stringify(jbp, null, 2));
   if (jbp) {
     return { status: 200, code: 0, message: "success", data: jbp };
   } else {
@@ -43,17 +45,18 @@ const getTinTdByID = async (id) => {
         model: db.Nhatuyendung, // Assuming Roles is the table for user roles
         as: "employer", // Ensure that 'as' matches the alias defined in your model associations
       },
-      // {
-      //   model: db.Kynang, // Assuming Roles is the table for user roles
-      //   as :'skill',
-      //   through: { attributes: [] }, // Không hiển thị bảng trung gian
-      //   // attributes: ['name'] // Lấy tên các kỹ năng    // Ensure that 'as' matches the alias defined in your model associations
-      // },{
-      //   model: db.Capbac, // Assuming Roles is the table for user roles
-      //   as : 'level',
-      //   through: { attributes: [] }, // Không hiển thị bảng trung gian
-      //   // attributes: ['name'] // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
-      // },
+      {
+        model: db.Kynang, // Assuming Roles is the table for user roles
+        as: "skills",
+        through: { attributes: [] }, // Không hiển thị bảng trung gian
+        attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+      },
+      {
+        model: db.Capbac, // Assuming Roles is the table for user roles
+        as: "levels",
+        through: { attributes: [] }, // Không hiển thị bảng trung gian
+        attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+      },
     ],
   });
   console.log("fdsf", jbp.dataValues);
@@ -150,6 +153,25 @@ const getTtdById = async (id) => {
   try {
     const res = await db.Tintuyendung.findOne({
       where: { id: id },
+      include: [
+        {
+          model: db.Nhatuyendung, // Assuming Roles is the table for user roles
+          as: "employer", // Ensure that 'as' matches the alias defined in your model associations
+        },
+        {
+          model: db.Kynang, // Assuming Roles is the table for user roles
+          as: "skills",
+          through: { attributes: [] }, // Không hiển thị bảng trung gian
+          attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+        },
+
+        {
+          model: db.Capbac, // Assuming Roles is the table for user roles
+          as: "levels",
+          through: { attributes: [] }, // Không hiển thị bảng trung gian
+          attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+        },
+      ],
     });
     console.log("🚀 ~ getTtdById ~ id:", id);
     console.log("res", res);

@@ -110,7 +110,7 @@ module.exports = {
         Trangthai: "active",
       },
       {
-        email: "support@itjobs.com",
+        email: "admin@itjobs.com",
         password: "hashed_password_10",
         username: "supportTeam",
         MaQuyen: 1,

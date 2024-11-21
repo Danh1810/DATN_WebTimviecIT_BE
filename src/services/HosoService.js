@@ -1,17 +1,16 @@
-const { getAllTintd } = require("../controller/TintdController");
 const db = require("../models/index");
 
-const getAllNtd = async () => {
-  const res = await db.Nhatuyendung.findAll({});
+const getAllHoso = async () => {
+  const res = await db.Hosocanhan.findAll({});
   if (res) {
     return { status: 200, code: 0, message: "success", data: res };
   } else {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
-const createNtd = async (data) => {
+const createHoso = async (data) => {
   try {
-    const res = await db.Nhatuyendung.create(data);
+    const res = await db.Hosocanhan.create(data);
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
     } else {
@@ -22,9 +21,9 @@ const createNtd = async (data) => {
   }
 };
 
-const updateNtd = async (data) => {
+const updateHoso = async (data) => {
   console.log(data);
-  const res = await db.Nhatuyendung.update(data, {
+  const res = await db.Hosocanhan.update(data, {
     where: { id: data.id },
   });
   if (res) {
@@ -34,8 +33,8 @@ const updateNtd = async (data) => {
   }
 };
 
-const XoaNtd = async (id) => {
-  const res = await db.Nhatuyendung.destroy({
+const XoaHoso = async (id) => {
+  const res = await db.Hosocanhan.destroy({
     where: { id: id },
   });
   if (res) {
@@ -45,9 +44,9 @@ const XoaNtd = async (id) => {
   }
 };
 
-const getNtdById = async (id) => {
+const getHosoById = async (id) => {
   try {
-    const res = await db.Nhatuyendung.findOne({
+    const res = await db.Hosocanhan.findOne({
       where: { id: id },
       attributes: ["id", "URL", "description"],
     });
@@ -62,10 +61,9 @@ const getNtdById = async (id) => {
 };
 
 module.exports = {
-  getAllNtd,
-  getNtdById,
-  createNtd,
-  updateNtd,
-  XoaNtd,
-  getAllTintd,
+  getAllHoso,
+  getHosoById,
+  createHoso,
+  updateHoso,
+  XoaHoso,
 };

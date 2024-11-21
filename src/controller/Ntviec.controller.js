@@ -9,6 +9,16 @@ const getNTV = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
+const getNTVhoso = async (req, res) => {
+  try {
+    const data = await NTVService.getAllNTVhoso(req.query.id);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
 const addNTV = async (req, res) => {
   try {
     const { hoVaTen, ngaySinh, thanhPho, diaChi, gioiTinh, soDienThoai } =
@@ -64,4 +74,5 @@ module.exports = {
   delNTV,
   getNtvById,
   updateNtv,
+  getNTVhoso,
 };

@@ -8,6 +8,22 @@ const getAllNTV = async () => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const getAllNTVhoso = async (id) => {
+  const res = await db.Nguoitimviec.findAll({
+    where: { id: id },
+    include: [
+      {
+        model: db.Hosocanhan,
+        as: "hoso",
+      },
+    ],
+  });
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 const createNtv = async (data) => {
   try {
     const res = await db.Nguoitimviec.create(data);
@@ -47,7 +63,6 @@ const getNtvById = async (id) => {
   try {
     const res = await db.Nguoitimviec.findOne({
       where: { id: id },
-      attributes: ["id", "URL", "description"],
     });
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
@@ -65,4 +80,5 @@ module.exports = {
   createNtv,
   updateNtv,
   XoaNtv,
+  getAllNTVhoso,
 };

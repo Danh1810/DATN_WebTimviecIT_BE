@@ -6,8 +6,42 @@ const getAllTintd = async () => {
 
   // Fetch the user from the database based on username and include their associated role (Group)
   const jbp = await db.Tintuyendung.findAll({
+    order: [["Ngaytao", "DESC"]],
     where: {
       trangthai: "Đã duyệt",
+    },
+    include: [
+      {
+        model: db.Nhatuyendung, // Assuming Roles is the table for user roles
+        as: "employer", // Ensure that 'as' matches the alias defined in your model associations
+      },
+      {
+        model: db.Kynang, // Assuming Roles is the table for user roles
+        as: "skills",
+        through: { attributes: [] }, // Không hiển thị bảng trung gian
+        attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+      },
+      {
+        model: db.Capbac, // Assuming Roles is the table for user roles
+        as: "levels",
+        through: { attributes: [] }, // Không hiển thị bảng trung gian
+        attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+      },
+    ],
+  });
+
+  if (jbp) {
+    return { status: 200, code: 0, message: "success", data: jbp };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+const getAllTintdcd = async () => {
+  // Fetch the user from the database based on username and include their associated role (Group)
+  const jbp = await db.Tintuyendung.findAll({
+    order: [["Ngaytao", "DESC"]],
+    where: {
+      trangthai: "Chờ duyệt",
     },
     include: [
       {
@@ -66,6 +100,27 @@ const getTinTdByID = async (id) => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const updateTrangthaiService = async (data) => {
+  // Tìm kiếm tin tuyển dụng
+  try {
+    const res = await db.Tintuyendung.update(
+      {
+        trangthai: "Đã duyệt",
+      },
+      {
+        where: { id: data.id },
+      }
+    );
+    if (res) {
+      return { status: 200, code: 0, message: "success", data: "" };
+    } else {
+      return { status: 500, code: 1, message: "fail", data: "" };
+    }
+  } catch (error) {
+    return { status: 500, code: -1, message: error.message, data: "" };
+  }
+};
+
 const searchTinTDd = async (keyword) => {
   const jobPosts = await db.Tintuyendung.findAll({
     include: [
@@ -194,4 +249,6 @@ module.exports = {
   createTtd,
   updateTtd,
   XoaTtd,
+  getAllTintdcd,
+  updateTrangthaiService,
 };

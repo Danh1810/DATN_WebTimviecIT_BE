@@ -5,19 +5,19 @@ const NTVController = require("../controller/Ntviec.controller");
 const uploadToCloudinary = require("../middleware/cloudinary"); // Ensure proper import style
 const upload = multer({ dest: "src/uploads" }); // Configure multer for file uploads
 
-// Define routes for Nguoi Tim Viec (Job Seeker)
-router.get("/", NTVController.getNTV); // Get all job seekers
+router.get("/", NTVController.getNTV);
+router.get("/hoso", NTVController.getNTVhoso);
 
 // Add a new job seeker with file upload and cloudinary integration
 router.post(
   "/",
-  upload.single("anhDaiDien"), // multer middleware for single file upload
-  uploadToCloudinary.uploadToCloudinary, // Custom middleware to upload to Cloudinary
-  NTVController.addNTV // Controller to handle the request
+  upload.single("anhDaiDien"),
+  uploadToCloudinary.uploadToCloudinary,
+  NTVController.addNTV
 );
 
-router.delete("/", NTVController.delNTV); // Delete a job seeker
-router.get("/:id", NTVController.getNtvById); // Get a job seeker by ID
-router.put("/", NTVController.updateNtv); // Update job seeker info
+router.delete("/", NTVController.delNTV);
+router.get("/detail", NTVController.getNtvById);
+router.put("/", NTVController.updateNtv);
 
 module.exports = router;

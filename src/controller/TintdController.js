@@ -11,6 +11,28 @@ const getAllTintd = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
+const updateTrangthaiService = async (req, res) => {
+  try {
+    var response = await jbpservice.updateTrangthaiService(req.body);
+    return res.status(response.status).json({
+      code: response.code,
+      message: response.message,
+      data: response.data,
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
+const getAllTintdcd = async (req, res) => {
+  try {
+    const data = await jbpservice.getAllTintdcd();
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
 const getTintdByID = async (req, res) => {
   try {
     const data = await jbpservice.getTinTdByID(req.query.id);
@@ -92,27 +114,47 @@ const addJobPostWithDetails = async (req, res) => {
       Ngayhethan,
       trangthai,
       mucluong,
-      Kynang = [], // Default empty array
-      Capbac = [], // Default empty array
+      Kynang = [],
+      Capbac = [],
       loaiHopdong,
       diaChiLamviec,
       kinhNghiem,
     } = req.body;
 
+    const employerId = 1; // Thay bằng logic để lấy ID của nhà tuyển dụng từ `req` hoặc `token`
+
     console.log("🚀 ~ Creating Job Post with Title:", tieude);
 
-    // Create the main job post
+    // Kiểm tra số lượng đăng tuyển
+    const employer = await db.Nhatuyendung.findByPk(employerId);
+    if (!employer) {
+      return res.status(404).json({ message: "Employer not found." });
+    }
+
+    if (employer.SoLuongDangTuyen <= 0) {
+      return res.status(400).json({
+        message: "No remaining job posts available for this employer.",
+      });
+    }
+
+    // Tạo tin tuyển dụng
     const newJobPost = await db.Tintuyendung.create({
       tieude,
       mota,
       Ngayhethan,
       trangthai,
       mucluong,
-      MaNTD: 1, // Default employer ID; adjust as needed
+      MaNTD: employerId,
       loaiHopdong,
       diaChiLamviec,
       kinhNghiem,
     });
+
+    // Cập nhật số lượng đăng tuyển
+    await employer.update({
+      Soluongdangbai: employer.Soluongdangbai - 1,
+    });
+    console.log("🚀 ~ Updated employer's job posting count.");
 
     // Validate and process skills
     const validSkills = Array.isArray(Kynang)
@@ -149,6 +191,7 @@ const addJobPostWithDetails = async (req, res) => {
     res.status(201).json({
       message: "Job post created successfully with additional details.",
       jobPost: newJobPost,
+      remainingPosts: employer.SoLuongDangTuyen,
       details: {
         skills: validSkills,
         levels: validLevels,
@@ -172,4 +215,6 @@ module.exports = {
   delTtd,
   getTtdById,
   updateTtd,
+  getAllTintdcd,
+  updateTrangthaiService,
 };

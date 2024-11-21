@@ -6,13 +6,15 @@ const tintdController = require("../controller/TintdController");
 // router.get("/", tintdController.getAllTintd);
 
 // Route to get a job post by ID
-router.get("/:id", tintdController.getTintdByID);
+// router.get("/:id", tintdController.getTintdByID);
 
 // Route to get TTD data
 router.get("/", tintdController.getAllTintd);
+router.get("/cd", tintdController.getAllTintdcd);
 
 // Route to add a new TTD
 router.post("/", tintdController.addJobPostWithDetails);
+router.post("/duyet", tintdController.updateTrangthaiService);
 
 // Route to delete a TTD by ID
 router.delete("/delete", tintdController.delTtd);

@@ -32,6 +32,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       Ngayhethan: {
         type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: () => {
+          const now = new Date();
+          now.setMonth(now.getMonth() + 1); // Cộng thêm 1 tháng
+          return now;
+        },
       },
       trangthai: {
         type: DataTypes.STRING,

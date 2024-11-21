@@ -19,6 +19,7 @@ const Tintdroute = require("../routes/Tintd.js");
 const Ungtuyenroute = require("../routes/Ungtuyen.js");
 const Vitrituyendungroute = require("../routes/Vitriungtuyen.js");
 const LuucongviecController = require("./luucongviec.js");
+const hosoroute = require("./hoso.js");
 
 const router = Router();
 const initApiRoutes = (app) => {
@@ -127,6 +128,7 @@ const initApiRoutes = (app) => {
   router.use("/Ut", Ungtuyenroute);
   router.use("/vtri", Vitrituyendungroute);
   router.use("/lcv", LuucongviecController);
+  router.use("/hoso", hosoroute);
 
   app.use("/vieclamit", router);
 };

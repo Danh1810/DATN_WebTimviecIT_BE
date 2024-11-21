@@ -41,7 +41,7 @@ const getLsttByGroup = async (req, res) => {
 };
 const getRoleById = async (req, res) => {
   try {
-    const data = await LsttService.getRoleById(req.query.id);
+    const data = await LsttService.getLSTTById(req.query.id);
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });

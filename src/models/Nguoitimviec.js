@@ -12,10 +12,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "NguoitimviecId",
         as: "hoso",
       });
-      Nguoitimviec.hasMany(models.Ungtuyen, {
-        foreignKey: "MaNTV",
-        as: "NTV_UT",
-      });
       Nguoitimviec.belongsTo(models.Nguoidung, {
         foreignKey: "MaND",
         as: "NTV_ND",

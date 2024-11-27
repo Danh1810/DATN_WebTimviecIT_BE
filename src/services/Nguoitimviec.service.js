@@ -10,11 +10,27 @@ const getAllNTV = async () => {
 };
 const getAllNTVhoso = async (id) => {
   const res = await db.Nguoitimviec.findAll({
-    where: { id: id },
+    where: { MaND: id },
     include: [
       {
         model: db.Hosocanhan,
         as: "hoso",
+      },
+    ],
+  });
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+const getAllNTVlcv = async (id) => {
+  const res = await db.Nguoitimviec.findAll({
+    where: { MaND: id },
+    include: [
+      {
+        model: db.Luucongviec,
+        as: "LCV_NTV",
       },
     ],
   });
@@ -62,7 +78,7 @@ const XoaNtv = async (id) => {
 const getNtvById = async (id) => {
   try {
     const res = await db.Nguoitimviec.findOne({
-      where: { id: id },
+      where: { MaND: id },
     });
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
@@ -81,4 +97,5 @@ module.exports = {
   updateNtv,
   XoaNtv,
   getAllNTVhoso,
+  getAllNTVlcv,
 };

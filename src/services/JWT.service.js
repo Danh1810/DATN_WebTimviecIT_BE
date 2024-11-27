@@ -2,7 +2,6 @@ const db = require("../models/index"); // Remove .js for CommonJS
 const getRolesByGroupId = async (id) => {
   const roles = await db.Quyen.findAll({
     where: { id: id },
-    attributes: [],
 
     attributes: ["id", "URL", "ten"],
     raw: true,

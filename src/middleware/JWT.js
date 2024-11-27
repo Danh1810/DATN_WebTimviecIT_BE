@@ -15,23 +15,27 @@ const nonSecurePaths = [
   "/Kntt",
   "/lstt",
   "/nguoidung",
+  "/nguoidung/up",
   "/nhatd",
+  "/nhatd/detail",
   "/ngtviec",
   "/ngtviec/detail",
   "/ngtviec/hoso",
+  "/ngtviec/lcv",
   "/phongvan",
   "/quyen",
   "/quyen/dk",
   "/thanhtoan",
   "/tintd",
   "/tintd/cd",
+  "/tintd/ntd",
   "/tintd/duyet",
   "/Ut",
   "/vtri",
   "/lcv",
   "/tintd/details",
-  "hoso",
-  "hoso/detail",
+  "/hoso",
+  "/hoso/detail",
   // "/reset-password",
   // "/news/getnewsbysort",
   // "/payment/callback",
@@ -120,7 +124,7 @@ const checkUserPermission = async (req, res, next) => {
     return next();
   }
   if (req.user) {
-    let group_id = req.user.Quyen_id;
+    let group_id = req.user.Quyen;
     console.log("user", req.user);
     console.log("path", req.path);
 
@@ -135,7 +139,6 @@ const checkUserPermission = async (req, res, next) => {
           ? item.URL.includes(currentUrl)
           : item.URL === currentUrl;
       });
-      console.log("dhsadh", checkPermission);
       if (checkPermission === true) {
         next();
       } else {

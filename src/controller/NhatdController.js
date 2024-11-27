@@ -13,20 +13,11 @@ const getAllNtd = async (req, res) => {
 // Assuming the model is in a folder named models
 const addNtd = async (req, res) => {
   try {
+    console.log("repbody", req.body);
     // Extract necessary fields from the request body
-    const {
-      ten,
-      email,
-      sdt,
-      website,
-      linhvuc,
-      diachi,
-      MaND,
-
-      Soluongdangbai,
-    } = req.body;
+    const { ten, email, sdt, website, linhvuc, diachi, MaND, Soluongdangbai } =
+      req.body;
     const logo = req.fileUrl;
-    // Create a new record in the Nhatuyendung table
     const newNtd = await ntdService.createNtd({
       ten,
       email,
@@ -34,7 +25,7 @@ const addNtd = async (req, res) => {
       website,
       linhvuc,
       diachi,
-      MaND: 1,
+      MaND: MaND,
       logo,
       Soluongdangbai: Soluongdangbai || 3, // Default to 0 if not provided
     });

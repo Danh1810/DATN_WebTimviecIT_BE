@@ -48,8 +48,7 @@ const XoaNtd = async (id) => {
 const getNtdById = async (id) => {
   try {
     const res = await db.Nhatuyendung.findOne({
-      where: { id: id },
-      attributes: ["id", "URL", "description"],
+      where: { MaND: id },
     });
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };

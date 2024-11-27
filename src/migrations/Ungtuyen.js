@@ -21,7 +21,7 @@ module.exports = {
           type: Sequelize.DATE,
         },
 
-        MaNTV: {
+        MaHS: {
           type: Sequelize.INTEGER,
         },
         MaTTD: {

@@ -11,9 +11,11 @@ const tintdController = require("../controller/TintdController");
 // Route to get TTD data
 router.get("/", tintdController.getAllTintd);
 router.get("/cd", tintdController.getAllTintdcd);
+router.get("/ntd", tintdController.getTtdntdId);
 
 // Route to add a new TTD
 router.post("/", tintdController.addJobPostWithDetails);
+router.post("/tk", tintdController.searchJobPostsByKeyword);
 router.post("/duyet", tintdController.updateTrangthaiService);
 
 // Route to delete a TTD by ID
@@ -24,5 +26,6 @@ router.get("/details", tintdController.getTtdById);
 
 // Route to update a TTD
 router.put("/update", tintdController.updateTtd);
+r;
 
 module.exports = router;

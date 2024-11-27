@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Association with Nguoitimviec (Job Seekers)
-      Ungtuyen.belongsTo(models.Nguoitimviec, {
-        foreignKey: "MaNTV",
+      Ungtuyen.belongsTo(models.Hosocanhan, {
+        foreignKey: "MaHS",
         as: "UT_NTV",
       });
       Ungtuyen.belongsTo(models.Tintuyendung, {
@@ -37,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: DataTypes.NOW, // Defaults to current date
       },
-      MaNTV: {
+      MaHS: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },

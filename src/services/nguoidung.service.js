@@ -41,19 +41,41 @@ const getNguoidungById = async (id) => {
     return { status: 500, code: -1, message: error.message, data: "" };
   }
 };
+const getNguoidungByUsername = async (username) => {
+  if (!username) {
+    return { status: 400, code: 1, message: "Invalid username", data: "" };
+  }
+
+  try {
+    const res = await db.Nguoidung.findOne({
+      where: { username: username },
+      include: [
+        {
+          model: db.Quyen,
+          as: "Group",
+          attributes: ["ten"],
+        },
+      ],
+    });
+
+    if (res) {
+      return { status: 200, code: 0, message: "success", data: res };
+    } else {
+      return { status: 404, code: 1, message: "User not found", data: "" };
+    }
+  } catch (error) {
+    return {
+      status: 500,
+      code: -1,
+      message: error.message || "Internal Server Error",
+      data: "",
+    };
+  }
+};
+
 const createNguoidung = async (data) => {
   try {
-    const role = await db.Nguoidung.findOne({
-      where: { tenQuyen: data.tenQuyen },
-      attributes: ["MaQuyen"],
-    });
-    if (!role) {
-      return { status: 404, code: 1, message: "Role not found", data: "" };
-    }
-    const newUser = await db.Nguoidung.create({
-      ...data,
-      MaQuyen: role.MaQuyen,
-    });
+    const newUser = await db.Nguoidung.create(data);
     return { status: 200, code: 0, message: "success", data: newUser };
   } catch (error) {
     return { status: 500, code: -1, message: error.message, data: "" };
@@ -129,4 +151,5 @@ module.exports = {
   updateNguoidung,
   Duyettaikhoan,
   createNguoidung,
+  getNguoidungByUsername,
 };

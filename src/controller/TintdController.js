@@ -1,5 +1,6 @@
 const jbpservice = require("../services/Tintd.service");
 const db = require("../models/index");
+const Nhatd = require("../services/Nhatd.service");
 
 const getAllTintd = async (req, res) => {
   try {
@@ -43,22 +44,21 @@ const getTintdByID = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
-// const searchJobPostsByKeyword = async (req, res) => {
-//   // const keyword =req.body.keyword
-//   // console.log("jdjsa",keyword)
-//   // if (!keyword) {
-//   //   return res.status(400).json({ message: 'Keyword is required' });
-//   // }
-//   // try {
-//   //   const data = await jbpservice.searchTintd(keyword);
-//   //   res
-//   //     .status(data.status)
-//   //     .json({ code: data.code, message: data.message, data: data.data });
-//   // } catch (error) {
-//   //   return res.status(500).json({ message: error.message, code: -1, data: "" });
-//   // }
-
-// };
+const searchJobPostsByKeyword = async (req, res) => {
+  const keyword = req.body.keyword;
+  console.log("jdjsa", keyword);
+  if (!keyword) {
+    return res.status(400).json({ message: "Keyword is required" });
+  }
+  try {
+    const data = await jbpservice.searchTinTDd(keyword);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
 const getTtd = async (req, res) => {
   try {
     const data = await jbpservice.getTtd();
@@ -98,6 +98,15 @@ const getTtdById = async (req, res) => {
       .json({ code: data.code, message: data.message, data: data.data });
   } catch (error) {}
 };
+const getTtdntdId = async (req, res) => {
+  try {
+    const data = await jbpservice.getAllTintdcdByEmployer(req.query.id);
+    console.log("🚀 ~ getTtdById ~ req:", req.query.id);
+    return res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {}
+};
 const updateTtd = async (req, res) => {
   try {
     const data = await jbpservice.updateTtd(req.body);
@@ -119,14 +128,19 @@ const addJobPostWithDetails = async (req, res) => {
       loaiHopdong,
       diaChiLamviec,
       kinhNghiem,
+      Ma,
     } = req.body;
 
-    const employerId = 1; // Thay bằng logic để lấy ID của nhà tuyển dụng từ `req` hoặc `token`
+    const employerId = parseInt(Ma); // Thay bằng logic để lấy ID của nhà tuyển dụng từ `req` hoặc `token`
 
+    console.log("🚀 ~ addJobPostWithDetails ~ employerId:", employerId);
     console.log("🚀 ~ Creating Job Post with Title:", tieude);
 
     // Kiểm tra số lượng đăng tuyển
-    const employer = await db.Nhatuyendung.findByPk(employerId);
+    const employer = await db.Nhatuyendung.findOne({
+      where: { MaND: employerId },
+    });
+    console.log("🚀 ~ addJobPostWithDetails ~ employer:", employer);
     if (!employer) {
       return res.status(404).json({ message: "Employer not found." });
     }
@@ -144,7 +158,7 @@ const addJobPostWithDetails = async (req, res) => {
       Ngayhethan,
       trangthai,
       mucluong,
-      MaNTD: employerId,
+      MaNTD: employer.id,
       loaiHopdong,
       diaChiLamviec,
       kinhNghiem,
@@ -217,4 +231,6 @@ module.exports = {
   updateTtd,
   getAllTintdcd,
   updateTrangthaiService,
+  getTtdntdId,
+  searchJobPostsByKeyword,
 };

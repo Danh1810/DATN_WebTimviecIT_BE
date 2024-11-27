@@ -28,13 +28,11 @@ const checkPassword = (plainPassword, hashedPassword) => {
   return bcrypt.compareSync(plainPassword, hashedPassword);
 };
 
-// Function to handle user login
 const login = async (data) => {
   try {
+    // Fetch the user from the database
     const user = await db.Nguoidung.findOne({
-      where: {
-        username: data.username,
-      },
+      where: { email: data.email },
       include: [
         {
           model: db.Quyen,
@@ -44,61 +42,64 @@ const login = async (data) => {
       raw: true,
       nest: true,
     });
+    console.log("🚀 ~ login ~ user:", user);
 
-    // Log the user data for debugging
-    console.log("User data:", user.password);
-    console.log("data", data.password);
-
-    // Check if user exists and password is correct
-    if (user) {
-      const hashedPassword = bcrypt.hashSync(user.password, 10);
-      if (checkPassword(data.password, hashedPassword)) {
-        console.log("Password matched");
-        // Construct the payload for the JWT token
-        const payload = {
-          email: user.email,
-          username: user.username,
-          Quyen: user.MaQuyen,
-          TenQuyen: user.Group.ten, // Access the role name from the 'Group' association
-          id: user.MaND,
-          ten: user.username,
-        };
-
-        // Log the payload for debugging
-
-        // Create the JWT token with the payload
-        const token = await JWTmdw.createToken(payload);
-        console.log(token);
-
-        // Return the success response with the token and user data
-        return {
-          status: 200,
-          message: "Đăng nhập thành công",
-          code: 0,
-          data: {
-            email: user.email,
-            username: user.username,
-            MaND: user.MaND,
-            access_token: token,
-            Quyen: user.MaQuyen,
-            TenQuyen: user.Group.ten,
-            ten: user.username,
-          },
-        };
-      }
+    if (!user) {
+      return {
+        status: 400,
+        message: "Tên đăng nhập hoặc mật khẩu không đúng",
+        code: 3,
+        data: {},
+      };
     }
 
-    // If username or password is incorrect, return an error
+    // Compare the provided password with the stored hashed password
+    const isPasswordValid = bcrypt.compareSync(data.password, user.password);
+    if (!isPasswordValid) {
+      return {
+        status: 400,
+        message: "Tên đăng nhập hoặc mật khẩu không đúng",
+        code: 3,
+        data: {},
+      };
+    }
+
+    // Construct the payload for the JWT token
+    const payload = {
+      email: user.email,
+      username: user.username,
+      Quyen: user.MaQuyen,
+      TenQuyen: user.Group.ten, // Access the role name from the 'Group' association
+      id: user.MaND,
+    };
+
+    const token = await JWTmdw.createToken(payload);
+
+    // Return the success response
     return {
-      status: 400,
-      message: "Ten đăng nhập hoặc mật khẩu không đúng",
-      code: 3,
-      data: {},
+      status: 200,
+      message: "Đăng nhập thành công",
+      code: 0,
+      data: {
+        email: user.email,
+        username: user.username,
+        MaND: user.MaND,
+        access_token: token,
+        Quyen: user.MaQuyen,
+        TenQuyen: user.Group.ten,
+        ten: user.username,
+        userid: user.id,
+      },
     };
   } catch (error) {
-    // If there's a server error, log the error and return a server error response
     console.error("Server Error:", error);
-    return { status: 500, message: "Lỗi đăng nhập", code: -1, data: {} };
+    return {
+      status: 500,
+      message: "Lỗi đăng nhập",
+      code: -1,
+      data: {},
+    };
   }
 };
+
 module.exports = { register, login, hashPassword };

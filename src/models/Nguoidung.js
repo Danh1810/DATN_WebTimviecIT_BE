@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       username: DataTypes.STRING,
       MaQuyen: DataTypes.INTEGER,
-      Trangthai: DataTypes.STRING,
+      Trangthai: { type: DataTypes.STRING, defaultValue: "Hoạt động" },
     },
     {
       sequelize,

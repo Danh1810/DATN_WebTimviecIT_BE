@@ -69,6 +69,47 @@ const getAllTintdcd = async () => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const getAllTintdcdByEmployer = async (employerId) => {
+  try {
+    // Fetch job posts for the specified employer
+    const jobPosts = await db.Tintuyendung.findAll({
+      order: [["Ngaytao", "DESC"]], // Sort by creation date in descending order
+      where: {
+        NhatuyendungId: employerId, // Filter by employer ID
+      },
+      include: [
+        {
+          model: db.Nhatuyendung,
+          as: "employer", // Alias for the employer
+        },
+        {
+          model: db.Kynang, // Skills required for the job
+          as: "skills",
+          through: { attributes: [] }, // Exclude intermediate table
+          attributes: ["ten"], // Fetch skill names only
+        },
+        {
+          model: db.Capbac, // Job levels
+          as: "levels",
+          through: { attributes: [] }, // Exclude intermediate table
+          attributes: ["ten"], // Fetch level names only
+        },
+      ],
+    });
+
+    // Return response
+    if (jobPosts) {
+      return { status: 200, code: 0, message: "success", data: jobPosts };
+    } else {
+      return { status: 404, code: 1, message: "No job posts found", data: [] };
+    }
+  } catch (error) {
+    // Handle errors
+    console.error("Error fetching job posts:", error);
+    return { status: 500, code: -1, message: "error", data: error.message };
+  }
+};
+
 const getTinTdByID = async (id) => {
   // Fetch the user from the database based on username and include their associated role (Group)
   const jbp = await db.Tintuyendung.findOne({
@@ -204,10 +245,10 @@ const XoaTtd = async (id) => {
   }
 };
 
-const getTtdById = async (id) => {
+const getTtdById = async (data) => {
   try {
     const res = await db.Tintuyendung.findOne({
-      where: { id: id },
+      where: { id: data },
       include: [
         {
           model: db.Nhatuyendung, // Assuming Roles is the table for user roles
@@ -228,7 +269,7 @@ const getTtdById = async (id) => {
         },
       ],
     });
-    console.log("🚀 ~ getTtdById ~ id:", id);
+    console.log("🚀 ~ getTtdById ~ id:", data);
     console.log("res", res);
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
@@ -251,4 +292,5 @@ module.exports = {
   XoaTtd,
   getAllTintdcd,
   updateTrangthaiService,
+  getAllTintdcdByEmployer,
 };

@@ -41,7 +41,7 @@ module.exports = {
         type: Sequelize.TEXT,
         allowNull: true,
       },
-      linkHoSoOnline: {
+      fileHoso: {
         type: Sequelize.STRING,
         allowNull: true,
       },

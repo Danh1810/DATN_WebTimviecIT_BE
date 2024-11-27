@@ -11,18 +11,10 @@ const getUT = async (req, res) => {
 };
 const addUT = async (req, res) => {
   try {
-    const { MaTTD, MaNTV } = req.body;
-    const filePath = `src/uploads/${req.file.filename}`; // Tên file sẽ lưu vào database
-
-    if (!filePath) {
-      return res.status(400).json({ message: "File is required" });
-    }
-
-    // Giả sử có hàm `saveApplication` để lưu thông tin vào database
+    const { MaTTD, MaHS } = req.body;
     const newApplication = {
       MaTTD,
-      MaNTV,
-      file: filePath, // Lưu tên file để dùng cho đường dẫn
+      MaHS,
       NgayNop: new Date(),
     };
 

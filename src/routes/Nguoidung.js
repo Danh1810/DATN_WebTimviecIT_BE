@@ -6,6 +6,7 @@ const userController = require("../controller/Nguoidung.controller");
 router.get("/", userController.getnguoidung);
 router.get("/:id", userController.getnguoidungById);
 router.post("/", userController.addnguoidung);
+router.post("/up", userController.hashPasswords);
 router.put("/:id", userController.updateND);
 router.delete("/:id", userController.delnguoidung);
 

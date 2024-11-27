@@ -7,6 +7,7 @@ const upload = multer({ dest: "src/uploads" }); // Configure multer for file upl
 
 router.get("/", NTVController.getNTV);
 router.get("/hoso", NTVController.getNTVhoso);
+router.get("/lcv", NTVController.getNTVhosolcv);
 
 // Add a new job seeker with file upload and cloudinary integration
 router.post(

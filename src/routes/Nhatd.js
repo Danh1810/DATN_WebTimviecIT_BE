@@ -5,7 +5,7 @@ const ntdController = require("../controller/NhatdController");
 const uploadToCloudinary = require("../middleware/cloudinary"); // Ensure proper import style
 const upload = multer({ dest: "src/uploads" }); // Configure multer for file uploads
 router.get("/", ntdController.getAllNtd);
-router.get("/:id", ntdController.getNtdById);
+router.get("/detail", ntdController.getNtdById);
 router.post(
   "/",
   upload.single("logo"), // multer middleware for single file upload

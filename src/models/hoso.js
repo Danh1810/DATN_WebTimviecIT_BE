@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "NguoitimviecId",
         as: "nguoitimviec",
       });
+      Hosocanhan.hasMany(models.Ungtuyen, {
+        foreignKey: "MaHS",
+        as: "NTV_UT",
+      });
     }
   }
 
@@ -21,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       trinhDoHocVan: DataTypes.TEXT,
       chungChiNgheNghiep: DataTypes.TEXT,
       duAnDaThamGia: DataTypes.TEXT,
-      linkHoSoOnline: DataTypes.STRING,
+      fileHoso: DataTypes.STRING,
       ngayCapNhat: DataTypes.DATE,
       NguoitimviecId: {
         type: DataTypes.INTEGER,

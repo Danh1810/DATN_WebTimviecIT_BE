@@ -92,28 +92,6 @@ const initApiRoutes = (app) => {
   //     res.status(200).json(data);
   //   }
   // );
-  router.get("/files/:fileId", (req, res) => {
-    const fileId = req.params.fileId;
-    const filePath = path.join(__dirname, "src/uploads", fileId);
-
-    // Kiểm tra xem file có tồn tại không
-    if (fs.existsSync(filePath)) {
-      // Đọc file dưới dạng buffer và chuyển đổi thành Base64
-      fs.readFile(filePath, (err, data) => {
-        if (err) {
-          console.error("Error reading file:", err);
-          res.status(500).json({ message: "Error reading file" });
-          return;
-        }
-        const base64Data = data.toString("base64");
-        res
-          .status(200)
-          .json({ file: `data:application/pdf;base64,${base64Data}` });
-      });
-    } else {
-      res.status(404).json({ message: "File not found" });
-    }
-  });
   router.use("/capbac", Capbacroute);
   router.use("/kynang", Knroute);
   router.use("/Kntt", Knttroute);

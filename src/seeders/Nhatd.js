@@ -12,7 +12,6 @@ module.exports = {
         linhvuc: "Phần mềm",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579560/FPTSOFT-Logo-new-NVf2j_nu92lb.png",
         MaND: 6,
-        Soluongdangbai: 0,
       },
       {
         ten: "Công ty Viettel Digital",
@@ -22,7 +21,6 @@ module.exports = {
         linhvuc: "Viễn thông",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579560/TopDev-Asset-15-1643008749_ic62kd.png",
         MaND: 7,
-        Soluongdangbai: 0,
       },
       {
         ten: "Công ty TMA Solutions",
@@ -32,7 +30,6 @@ module.exports = {
         linhvuc: "Gia công phần mềm",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579560/TMA_cl4dmk.png",
         MaND: 8,
-        Soluongdangbai: 0,
       },
       {
         ten: "Công ty VinBrain",
@@ -42,7 +39,6 @@ module.exports = {
         linhvuc: "AI & Healthcare",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579561/vinbarain_xssfzy.jpg",
         MaND: 9,
-        Soluongdangbai: 0,
       },
       {
         ten: "Công ty NashTech Vietnam",
@@ -52,7 +48,6 @@ module.exports = {
         linhvuc: "Phần mềm",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579560/nashtech_ognqwd.png",
         MaND: 10,
-        Soluongdangbai: 0,
       },
       {
         ten: "Công ty Rikkeisoft",
@@ -62,7 +57,6 @@ module.exports = {
         linhvuc: "Gia công phần mềm",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579560/rik_xw0r3a.jpg",
         MaND: 11,
-        Soluongdangbai: 0,
       },
       {
         ten: "Công ty Axon Active",
@@ -72,7 +66,6 @@ module.exports = {
         linhvuc: "Phát triển phần mềm",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579560/axon_mtev7r.jpg",
         MaND: 12,
-        Soluongdangbai: 0,
       },
       {
         ten: "Công ty VNG Corporation",
@@ -82,7 +75,6 @@ module.exports = {
         linhvuc: "Công nghệ thông tin",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579560/9c8d9f666ca55b657e57cb6db010563f_t2jz33.png",
         MaND: 13,
-        Soluongdangbai: 0,
       },
       {
         ten: "Công ty FPT Telecom",
@@ -92,7 +84,6 @@ module.exports = {
         linhvuc: "Viễn thông",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579560/telecom_qkuu0h.png",
         MaND: 14,
-        Soluongdangbai: 0,
       },
       {
         ten: "Công ty KMS Technology",
@@ -102,7 +93,6 @@ module.exports = {
         linhvuc: "Phần mềm",
         logo: "https://res.cloudinary.com/dlxczbtva/image/upload/v1731579560/kms_nuxhd3.png",
         MaND: 15,
-        Soluongdangbai: 0,
       },
     ]);
   },

@@ -8,6 +8,22 @@ const getAllHoso = async () => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const getAllHosoID = async (id) => {
+  const res = await db.Hosocanhan.findAll({
+    where: { id: id },
+    include: [
+      {
+        models: db.Nguoitimviec,
+        as: "nguoitimviec",
+      },
+    ],
+  });
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 const createHoso = async (data) => {
   try {
     const res = await db.Hosocanhan.create(data);
@@ -45,10 +61,10 @@ const XoaHoso = async (id) => {
 };
 
 const getHosoById = async (id) => {
+  console.log("🚀 ~ getHosoById ~ id:", id);
   try {
     const res = await db.Hosocanhan.findOne({
       where: { id: id },
-      attributes: ["id", "URL", "description"],
     });
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
@@ -66,4 +82,5 @@ module.exports = {
   createHoso,
   updateHoso,
   XoaHoso,
+  getAllHosoID,
 };

@@ -31,7 +31,7 @@ const getNTVhosolcv = async (req, res) => {
 };
 const addNTV = async (req, res) => {
   try {
-    const { hoVaTen, ngaySinh, thanhPho, diaChi, gioiTinh, soDienThoai } =
+    const { hoVaTen, ngaySinh, thanhPho, diaChi, gioiTinh, soDienThoai, MaND } =
       req.body;
 
     const anhDaiDien = req.fileUrl;
@@ -43,7 +43,7 @@ const addNTV = async (req, res) => {
       diaChi,
       gioiTinh,
       soDienThoai,
-      MaND: 1,
+      MaND: MaND,
     });
     res
       .status(data.status)

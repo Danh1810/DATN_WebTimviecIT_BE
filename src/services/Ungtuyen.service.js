@@ -8,6 +8,48 @@ const getAllUT = async () => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const layTatCaHSTheoTTD = async (id) => {
+  console.log("🚀 ~ layTatCaHSTheoTTD ~ id:", id);
+  const res = await db.Ungtuyen.findAll({
+    where: {
+      MaTTD: id,
+    },
+    include: [
+      {
+        model: db.Hosocanhan,
+        as: "UT_NTV", // Tên alias đã khai báo trong associate
+      },
+    ],
+  });
+  if (res) {
+    console.log("🚀 ~ layTatCaHSTheoTTD ~ res:", res);
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+const layTatCaHSTheoNTV = async (id) => {
+  console.log("🚀 ~ layTatCaHSTheoTTD ~ id:", id);
+  const res = await db.Ungtuyen.findAll({
+    include: [
+      {
+        model: db.Hosocanhan,
+        as: "UT_NTV",
+        where: { NguoitimviecId: id }, // Lọc theo ID người tìm việc
+      },
+      {
+        model: db.Tintuyendung,
+        as: "UT_TTD",
+      },
+    ],
+  });
+  if (res) {
+    console.log("🚀 ~ layTatCaHSTheoTTD ~ res:", res);
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 const createUT = async (data) => {
   try {
     const res = await db.Ungtuyen.create(data);
@@ -65,4 +107,6 @@ module.exports = {
   createUT,
   updateUT,
   XoaUT,
+  layTatCaHSTheoTTD,
+  layTatCaHSTheoNTV,
 };

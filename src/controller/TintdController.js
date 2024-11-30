@@ -12,6 +12,16 @@ const getAllTintd = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
+const getAllTintdadmin = async (req, res) => {
+  try {
+    const data = await jbpservice.getAllTintdadmin();
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
 const updateTrangthaiService = async (req, res) => {
   try {
     var response = await jbpservice.updateTrangthaiService(req.body);
@@ -45,7 +55,7 @@ const getTintdByID = async (req, res) => {
   }
 };
 const searchJobPostsByKeyword = async (req, res) => {
-  const keyword = req.body.keyword;
+  const keyword = req.query.keyword;
   console.log("jdjsa", keyword);
   if (!keyword) {
     return res.status(400).json({ message: "Keyword is required" });
@@ -92,7 +102,6 @@ const delTtd = async (req, res) => {
 const getTtdById = async (req, res) => {
   try {
     const data = await jbpservice.getTtdById(req.query.id);
-    console.log("🚀 ~ getTtdById ~ req:", req.query.id);
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
@@ -100,7 +109,10 @@ const getTtdById = async (req, res) => {
 };
 const getTtdntdId = async (req, res) => {
   try {
-    const data = await jbpservice.getAllTintdcdByEmployer(req.query.id);
+    const employer = await db.Nhatuyendung.findOne({
+      where: { MaND: req.query.id },
+    });
+    const data = await jbpservice.getAllTintdcdByEmployer(employer.id);
     console.log("🚀 ~ getTtdById ~ req:", req.query.id);
     return res
       .status(data.status)
@@ -120,7 +132,6 @@ const addJobPostWithDetails = async (req, res) => {
     const {
       tieude,
       mota,
-      Ngayhethan,
       trangthai,
       mucluong,
       Kynang = [],
@@ -155,7 +166,6 @@ const addJobPostWithDetails = async (req, res) => {
     const newJobPost = await db.Tintuyendung.create({
       tieude,
       mota,
-      Ngayhethan,
       trangthai,
       mucluong,
       MaNTD: employer.id,
@@ -233,4 +243,5 @@ module.exports = {
   updateTrangthaiService,
   getTtdntdId,
   searchJobPostsByKeyword,
+  getAllTintdadmin,
 };

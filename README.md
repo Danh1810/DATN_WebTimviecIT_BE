@@ -16,3 +16,5 @@ SET URL = JSON_ARRAY(
 WHERE id = <id cần cập nhật>;
 
 npx kill-port 3060
+hashed_password_10
+admin@itjobs.com

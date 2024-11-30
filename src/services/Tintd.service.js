@@ -36,6 +36,38 @@ const getAllTintd = async () => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const getAllTintdadmin = async () => {
+  console.log("sdad");
+
+  // Fetch the user from the database based on username and include their associated role (Group)
+  const jbp = await db.Tintuyendung.findAll({
+    order: [["Ngaytao", "DESC"]],
+    include: [
+      {
+        model: db.Nhatuyendung, // Assuming Roles is the table for user roles
+        as: "employer", // Ensure that 'as' matches the alias defined in your model associations
+      },
+      {
+        model: db.Kynang, // Assuming Roles is the table for user roles
+        as: "skills",
+        through: { attributes: [] }, // Không hiển thị bảng trung gian
+        attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+      },
+      {
+        model: db.Capbac, // Assuming Roles is the table for user roles
+        as: "levels",
+        through: { attributes: [] }, // Không hiển thị bảng trung gian
+        attributes: ["ten"], // Lấy tên các kỹ năng   // Ensure that 'as' matches the alias defined in your model associations
+      },
+    ],
+  });
+
+  if (jbp) {
+    return { status: 200, code: 0, message: "success", data: jbp };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 const getAllTintdcd = async () => {
   // Fetch the user from the database based on username and include their associated role (Group)
   const jbp = await db.Tintuyendung.findAll({
@@ -75,7 +107,7 @@ const getAllTintdcdByEmployer = async (employerId) => {
     const jobPosts = await db.Tintuyendung.findAll({
       order: [["Ngaytao", "DESC"]], // Sort by creation date in descending order
       where: {
-        NhatuyendungId: employerId, // Filter by employer ID
+        MaNTD: employerId, // Filter by employer ID
       },
       include: [
         {
@@ -163,13 +195,15 @@ const updateTrangthaiService = async (data) => {
 };
 
 const searchTinTDd = async (keyword) => {
+  console.log("🚀 ~ searchTinTDd ~ keyword:", keyword);
+
   const jobPosts = await db.Tintuyendung.findAll({
     include: [
       {
         model: db.Kynang,
-        as: "skill",
+        as: "skills",
         // where: keyword ? { name: { [Op.like]: `%${keyword}%` } } : {},
-        attributes: ["name"],
+        attributes: ["ten"],
         through: { attributes: [] },
         required: false, // Không bắt buộc phải có Skills
       },
@@ -184,15 +218,16 @@ const searchTinTDd = async (keyword) => {
       [Op.or]: [
         // Nếu có Skills phù hợp
         {
-          "$skill.name$": { [Op.like]: `%${keyword}%` },
+          "$skills.ten$": { [Op.like]: `%${keyword}%` },
         },
         // Nếu có Employers phù hợp
         {
-          "$employer.name$": { [Op.like]: `%${keyword}%` },
+          "$employer.ten$": { [Op.like]: `%${keyword}%` },
         },
       ],
     },
   });
+  console.log("🚀 ~ searchTinTDd ~ jobPosts:", jobPosts);
 
   if (jobPosts) {
     return { status: 200, code: 0, message: "Thành công", data: jobPosts };
@@ -293,4 +328,5 @@ module.exports = {
   getAllTintdcd,
   updateTrangthaiService,
   getAllTintdcdByEmployer,
+  getAllTintdadmin,
 };

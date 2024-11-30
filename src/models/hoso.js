@@ -26,10 +26,17 @@ module.exports = (sequelize, DataTypes) => {
       chungChiNgheNghiep: DataTypes.TEXT,
       duAnDaThamGia: DataTypes.TEXT,
       fileHoso: DataTypes.STRING,
-      ngayCapNhat: DataTypes.DATE,
+      ngayCapNhat: {
+        type: DataTypes.DATE, // Kiểu dữ liệu DATE
+        defaultValue: DataTypes.NOW, // Giá trị mặc định là ngày/giờ hiện tại
+      },
       NguoitimviecId: {
         type: DataTypes.INTEGER,
         references: { model: "Nguoitimviec", key: "id" },
+      },
+      trangthai: {
+        type: DataTypes.STRING,
+        defaultValue: "Đang hoạt động",
       },
     },
     {

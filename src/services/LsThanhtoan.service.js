@@ -63,24 +63,27 @@ const env = require("dotenv");
 env.config();
 
 const create = async (data) => {
-  const fee = await db.Fees.findOne({
+  const fee = await db.Nhatuyendung.findOne({
     where: {
-      id: data.fee_id,
+      id: data.id,
     },
     raw: true,
     nest: true,
   });
+  const { id, sotien, soluong, ma, MaTT, goimua, ten } = data; // Lấy giá trị từ `data`
+
+  // Kiểm tra trạng thái hoặc điều kiện khác nếu cần
 
   if (fee && +fee.status != 1) {
     var accessKey = process.env.accessKey;
     var secretKey = process.env.secretKey;
-    var orderInfo = fee.name;
+    var orderInfo = ten;
     var partnerCode = "MOMO";
     var redirectUrl = process.env.redirectUrl;
     var ipnUrl = process.env.ipnUrl;
     var requestType = process.env.requestType;
     // var requestType = "captureWallet";
-    var amount = fee.price;
+    var amount = sotien;
     var orderId = partnerCode + new Date().getTime();
     var requestId = orderId;
     var extraData = btoa(data.id);
@@ -88,8 +91,6 @@ const create = async (data) => {
     var autoCapture = true;
     var lang = "vi";
 
-    //before sign HMAC SHA256 with format
-    //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
     var rawSignature =
       "accessKey=" +
       accessKey +
@@ -140,6 +141,9 @@ const create = async (data) => {
       extraData: extraData,
       orderGroupId: orderGroupId,
       signature: signature,
+      soluong, // Gửi thêm thông tin số lượng
+      MaTT, // Gửi thêm mã thanh toán
+      goimua, // Gửi thêm gói mua
     });
 
     const options = {
@@ -172,20 +176,13 @@ const callback = async (data) => {
         data.orderType,
         data.payType
       );
-      const update = await db.Paymenthistories.update(
-        {
-          paymentstatus_id: 1,
-          time: time,
-          orderInfo: data.orderInfo,
-          orderType: data.orderType,
-          payType: data.payType,
-        },
-        {
-          where: {
-            id: atob(data.extraData),
-          },
-        }
-      );
+      const update = await db.Lichsuthanhtoan.create({
+        MaTT: data.MaTT,
+        MaNTD: data.extraData,
+        sotien: data.amount,
+        Soluongmua: data.soluong,
+        // goimua:data.goimua
+      });
       if (update) {
         return { status: 200, message: "success", code: 0, data: data };
       }
@@ -202,4 +199,6 @@ module.exports = {
   createLSTT,
   updateLSTT,
   XoaLSTT,
+  create,
+  callback,
 };

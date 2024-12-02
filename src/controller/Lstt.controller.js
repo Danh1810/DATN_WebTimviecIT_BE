@@ -55,6 +55,22 @@ const updateLSTT = async (req, res) => {
       .json({ code: data.code, message: data.message, data: data.data });
   } catch (error) {}
 };
+const create = async (req, res) => {
+  try {
+    const result = await LsttService.create(req.body);
+    return res.status(result.status).json(result);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
+const callback = async (req, res) => {
+  try {
+    const result = await LsttService.callback(req.body);
+    return res.status(result.status).json(result);
+  } catch (error) {
+    return res.status(500).json(error);
+  }
+};
 module.exports = {
   getLstt,
   addLstt,
@@ -62,4 +78,6 @@ module.exports = {
   getLsttByGroup,
   getRoleById,
   updateLSTT,
+  create,
+  callback,
 };

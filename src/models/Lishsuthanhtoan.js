@@ -31,12 +31,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       trangthai: {
         type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: "pending",
+        allowNull: true,
+        defaultValue: "Thành công",
       },
+      // goimua: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
+      // },
       sotien: {
         type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+        allowNull: true,
       },
       Ngaythanhtoan: {
         type: DataTypes.DATE,

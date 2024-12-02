@@ -8,6 +8,8 @@ router.post("/", LsttController.addLstt); // Add new payment history
 router.delete("/", LsttController.delLstt); // Delete payment history by ID
 router.get("/group", LsttController.getLsttByGroup); // Get payment history by group ID
 router.get("/role/:id", LsttController.getRoleById); // Get role by ID
-router.put("/", LsttController.updateLSTT); // Update payment history
+router.put("/", LsttController.updateLSTT);
+router.post("/create", LsttController.create),
+  router.post("/callback", LsttController.callback);
 
 module.exports = router;

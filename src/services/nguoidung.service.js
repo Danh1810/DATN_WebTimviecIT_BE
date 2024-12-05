@@ -125,6 +125,18 @@ const updateNguoidung = async (id, data) => {
     return { status: 500, code: -1, message: error.message, data: "" };
   }
 };
+const updateNd = async (data) => {
+  console.log(data);
+  const res = await db.Nguoidung.update(data, {
+    where: { id: data.id },
+  });
+  console.log("🚀 ~ updateNd ~ res:", res);
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 
 const Duyettaikhoan = async (data) => {
   console.log(data);
@@ -152,4 +164,5 @@ module.exports = {
   Duyettaikhoan,
   createNguoidung,
   getNguoidungByUsername,
+  updateNd,
 };

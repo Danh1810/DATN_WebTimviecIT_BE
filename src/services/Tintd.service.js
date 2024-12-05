@@ -258,7 +258,8 @@ const createTtd = async (data) => {
 };
 
 const updateTtd = async (data) => {
-  console.log(data);
+  console.log("🚀 ~ updateTtd ~ data:", data);
+
   const res = await db.Tintuyendung.update(data, {
     where: { id: data.id },
   });

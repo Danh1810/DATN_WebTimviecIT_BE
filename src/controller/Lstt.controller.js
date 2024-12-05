@@ -58,6 +58,8 @@ const updateLSTT = async (req, res) => {
 const create = async (req, res) => {
   try {
     const result = await LsttService.create(req.body);
+    console.log("🚀 ~ create ~ result:", result);
+
     return res.status(result.status).json(result);
   } catch (error) {
     return res.status(500).json(error);

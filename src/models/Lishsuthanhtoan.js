@@ -13,10 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "MaNTT",
         as: "employer",
       });
-      Lichsuthanhtoan.belongsTo(models.Thanhtoan, {
-        foreignKey: "MaTT",
-        as: "payment",
-      });
     }
   }
   Lichsuthanhtoan.init(
@@ -25,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      MaTT: {
-        type: DataTypes.INTEGER,
+      loaiThanhtoan: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
       trangthai: {
@@ -34,10 +30,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: "Thành công",
       },
-      // goimua: {
-      //   type: DataTypes.STRING,
-      //   allowNull: true,
-      // },
+      goimua: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       sotien: {
         type: DataTypes.DECIMAL(10, 2),
         allowNull: true,

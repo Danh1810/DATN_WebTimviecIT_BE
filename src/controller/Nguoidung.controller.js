@@ -98,12 +98,44 @@ const getNguoidungByUsername = async (req, res) => {
 };
 const updateND = async (req, res) => {
   try {
-    const data = await nguoidungService.updateNguoidung(req.body);
+    const { id, email, password, username, MaQuyen } = req.body;
+    console.log("🚀 ~ updateND ~ req.body:", req.body);
+
+    // Validate required fields (example)
+    if (!email || !username || !MaQuyen) {
+      return res
+        .status(400)
+        .json({ message: "Missing required fields.", code: -1 });
+    }
+
+    // Optional: Hash the password if provided
+    let hashedPassword;
+    if (password) {
+      const saltRounds = 10; // Complexity of hashing
+      hashedPassword = await bcrypt.hash(password, saltRounds);
+      console.log("🚀 ~ updateND ~ hashedPassword:", hashedPassword);
+    }
+
+    // Update user with hashed password if provided
+    const data = await nguoidungService.updateNd({
+      id,
+      email,
+      password: hashedPassword, // Only hashed if provided
+      username,
+      MaQuyen,
+    });
+    console.log("🚀 ~ updateND ~ data:", data);
+
+    // Respond with the result from the service
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
-  } catch (error) {}
+  } catch (error) {
+    console.error("🚀 ~ updateND ~ error:", error);
+    return res.status(500).json({ message: "Internal Server Error", code: -1 });
+  }
 };
+
 module.exports = {
   getnguoidung,
   addnguoidung,

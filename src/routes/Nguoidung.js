@@ -7,7 +7,7 @@ router.get("/", userController.getnguoidung);
 router.get("/:id", userController.getnguoidungById);
 router.post("/", userController.addnguoidung);
 router.post("/up", userController.hashPasswords);
-router.put("/:id", userController.updateND);
+router.put("/update", userController.updateND);
 router.delete("/:id", userController.delnguoidung);
 
 module.exports = router;

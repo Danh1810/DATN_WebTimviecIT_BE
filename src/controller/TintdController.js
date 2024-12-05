@@ -122,6 +122,8 @@ const getTtdntdId = async (req, res) => {
 const updateTtd = async (req, res) => {
   try {
     const data = await jbpservice.updateTtd(req.body);
+    console.log("🚀 ~ updateTtd ~ data:", data);
+    console.log("🚀 ~ updateTtd ~ req.body:", req.body);
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });

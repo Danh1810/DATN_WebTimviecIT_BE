@@ -1,6 +1,7 @@
 const jbpservice = require("../services/Tintd.service");
 const db = require("../models/index");
 const Nhatd = require("../services/Nhatd.service");
+const { sequelize } = require("sequelize");
 
 const getAllTintd = async (req, res) => {
   try {

@@ -59,7 +59,19 @@ const addNtd = async (req, res) => {
 
 const updateNtd = async (req, res) => {
   try {
-    const data = await ntdService.updateNtd(req.body);
+    const { id, ten, email, sdt, website, linhvuc, diachi } = req.body;
+    console.log("🚀 ~ updateNtd ~ eq.body;:", req.body);
+    const logo = req.fileUrl;
+    const data = await ntdService.updateNtd({
+      id,
+      ten,
+      email,
+      sdt,
+      website,
+      linhvuc,
+      diachi,
+      logo,
+    });
     res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });

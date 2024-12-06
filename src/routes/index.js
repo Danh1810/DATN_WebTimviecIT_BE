@@ -182,6 +182,12 @@ const initApiRoutes = (app) => {
       vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
       console.log("🚀 ~ vnpUrl:", vnpUrl);
       res.status(200).json({ paymentUrl: vnpUrl });
+      const sl2 = fee.Soluongdangbai + sl;
+      const fee1 = await db.Nhatuyendung.update(
+        { Soluongdangbai: sl2 },
+        { where: { id: fee.id } }
+      );
+      console.log("🚀 ~ router.post ~ fee1:", fee1);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

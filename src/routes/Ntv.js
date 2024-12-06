@@ -19,6 +19,22 @@ router.post(
 
 router.delete("/", NTVController.delNTV);
 router.get("/detail", NTVController.getNtvById);
-router.put("/", NTVController.updateNtv);
+router.put(
+  "/update",
+  upload.single("anhDaiDien"), // multer middleware for file uploads
+  async (req, res, next) => {
+    try {
+      if (req.file) {
+        // If a file is uploaded, process it
+        req.body.anhDaiDien = await uploadToCloudinary(req.file.path); // Assuming this returns the URL
+      }
+      next(); // Proceed to the controller
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      return res.status(500).json({ error: "Failed to upload logo." });
+    }
+  },
+  NTVController.updateNtv
+);
 
 module.exports = router;

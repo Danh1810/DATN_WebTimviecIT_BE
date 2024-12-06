@@ -1,7 +1,14 @@
 const db = require("../models/index");
 
 const getAllHoso = async () => {
-  const res = await db.Hosocanhan.findAll({});
+  const res = await db.Hosocanhan.findAll({
+    include: [
+      {
+        model: db.Nguoitimviec,
+        as: "nguoitimviec",
+      },
+    ],
+  });
   if (res) {
     return { status: 200, code: 0, message: "success", data: res };
   } else {

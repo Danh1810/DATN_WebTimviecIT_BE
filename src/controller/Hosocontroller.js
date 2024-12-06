@@ -62,7 +62,34 @@ const createHoso = async (req, res) => {
 
 const updateHoso = async (req, res) => {
   try {
-    const data = await HosoService.updateHoso(req.body);
+    const {
+      id,
+      tenhoso,
+      kyNangLapTrinh,
+      capBacHienTai,
+      mucTieuNgheNghiep,
+      chungChiNgheNghiep,
+      duAnDaThamGia,
+      NguoitimviecId,
+      kinhNghiemLamViec,
+      trinhDoHocVan,
+    } = req.body;
+    console.log("🚀 ~ createHoso ~ req.body:", req.body);
+    const fileHoso = req.fileUrl;
+
+    const data = await HosoService.updateHoso({
+      id,
+      tenhoso,
+      kyNangLapTrinh,
+      capBacHienTai,
+      chungChiNgheNghiep,
+      mucTieuNgheNghiep,
+      duAnDaThamGia,
+      NguoitimviecId,
+      fileHoso,
+      kinhNghiemLamViec,
+      trinhDoHocVan,
+    });
     res.status(data.status).json({
       code: data.code,
       message: data.message,

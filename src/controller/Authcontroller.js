@@ -75,9 +75,10 @@ const register = async (req, res) => {
     // Check if the user already exists
     const existingUser = await db.Nguoidung.findOne({
       where: {
-        [Op.or]: [{ email: req.body.email }, { username: req.body.username }],
+        [Op.or]: [{ email: req.body.email }],
       },
     });
+    console.log("🚀 ~ register ~ existingUser:", existingUser);
 
     if (existingUser) {
       return res.status(409).json({ error: "Người dùng đã tồn tại" });

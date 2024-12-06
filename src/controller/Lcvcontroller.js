@@ -1,5 +1,5 @@
 const LuucongviecService = require("../services/Luucongviec.service");
-
+const db = require("../models/index");
 const getSavedJobs = async (req, res) => {
   const data = await LuucongviecService.getAllSavedJobs();
   return res.status(data.status).json(data);
@@ -11,7 +11,16 @@ const getSavedJobById = async (req, res) => {
 };
 
 const addSavedJob = async (req, res) => {
-  const data = await LuucongviecService.createSavedJob(req.body);
+  const { Userid, MaTTD } = req.body;
+  console.log("🚀 ~ addSavedJob ~ req.body:", req.body);
+  const employer = await db.Nguoitimviec.findOne({
+    where: { MaND: Userid },
+  });
+
+  const data = await LuucongviecService.createSavedJob({
+    MaTTD: MaTTD,
+    MaNTV: employer.id,
+  });
   return res.status(data.status).json(data);
 };
 

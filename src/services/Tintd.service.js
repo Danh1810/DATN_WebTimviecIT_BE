@@ -1,11 +1,13 @@
-const db = require("../models/index");
-const { Op } = require("sequelize");
+const db = require("../models/index"); // Gồm models và sequelize instance
+const { Op } = require("sequelize"); // Các toán tử của Sequelize
+const { sequelize } = db; // Lấy instance sequelize từ db
 
 const getAllTintd = async () => {
   console.log("sdad");
 
   // Fetch the user from the database based on username and include their associated role (Group)
   const jbp = await db.Tintuyendung.findAll({
+    // order: sequelize.random(),
     order: [["Ngaytao", "DESC"]],
     where: {
       trangthai: "Đã duyệt",

@@ -12,13 +12,14 @@ const app = express();
 const { sequelize } = require("./models/index");
 
 // Middleware configuration
-app.use(express.json()); // Handles JSON payloads.
+app.use(express.json());
+app.use(bodyParser.json()); // Handles JSON payloads.
 app.use(bodyParser.urlencoded({ extended: true })); // For handling form-encoded data.
 app.use(cookieParser()); // Parse cookies for authentication/other purposes.
 app.use(
   cors({
     origin: "http://localhost:3000", // Allow requests from your frontend
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // This is required for cookies and Authorization headers
   })

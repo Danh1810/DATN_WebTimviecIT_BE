@@ -6,10 +6,10 @@ const LuucongviecController = require("../controller/Lcvcontroller");
 router.get("/", LuucongviecController.getSavedJobs);
 
 // Get a single saved job by ID
-router.get("/saved-jobs/:id", LuucongviecController.getSavedJobById);
+router.get("/", LuucongviecController.getSavedJobById);
 
 // Create a new saved job
-router.post("/saved-jobs", LuucongviecController.addSavedJob);
+router.post("/", LuucongviecController.addSavedJob);
 
 // Update an existing saved job
 router.put("/saved-jobs/:id", LuucongviecController.updateSavedJob);

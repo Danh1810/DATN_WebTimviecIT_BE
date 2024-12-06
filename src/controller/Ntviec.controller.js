@@ -72,7 +72,30 @@ const getNtvById = async (req, res) => {
 };
 const updateNtv = async (req, res) => {
   try {
-    const data = await NTVService.updateNtv(req.body);
+    const {
+      id,
+      hoVaTen,
+      ngaySinh,
+      thanhPho,
+      diaChi,
+      gioiTinh,
+      soDienThoai,
+      MaND,
+    } = req.body;
+    console.log("🚀 ~ updateNtv ~ req.body:", req.body);
+
+    const anhDaiDien = req.fileUrl;
+    const data = await NTVService.updateNtv({
+      id,
+      anhDaiDien,
+      hoVaTen,
+      ngaySinh,
+      thanhPho,
+      diaChi,
+      gioiTinh,
+      soDienThoai,
+      MaND: MaND,
+    });
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });

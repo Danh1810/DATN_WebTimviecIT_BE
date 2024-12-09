@@ -47,6 +47,7 @@ const getLSTTById = async (id) => {
   try {
     const res = await db.Lichsuthanhtoan.findOne({
       where: { id: id },
+      include: [{ model: db.Nhatuyendung, as: "employer" }],
     });
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };

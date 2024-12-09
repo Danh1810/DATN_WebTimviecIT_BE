@@ -1,7 +1,5 @@
 const cloudinary = require("cloudinary").v2;
-const fs = require("fs").promises; // Sử dụng phiên bản async của fs
-
-// Cấu hình Cloudinary với các thông số chính xác
+const { PassThrough } = require("stream");
 require("dotenv").config(); // Tải biến môi trường từ .env
 
 cloudinary.config({
@@ -9,37 +7,48 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
-
-// Middleware để upload file lên Cloudinary
 const uploadToCloudinary = async (req, res, next) => {
+  console.time("UploadToCloudinary"); // Đo thời gian thực hiện
+
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded!" });
     }
 
-    // Upload file lên Cloudinary với cấu hình
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      resource_type: "image", // Đảm bảo rằng file là hình ảnh
-      folder: "webtimviecit", // Folder trên Cloudinary để lưu trữ hình ảnh
-      transformation: [{ width: 500, height: 500, crop: "limit" }], // Resize ảnh khi tải lên
+    // Sử dụng stream để upload trực tiếp lên Cloudinary
+    const uploadStream = new Promise((resolve, reject) => {
+      const passthrough = new PassThrough();
+
+      const stream = cloudinary.uploader.upload_stream(
+        {
+          resource_type: "image", // Đảm bảo rằng file là hình ảnh
+          folder: "webtimviecit", // Folder trên Cloudinary
+          transformation: [{ width: 500, height: 500, crop: "limit" }], // Resize ảnh khi tải lên
+        },
+        (error, result) => {
+          if (error) return reject(error);
+          resolve(result);
+        }
+      );
+
+      passthrough.pipe(stream);
+      passthrough.end(req.file.buffer); // Truyền buffer vào stream
     });
+
+    const result = await uploadStream;
 
     // Lưu URL của ảnh vào request để sử dụng ở bước tiếp theo
     req.fileUrl = result.secure_url;
 
-    // Tiến hành tiếp tục request
-    next();
+    next(); // Tiếp tục request
   } catch (error) {
-    // Xử lý lỗi upload
+    console.error("Error during upload to Cloudinary:", error);
     res.status(500).json({
       error: "Upload to Cloudinary failed",
       details: error.message,
     });
   } finally {
-    // Dù có lỗi hay không, xóa file tạm đã tải lên
-    if (req.file && req.file.path) {
-      await fs.unlink(req.file.path);
-    }
+    console.timeEnd("UploadToCloudinary"); // Kết thúc đo thời gian
   }
 };
 

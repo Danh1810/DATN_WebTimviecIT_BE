@@ -25,6 +25,14 @@ module.exports = (sequelize, DataTypes) => {
       username: DataTypes.STRING,
       MaQuyen: DataTypes.INTEGER,
       Trangthai: { type: DataTypes.STRING, defaultValue: "Hoạt động" },
+      isVerified: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
+      verificationToken: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
     },
     {
       sequelize,

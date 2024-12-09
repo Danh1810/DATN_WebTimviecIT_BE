@@ -47,7 +47,7 @@ const addnguoidung = async (req, res) => {
 
 const delnguoidung = async (req, res) => {
   try {
-    const data = await nguoidungService.del(req.body);
+    const data = await nguoidungService.xoanguoidung(req.query.id);
     res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });

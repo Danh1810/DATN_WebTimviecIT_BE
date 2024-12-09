@@ -20,7 +20,7 @@ router.get("/tk", tintdController.searchJobPostsByKeyword);
 router.post("/duyet", tintdController.updateTrangthaiService);
 
 // Route to delete a TTD by ID
-router.delete("/delete", tintdController.delTtd);
+router.delete("/", tintdController.delTtd);
 
 // Route to get TTD by ID
 router.get("/details", tintdController.getTtdById);

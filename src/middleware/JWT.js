@@ -54,6 +54,7 @@ const nonSecurePaths = [
   "/callback",
   "/create_payment_url",
   "/vnpay_return",
+  "/verify-email",
   // "/reset-password",
   // "/news/getnewsbysort",
   // "/payment/callback",

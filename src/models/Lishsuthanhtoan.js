@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       loaiThanhtoan: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: "VNPAY",
       },
       trangthai: {
         type: DataTypes.STRING,

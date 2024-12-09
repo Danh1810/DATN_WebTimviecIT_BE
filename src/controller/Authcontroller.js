@@ -1,7 +1,6 @@
 const authService = require("../services/auth.service.js");
 const bcrypt = require("bcryptjs");
 const mysql = require("mysql2");
-const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const db = require("../models/index.js");
 const { Op } = require("sequelize");
@@ -67,16 +66,17 @@ const { Op } = require("sequelize");
 
 // Verification Route
 
+const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+const env = require("dotenv");
+env.config();
 const register = async (req, res) => {
   try {
-    // Log input data
     console.log("🚀 ~ register ~ req.body:", req.body);
 
     // Check if the user already exists
     const existingUser = await db.Nguoidung.findOne({
-      where: {
-        [Op.or]: [{ email: req.body.email }],
-      },
+      where: { [Op.or]: [{ email: req.body.email }] },
     });
     console.log("🚀 ~ register ~ existingUser:", existingUser);
 
@@ -88,40 +88,90 @@ const register = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
 
+    // Generate email verification token
+    const verificationToken = jwt.sign(
+      { email: req.body.email },
+      process.env.JWT_SECRET, // Use a secret key from your environment variables
+      { expiresIn: "1h" } // Token expires in 1 hour
+    );
+    console.log("🚀 ~ register ~ verificationToken:", verificationToken);
+
     // Create a new user
     const newUser = await db.Nguoidung.create({
       username: req.body.username,
       email: req.body.email,
       password: hash,
       MaQuyen: parseInt(req.body.MaQuyen),
+      isVerified: false, // Add a field for email verification status
+      verificationToken: verificationToken, // Store the verification token in the database
     });
+    console.log("🚀 ~ register ~ newUser:", newUser);
+
+    // Send verification email
+    const transporter = nodemailer.createTransport({
+      service: "Gmail", // Or your preferred email provider
+      auth: {
+        user: process.env.email, // Your email
+        pass: process.env.password, // Your email password
+      },
+    });
+
+    const verificationUrl = `${process.env.URL}/verify?token=${verificationToken}`;
+    const mailOptions = {
+      from: process.env.email,
+      to: req.body.email,
+      subject: "Xác minh email",
+      html: `<p>Chào ${req.body.username},</p>
+             <p>Vui lòng xác minh email của bạn bằng cách nhấp vào liên kết bên dưới:</p>
+             <a href="${verificationUrl}">Xác minh email</a>
+             <p>Liên kết này sẽ hết hạn sau 1 giờ.</p>`,
+    };
+
+    await transporter.sendMail(mailOptions);
 
     return res
       .status(200)
-      .json({ message: "Đăng ký thành công", user: newUser });
+      .json({ message: "Đăng ký thành công. Kiểm tra email để xác minh." });
   } catch (error) {
     console.error("Lỗi khi xử lý đăng ký:", error);
     return res.status(500).json({ error: "Lỗi máy chủ" });
   }
 };
 
-// const verifyEmail = (req, res) => {
-//   const { token } = req.params;
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.query;
+    console.log("🚀 ~ verifyEmail ~ token:", token);
 
-//   const q = "SELECT * FROM Nguoidung WHERE verificationToken = ?";
-//   db.query(q, [token], (err, data) => {
-//     if (err) return res.status(500).json(err);
-//     if (!data.length) return res.status(404).json("Invalid verification token");
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("🚀 ~ verifyEmail ~ decoded:", decoded);
 
-//     // Mark user as verified
-//     const qUpdate =
-//       "UPDATE Nguoidung SET verified = true WHERE verificationToken = ?";
-//     db.query(qUpdate, [token], (err, data) => {
-//       if (err) return res.status(500).json(err);
-//       return res.status(200).json("Email đã được xác nhận thành công.");
-//     });
-//   });
-// };
+    // Find the user by email
+    const user = await db.Nguoidung.findOne({
+      where: { email: decoded.email },
+    });
+    console.log("🚀 ~ verifyEmail ~ user:", user);
+    console.log("🚀 ~ verifyEmail ~ user.isVerified :", user.isVerified);
+    if (!user || user.isVerified == true) {
+      return res
+        .status(400)
+        .json({ error: "Liên kết không hợp lệ hoặc đã được sử dụng" });
+    }
+
+    // Update the user's verification status
+    user.isVerified = true;
+    user.verificationToken = null; // Remove the token after successful verification
+    await user.save();
+
+    return res.status(200).json({ message: "Xác minh email thành công" });
+  } catch (error) {
+    console.error("Lỗi khi xác minh email:", error);
+    return res
+      .status(400)
+      .json({ error: "Liên kết xác minh không hợp lệ hoặc đã hết hạn" });
+  }
+};
 
 const Login = async (req, res) => {
   try {
@@ -182,4 +232,5 @@ module.exports = {
   logout,
   getUserAccount,
   forgotPassword,
+  verifyEmail,
 };

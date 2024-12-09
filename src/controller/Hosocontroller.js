@@ -106,7 +106,7 @@ const updateHoso = async (req, res) => {
 
 const XoaHoso = async (req, res) => {
   try {
-    const data = await HosoService.XoaHoso(req.params.id);
+    const data = await HosoService.XoaHoso(req.query.id);
     res.status(data.status).json({
       code: data.code,
       message: data.message,

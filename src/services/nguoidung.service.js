@@ -156,6 +156,16 @@ const Duyettaikhoan = async (data) => {
     return { status: 500, code: -1, message: error.message, data: "" };
   }
 };
+const xoanguoidung = async (id) => {
+  const res = await db.Nguoidung.destroy({
+    where: { id: id },
+  });
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 
 module.exports = {
   getAllNguoidung,
@@ -165,4 +175,5 @@ module.exports = {
   createNguoidung,
   getNguoidungByUsername,
   updateNd,
+  xoanguoidung,
 };

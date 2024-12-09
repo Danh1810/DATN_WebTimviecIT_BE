@@ -19,7 +19,7 @@ app.use(cookieParser()); // Parse cookies for authentication/other purposes.
 app.use(
   cors({
     origin: "http://localhost:3000", // Allow requests from your frontend
-    methods: ["GET", "POST", "PUT", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // This is required for cookies and Authorization headers
   })

@@ -37,6 +37,7 @@ const initApiRoutes = (app) => {
   router.get("/search", emCtl.getNtdById);
   router.get("/jb", jbpCtl.getAllTintd);
   router.get("/sea", jbpCtl.getTintdByID);
+  router.get("/verify-email", authController.verifyEmail);
   // router.get(
   //   "/google",
   //   passport.authenticate("google", {

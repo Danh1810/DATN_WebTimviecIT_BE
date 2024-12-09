@@ -41,6 +41,6 @@ router.put(
 );
 
 // Delete a Hoso record by ID
-router.delete("/delete", HosoController.XoaHoso);
+router.delete("/", HosoController.XoaHoso);
 
 module.exports = router;

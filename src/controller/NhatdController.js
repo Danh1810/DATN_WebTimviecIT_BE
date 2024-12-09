@@ -14,7 +14,6 @@ const getAllNtd = async (req, res) => {
 const addNtd = async (req, res) => {
   try {
     console.log("repbody", req.body);
-    // Extract necessary fields from the request body
     const { ten, email, sdt, website, linhvuc, diachi, MaND, Soluongdangbai } =
       req.body;
     const logo = req.fileUrl;

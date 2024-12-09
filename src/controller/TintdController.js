@@ -92,7 +92,7 @@ const addTtd = async (req, res) => {
 };
 const delTtd = async (req, res) => {
   try {
-    const data = await jbpservice.delTtd(req.body);
+    const data = await jbpservice.XoaTtd(req.query.id);
     res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });

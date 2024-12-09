@@ -23,10 +23,18 @@ router.put(
   "/update",
   upload.single("anhDaiDien"), // multer middleware for file uploads
   async (req, res, next) => {
+    console.log("🚀 ~ req.file:", req.file);
     try {
       if (req.file) {
-        // If a file is uploaded, process it
-        req.body.anhDaiDien = await uploadToCloudinary(req.file.path); // Assuming this returns the URL
+        // Process file upload and get Cloudinary URL
+        const cloudinaryResult = await uploadToCloudinary.uploadToCloudinary(
+          req,
+          res,
+          () => {}
+        );
+        if (cloudinaryResult && req.fileUrl) {
+          req.body.anhDaiDien = req.fileUrl; // Attach Cloudinary URL to request body
+        }
       }
       next(); // Proceed to the controller
     } catch (error) {

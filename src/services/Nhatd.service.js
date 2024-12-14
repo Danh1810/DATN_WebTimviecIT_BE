@@ -59,6 +59,21 @@ const getNtdById = async (id) => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const getNtdByIdNTD = async (id) => {
+  console.log("🚀 ~ getNtdByIdNTD ~ id:", id);
+  try {
+    const res = await db.Nhatuyendung.findOne({
+      where: { id: id },
+    });
+    if (res) {
+      return { status: 200, code: 0, message: "success", data: res };
+    } else {
+      return { status: 500, code: -1, message: "error", data: "" };
+    }
+  } catch (error) {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 
 module.exports = {
   getAllNtd,
@@ -67,4 +82,5 @@ module.exports = {
   updateNtd,
   XoaNtd,
   getAllTintd,
+  getNtdByIdNTD,
 };

@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       mota: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT("long"),
       },
       Ngayhethan: {
         type: DataTypes.DATE,

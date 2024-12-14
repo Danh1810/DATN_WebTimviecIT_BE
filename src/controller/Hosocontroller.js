@@ -19,13 +19,14 @@ const getAllHoso = async (req, res) => {
 };
 
 const createHoso = async (req, res) => {
+  console.log("🚀 ~ createHoso ~ req:", req);
+
   try {
     const {
       tenhoso,
       kyNangLapTrinh,
       capBacHienTai,
       mucTieuNgheNghiep,
-      chungChiNgheNghiep,
       duAnDaThamGia,
       NguoitimviecId,
       kinhNghiemLamViec,
@@ -38,7 +39,6 @@ const createHoso = async (req, res) => {
       tenhoso,
       kyNangLapTrinh,
       capBacHienTai,
-      chungChiNgheNghiep,
       mucTieuNgheNghiep,
       duAnDaThamGia,
       NguoitimviecId,
@@ -68,7 +68,6 @@ const updateHoso = async (req, res) => {
       kyNangLapTrinh,
       capBacHienTai,
       mucTieuNgheNghiep,
-      chungChiNgheNghiep,
       duAnDaThamGia,
       NguoitimviecId,
       kinhNghiemLamViec,
@@ -82,7 +81,6 @@ const updateHoso = async (req, res) => {
       tenhoso,
       kyNangLapTrinh,
       capBacHienTai,
-      chungChiNgheNghiep,
       mucTieuNgheNghiep,
       duAnDaThamGia,
       NguoitimviecId,

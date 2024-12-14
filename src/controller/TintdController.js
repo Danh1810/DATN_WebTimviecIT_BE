@@ -120,6 +120,15 @@ const getTtdntdId = async (req, res) => {
       .json({ code: data.code, message: data.message, data: data.data });
   } catch (error) {}
 };
+const getTtdntdIddetail = async (req, res) => {
+  try {
+    const data = await jbpservice.getAllTintdcdByEmployer(req.query.id);
+    console.log("🚀 ~ getTtdById ~ req:", req.query.id);
+    return res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {}
+};
 const updateTtd = async (req, res) => {
   try {
     const data = await jbpservice.updateTtd(req.body);
@@ -247,4 +256,5 @@ module.exports = {
   getTtdntdId,
   searchJobPostsByKeyword,
   getAllTintdadmin,
+  getTtdntdIddetail,
 };

@@ -29,27 +29,42 @@ const layTatCaHSTheoTTD = async (id) => {
   }
 };
 const layTatCaHSTheoNTV = async (id) => {
-  console.log("🚀 ~ layTatCaHSTheoTTD ~ id:", id);
-  const res = await db.Ungtuyen.findAll({
-    include: [
-      {
-        model: db.Hosocanhan,
-        as: "UT_NTV",
-        where: { NguoitimviecId: id }, // Lọc theo ID người tìm việc
-      },
-      {
-        model: db.Tintuyendung,
-        as: "UT_TTD",
-      },
-    ],
-  });
-  if (res) {
-    console.log("🚀 ~ layTatCaHSTheoTTD ~ res:", res);
-    return { status: 200, code: 0, message: "success", data: res };
-  } else {
-    return { status: 500, code: -1, message: "error", data: "" };
+  console.log("🚀 ~ layTatCaHSTheoNTV ~ id:", id);
+  try {
+    const res = await db.Ungtuyen.findAll({
+      include: [
+        {
+          model: db.Hosocanhan,
+          as: "UT_NTV",
+          where: { NguoitimviecId: id }, // Filter by job seeker ID
+        },
+        {
+          model: db.Tintuyendung,
+          as: "UT_TTD",
+        },
+        {
+          model: db.PhanHoiUngTuyen,
+          as: "ungtuyen11", // Include feedback associated with the job application
+        },
+      ],
+    });
+
+    if (res) {
+      return { status: 200, code: 0, message: "success", data: res };
+    } else {
+      return { status: 404, code: 1, message: "No data found", data: "" };
+    }
+  } catch (error) {
+    console.error("🚀 ~ layTatCaHSTheoNTV ~ error:", error);
+    return {
+      status: 500,
+      code: -1,
+      message: "Server error",
+      data: error.message,
+    };
   }
 };
+
 const createUT = async (data) => {
   try {
     const res = await db.Ungtuyen.create(data);

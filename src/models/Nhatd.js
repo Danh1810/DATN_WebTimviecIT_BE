@@ -64,6 +64,9 @@ module.exports = (sequelize, DataTypes) => {
       Soluongdangbai: {
         type: DataTypes.INTEGER,
       },
+      thongtin: {
+        type: DataTypes.TEXT("long"),
+      },
     },
     {
       sequelize,

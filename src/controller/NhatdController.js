@@ -14,8 +14,17 @@ const getAllNtd = async (req, res) => {
 const addNtd = async (req, res) => {
   try {
     console.log("repbody", req.body);
-    const { ten, email, sdt, website, linhvuc, diachi, MaND, Soluongdangbai } =
-      req.body;
+    const {
+      ten,
+      email,
+      sdt,
+      website,
+      linhvuc,
+      diachi,
+      MaND,
+      Soluongdangbai,
+      thongtin,
+    } = req.body;
     const logo = req.fileUrl;
     const newNtd = await ntdService.createNtd({
       ten,
@@ -26,6 +35,7 @@ const addNtd = async (req, res) => {
       diachi,
       MaND: MaND,
       logo,
+      thongtin,
       Soluongdangbai: Soluongdangbai || 3, // Default to 0 if not provided
     });
 
@@ -58,7 +68,8 @@ const addNtd = async (req, res) => {
 
 const updateNtd = async (req, res) => {
   try {
-    const { id, ten, email, sdt, website, linhvuc, diachi } = req.body;
+    const { id, ten, email, sdt, website, linhvuc, diachi, thongtin } =
+      req.body;
     console.log("🚀 ~ updateNtd ~ eq.body;:", req.body);
     const logo = req.fileUrl;
     const data = await ntdService.updateNtd({
@@ -70,6 +81,7 @@ const updateNtd = async (req, res) => {
       linhvuc,
       diachi,
       logo,
+      thongtin,
     });
     res
       .status(data.status)
@@ -100,6 +112,17 @@ const getNtdById = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
+const getNtdByIdNTD = async (req, res) => {
+  console.log("🚀 ~ getNtdByIdNTD ~ req:", req.query.id);
+  try {
+    const data = await ntdService.getNtdByIdNTD(req.query.id);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
 
 module.exports = {
   getAllNtd,
@@ -107,4 +130,5 @@ module.exports = {
   updateNtd,
   deleteNtd,
   getNtdById,
+  getNtdByIdNTD,
 };

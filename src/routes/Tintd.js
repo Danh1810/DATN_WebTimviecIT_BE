@@ -13,6 +13,7 @@ router.get("/", tintdController.getAllTintd);
 router.get("/admin", tintdController.getAllTintdadmin);
 router.get("/cd", tintdController.getAllTintdcd);
 router.get("/ntd", tintdController.getTtdntdId);
+router.get("/ntd/detail", tintdController.getTtdntdIddetail);
 
 // Route to add a new TTD
 router.post("/", tintdController.addJobPostWithDetails);

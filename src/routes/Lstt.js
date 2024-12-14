@@ -11,5 +11,5 @@ router.get("/detail", LsttController.getRoleById); // Get role by ID
 router.put("/", LsttController.updateLSTT);
 router.post("/create", LsttController.create),
   router.post("/callback", LsttController.callback);
-
+router.get("/ntd", LsttController.getLsttByNTDId);
 module.exports = router;

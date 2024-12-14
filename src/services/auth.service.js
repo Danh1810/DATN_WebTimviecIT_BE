@@ -30,7 +30,6 @@ const checkPassword = (plainPassword, hashedPassword) => {
 
 const login = async (data) => {
   try {
-    // Fetch the user from the database
     const user = await db.Nguoidung.findOne({
       where: { email: data.email },
       include: [
@@ -44,38 +43,85 @@ const login = async (data) => {
     });
     console.log("🚀 ~ login ~ user:", user);
 
+    // Check if user exists
     if (!user) {
       return {
         status: 400,
-        message: "Tên đăng nhập hoặc mật khẩu không đúng",
+        message: "Thông tin đăng nhập không chính xác",
         code: 3,
         data: {},
       };
     }
 
-    // Compare the provided password with the stored hashed password
-    const isPasswordValid = bcrypt.compareSync(data.password, user.password);
+    // Check email verification status
+    if (user.isVerified === 0) {
+      return {
+        status: 403,
+        message: "Email chưa được xác thực",
+        code: 4,
+        data: {},
+      };
+    }
+
+    // Check user's active status
+    if (user.Trangthai !== "Hoạt động") {
+      return {
+        status: 403,
+        message: "Tài khoản đã bị khóa hoặc không hoạt động",
+        code: 5,
+        data: {},
+      };
+    }
+
+    // Validate password
+    let isPasswordValid = false;
+    try {
+      isPasswordValid = bcrypt.compareSync(data.password, user.password);
+      console.log("🚀 ~ login ~ isPasswordValid:", isPasswordValid);
+    } catch (err) {
+      console.error("Password comparison error:", err);
+      return {
+        status: 500,
+        message: "Lỗi xử lý mật khẩu",
+        code: -1,
+        data: {},
+      };
+    }
+
+    // Check password validity
     if (!isPasswordValid) {
       return {
         status: 400,
-        message: "Tên đăng nhập hoặc mật khẩu không đúng",
+        message: "Thông tin đăng nhập không chính xác",
         code: 3,
         data: {},
       };
     }
 
-    // Construct the payload for the JWT token
+    // Prepare payload for token
     const payload = {
       email: user.email,
       username: user.username,
       Quyen: user.MaQuyen,
-      TenQuyen: user.Group.ten, // Access the role name from the 'Group' association
-      id: user.MaND,
+      TenQuyen: user.Group.ten,
+      id: user.id,
     };
 
-    const token = await JWTmdw.createToken(payload);
+    // Create token
+    let token;
+    try {
+      token = await JWTmdw.createToken(payload);
+    } catch (err) {
+      console.error("Token creation error:", err);
+      return {
+        status: 500,
+        message: "Lỗi tạo token",
+        code: -1,
+        data: {},
+      };
+    }
 
-    // Return the success response
+    // Successful login response
     return {
       status: 200,
       message: "Đăng nhập thành công",

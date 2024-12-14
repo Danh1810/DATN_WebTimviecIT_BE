@@ -1,4 +1,5 @@
 const LsttService = require("../services/LsThanhtoan.service");
+const db = require("../models/index");
 const getLstt = async (req, res) => {
   try {
     const data = await LsttService.getAllLSTT();
@@ -47,6 +48,19 @@ const getRoleById = async (req, res) => {
       .json({ code: data.code, message: data.message, data: data.data });
   } catch (error) {}
 };
+const getLsttByNTDId = async (req, res) => {
+  try {
+    const employer = await db.Nhatuyendung.findOne({
+      where: { MaND: req.query.id },
+    });
+    console.log("🚀 ~ getLsttByNTDId ~ req.query.id:", req.query.id);
+    const data = await LsttService.getLSTTByNTDId(employer.id);
+    console.log("🚀 ~ getLsttByNTDId ~ data:", data);
+    return res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {}
+};
 const updateLSTT = async (req, res) => {
   try {
     const data = await LsttService.updateLSTT(req.body);
@@ -82,4 +96,5 @@ module.exports = {
   updateLSTT,
   create,
   callback,
+  getLsttByNTDId,
 };

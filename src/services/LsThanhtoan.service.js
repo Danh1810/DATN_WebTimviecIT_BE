@@ -58,6 +58,22 @@ const getLSTTById = async (id) => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const getLSTTByNTDId = async (id) => {
+  console.log("🚀 ~ getLSTTByNTDId ~ id:", id);
+  try {
+    const res = await db.Lichsuthanhtoan.findAll({
+      where: { MaNTT: id },
+      include: [{ model: db.Nhatuyendung, as: "employer" }],
+    });
+    if (res) {
+      return { status: 200, code: 0, message: "success", data: res };
+    } else {
+      return { status: 500, code: -1, message: "error", data: "" };
+    }
+  } catch (error) {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 const axios = require("axios");
 const crypto = require("crypto");
 const env = require("dotenv");
@@ -235,4 +251,5 @@ module.exports = {
   XoaLSTT,
   create,
   callback,
+  getLSTTByNTDId,
 };

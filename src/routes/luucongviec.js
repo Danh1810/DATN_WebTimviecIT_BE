@@ -15,6 +15,6 @@ router.post("/", LuucongviecController.addSavedJob);
 router.put("/saved-jobs/:id", LuucongviecController.updateSavedJob);
 
 // Delete a saved job
-router.delete("/saved-jobs/:id", LuucongviecController.deleteSavedJob);
+router.delete("/", LuucongviecController.deleteSavedJob);
 
 module.exports = router;

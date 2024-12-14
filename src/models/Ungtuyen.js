@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "MaHS",
         as: "UT_NTV",
       });
+      Ungtuyen.hasMany(models.PhanHoiUngTuyen, {
+        foreignKey: "idUngTuyen",
+        as: "ungtuyen11",
+      });
       Ungtuyen.belongsTo(models.Tintuyendung, {
         foreignKey: "MaTTD",
         as: "UT_TTD",

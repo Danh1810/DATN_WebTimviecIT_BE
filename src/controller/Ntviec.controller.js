@@ -85,6 +85,7 @@ const updateNtv = async (req, res) => {
     console.log("🚀 ~ updateNtv ~ req.body:", req.body);
 
     const anhDaiDien = req.fileUrl;
+    console.log("🚀 ~ updateNtv ~ req.fileUrl:", req.fileUrl);
     const data = await NTVService.updateNtv({
       id,
       anhDaiDien,

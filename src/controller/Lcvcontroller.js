@@ -30,7 +30,7 @@ const updateSavedJob = async (req, res) => {
 };
 
 const deleteSavedJob = async (req, res) => {
-  const data = await LuucongviecService.deleteSavedJob(req.params.id);
+  const data = await LuucongviecService.deleteSavedJob(req.query.id);
   return res.status(data.status).json(data);
 };
 

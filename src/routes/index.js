@@ -18,7 +18,7 @@ const Lsttroute = require("../routes/Lstt.js");
 const Nguoidungroute = require("../routes/Nguoidung.js");
 const NhaTDroute = require("../routes/Nhatd.js");
 const Nguoitimviecroute = require("../routes/Ntv.js");
-const Phongvanroute = require("../routes/Phongvan.js");
+const Phongvanroute = require("../routes/Phanhoi.js");
 const quyenroute = require("../routes/Quyen.js");
 const Tintdroute = require("../routes/Tintd.js");
 const Ungtuyenroute = require("../routes/Ungtuyen.js");
@@ -31,6 +31,7 @@ const initApiRoutes = (app) => {
   router.all("*", checkUserJWT, checkUserPermission);
 
   router.post("/register", authController.register);
+  router.post("/registerntd", authController.registerNTD);
   router.post("/login", authController.Login);
   router.get("/logout", authController.logout);
   router.get("/account", authController.getUserAccount);
@@ -105,7 +106,7 @@ const initApiRoutes = (app) => {
   router.use("/nguoidung", Nguoidungroute);
   router.use("/nhatd", NhaTDroute);
   router.use("/ngtviec", Nguoitimviecroute);
-  router.use("/phongvan", Phongvanroute);
+  router.use("/phanhoi", Phongvanroute);
   router.use("/quyen", quyenroute);
   router.use("/tintd", Tintdroute);
   router.use("/Ut", Ungtuyenroute);
@@ -182,13 +183,17 @@ const initApiRoutes = (app) => {
       vnp_Params["vnp_SecureHash"] = signed;
       vnpUrl += "?" + querystring.stringify(vnp_Params, { encode: false });
       console.log("🚀 ~ vnpUrl:", vnpUrl);
+
+      if (req.body.goimua === "goi1") {
+        const sl2 = fee.Soluongdangbai + sl;
+        const fee1 = await db.Nhatuyendung.update(
+          { Soluongdangbai: sl2 },
+          { where: { id: fee.id } }
+        );
+
+        console.log("🚀 ~ router.post ~ fee1:", fee1);
+      }
       res.status(200).json({ paymentUrl: vnpUrl });
-      const sl2 = fee.Soluongdangbai + sl;
-      const fee1 = await db.Nhatuyendung.update(
-        { Soluongdangbai: sl2 },
-        { where: { id: fee.id } }
-      );
-      console.log("🚀 ~ router.post ~ fee1:", fee1);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

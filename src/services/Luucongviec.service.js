@@ -58,7 +58,7 @@ const updateSavedJob = async (id, data) => {
 
 const deleteSavedJob = async (id) => {
   try {
-    const deleted = await db.Luucongviec.destroy({ where: { id } });
+    const deleted = await db.Luucongviec.destroy({ where: { id: id } });
     return deleted
       ? { status: 200, code: 0, message: "Saved job deleted", data: deleted }
       : { status: 404, code: 1, message: "Saved job not found", data: null };

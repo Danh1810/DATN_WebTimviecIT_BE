@@ -1,7 +1,10 @@
 const jbpservice = require("../services/Tintd.service");
 const db = require("../models/index");
 const Nhatd = require("../services/Nhatd.service");
-const { sequelize } = require("sequelize");
+const { sequelize, where } = require("sequelize");
+const nodemailer = require("nodemailer");
+const env = require("dotenv");
+env.config();
 
 const getAllTintd = async (req, res) => {
   try {
@@ -25,7 +28,27 @@ const getAllTintdadmin = async (req, res) => {
 };
 const updateTrangthaiService = async (req, res) => {
   try {
+    const data = await db.Nguoidung.findOne({
+      where: { id: req.body.employer.MaND },
+    });
     var response = await jbpservice.updateTrangthaiService(req.body);
+    const transporter = nodemailer.createTransport({
+      service: "Gmail", // Or your preferred email provider
+      auth: {
+        user: process.env.email, // Your email
+        pass: process.env.password, // Your email password
+      },
+    });
+    const mailOptions = {
+      from: process.env.email,
+      to: data.email,
+      subject: "Xác minh email",
+      html: `<p>Chào ${data.username},</p>
+             <p>Bài đăng tuyển dụng <h3> ${req.body.tieude}</h3> đã được duyệt</p>
+             
+             `,
+    };
+    await transporter.sendMail(mailOptions);
     return res.status(response.status).json({
       code: response.code,
       message: response.message,

@@ -21,10 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       kyNangLapTrinh: DataTypes.JSON,
       capBacHienTai: DataTypes.STRING,
       mucTieuNgheNghiep: DataTypes.TEXT,
-      kinhNghiemLamViec: DataTypes.TEXT,
-      trinhDoHocVan: DataTypes.TEXT,
-      chungChiNgheNghiep: DataTypes.TEXT,
-      duAnDaThamGia: DataTypes.TEXT,
+      kinhNghiemLamViec: DataTypes.STRING,
+      trinhDoHocVan: DataTypes.STRING,
+      Mucluongmongmuon: DataTypes.DECIMAL(10, 2),
+      hinhThuclamviec: DataTypes.TEXT,
       fileHoso: DataTypes.STRING,
       ngayCapNhat: {
         type: DataTypes.DATE, // Kiểu dữ liệu DATE

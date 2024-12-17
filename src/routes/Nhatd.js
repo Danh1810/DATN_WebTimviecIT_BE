@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const ntdController = require("../controller/NhatdController");
-const uploadToCloudinary = require("../middleware/cloudinary");
+const { uploadToCloudinary } = require("../middleware/cloudinary");
 
-// Multer configuration
+// Multer configuration: Memory storage for buffer upload
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
@@ -21,7 +21,7 @@ router.get("/id", ntdController.getNtdByIdNTD);
 router.post(
   "/",
   upload.single("logo"),
-  uploadToCloudinary.uploadToCloudinary,
+  uploadToCloudinary, // Cloudinary upload middleware
   (req, res, next) => {
     if (req.fileUrl) {
       req.body.logo = req.fileUrl; // Attach Cloudinary URL to request body
@@ -32,23 +32,47 @@ router.post(
 );
 
 // Update record with file upload
+// router.put(
+//   "/update",
+//   upload.single("logo"), // Multer middleware for file uploads
+//   async (req, res, next) => {
+//     try {
+//       if (req.file) {
+//         // File exists, upload to Cloudinary
+//         await uploadToCloudinary(req, res, () => {
+//           req.body.logo = req.fileUrl; // Attach Cloudinary URL to request body
+//         });
+//       }
+//       // If no file, skip Cloudinary upload
+//       next();
+//     } catch (error) {
+//       console.error("Error uploading to Cloudinary:", error);
+//       return res.status(500).json({ error: "Failed to upload logo." });
+//     }
+//   },
+//   ntdController.updateNtd
+// );
 router.put(
   "/update",
-  upload.single("logo"), // multer middleware for file uploads
-  async (req, res, next) => {
+  upload.single("logo"), // Multer middleware for file uploads
+  uploadToCloudinary, // Cloudinary upload middleware
+  (req, res, next) => {
     try {
-      if (req.file) {
-        // If a file is uploaded, process it
-        req.body.logo = await uploadToCloudinary(req.file.path); // Assuming this returns the URL
+      // If a file was uploaded and Cloudinary processed it, attach the URL to req.body
+      if (req.fileUrl) {
+        req.body.logo = req.fileUrl;
       }
-      next(); // Proceed to the controller
+      next(); // Proceed to the controller only if file handling was successful
     } catch (error) {
-      console.error("Error uploading to Cloudinary:", error);
-      return res.status(500).json({ error: "Failed to upload logo." });
+      console.error("Error attaching Cloudinary URL:", error);
+      return res.status(500).json({ error: "Failed to process file upload." });
     }
   },
-  ntdController.updateNtd
+  ntdController.updateNtd // Proceed to the controller after file handling
 );
+
+// Update "trangthai" (status) service
+router.post("/duyet", ntdController.updateTrangthaiService);
 
 // Delete record
 router.delete("/delete", ntdController.deleteNtd);

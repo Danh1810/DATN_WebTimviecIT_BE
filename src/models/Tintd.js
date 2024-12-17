@@ -43,7 +43,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
       },
       mucluong: {
-        type: DataTypes.STRING,
+        type: DataTypes.DECIMAL(10, 2),
       },
       MaNTD: {
         type: DataTypes.INTEGER,

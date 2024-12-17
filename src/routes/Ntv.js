@@ -2,8 +2,11 @@ const express = require("express");
 const router = express.Router();
 const multer = require("multer");
 const NTVController = require("../controller/Ntviec.controller");
-const uploadToCloudinary = require("../middleware/cloudinary"); // Ensure proper import style
-const upload = multer({ dest: "src/uploads" }); // Configure multer for file uploads
+const { uploadToCloudinary } = require("../middleware/cloudinary"); // Ensure proper import style
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+}); // Configure multer for file uploads
 
 router.get("/", NTVController.getNTV);
 router.get("/hoso", NTVController.getNTVhoso);
@@ -13,7 +16,7 @@ router.get("/lcv", NTVController.getNTVhosolcv);
 router.post(
   "/",
   upload.single("anhDaiDien"),
-  uploadToCloudinary.uploadToCloudinary,
+  uploadToCloudinary,
   NTVController.addNTV
 );
 
@@ -22,24 +25,17 @@ router.get("/detail", NTVController.getNtvById);
 router.put(
   "/update",
   upload.single("anhDaiDien"), // multer middleware for file uploads
-  async (req, res, next) => {
-    console.log("🚀 ~ req.file:", req.file);
+  uploadToCloudinary, // Cloudinary upload middleware
+  (req, res, next) => {
     try {
-      if (req.file) {
-        // Process file upload and get Cloudinary URL
-        const cloudinaryResult = await uploadToCloudinary.uploadToCloudinary(
-          req,
-          res,
-          () => {}
-        );
-        if (cloudinaryResult && req.fileUrl) {
-          req.body.anhDaiDien = req.fileUrl; // Attach Cloudinary URL to request body
-        }
+      // If a file was uploaded and Cloudinary processed it, attach the URL to req.body
+      if (req.fileUrl) {
+        req.body.anhDaiDien = req.fileUrl;
       }
-      next(); // Proceed to the controller
+      next(); // Proceed to the controller only if file handling was successful
     } catch (error) {
-      console.error("Error uploading to Cloudinary:", error);
-      return res.status(500).json({ error: "Failed to upload logo." });
+      console.error("Error attaching Cloudinary URL:", error);
+      return res.status(500).json({ error: "Failed to process file upload." });
     }
   },
   NTVController.updateNtv

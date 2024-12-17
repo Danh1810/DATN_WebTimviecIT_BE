@@ -53,6 +53,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      trangthai: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       MaND: {
         type: DataTypes.INTEGER,
         allowNull: true,

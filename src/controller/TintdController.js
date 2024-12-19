@@ -175,7 +175,9 @@ const addJobPostWithDetails = async (req, res) => {
       diaChiLamviec,
       kinhNghiem,
       Ma,
+      noibatnline,
     } = req.body;
+    console.log("🚀 ~ addJobPostWithDetails ~ req.body:", req.body);
 
     const employerId = parseInt(Ma); // Thay bằng logic để lấy ID của nhà tuyển dụng từ `req` hoặc `token`
 
@@ -191,7 +193,7 @@ const addJobPostWithDetails = async (req, res) => {
       return res.status(404).json({ message: "Employer not found." });
     }
 
-    if (employer.SoLuongDangTuyen <= 0) {
+    if (employer.Soluongdangbai <= 0) {
       return res.status(400).json({
         message: "No remaining job posts available for this employer.",
       });
@@ -207,12 +209,19 @@ const addJobPostWithDetails = async (req, res) => {
       loaiHopdong,
       diaChiLamviec,
       kinhNghiem,
+      noibat: noibatnline,
     });
+    console.log("🚀 ~ addJobPostWithDetails ~ newJobPost:", newJobPost);
 
-    // Cập nhật số lượng đăng tuyển
-    await employer.update({
-      Soluongdangbai: employer.Soluongdangbai - 1,
-    });
+    if (noibatnline === false) {
+      await employer.update({
+        Soluongdangbai: employer.Soluongdangbai - 1,
+      });
+    } else {
+      await employer.update({
+        Soluongnoibat: employer.Soluongnoibat - 1,
+      });
+    }
     console.log("🚀 ~ Updated employer's job posting count.");
 
     // Validate and process skills
@@ -223,9 +232,9 @@ const addJobPostWithDetails = async (req, res) => {
     if (validSkills.length > 0) {
       const jobSkillLinks = validSkills.map((skillId) => ({
         MaTTD: newJobPost.id,
-        MaCB: skillId,
+        MaKN: skillId,
       }));
-      await db.Vitrituyendung.bulkCreate(jobSkillLinks);
+      await db.Kynangtuyendung.bulkCreate(jobSkillLinks);
       console.log("🚀 ~ Successfully inserted skills:", jobSkillLinks);
     } else {
       console.warn("⚠️ ~ No valid skills provided. Skipping skill insertion.");
@@ -239,9 +248,9 @@ const addJobPostWithDetails = async (req, res) => {
     if (validLevels.length > 0) {
       const jobLevelLinks = validLevels.map((levelId) => ({
         MaTTD: newJobPost.id,
-        MaKN: levelId,
+        MaCB: levelId,
       }));
-      await db.Kynangtuyendung.bulkCreate(jobLevelLinks);
+      await db.Vitrituyendung.bulkCreate(jobLevelLinks);
       console.log("🚀 ~ Successfully inserted levels:", jobLevelLinks);
     } else {
       console.warn("⚠️ ~ No valid levels provided. Skipping level insertion.");
@@ -265,6 +274,108 @@ const addJobPostWithDetails = async (req, res) => {
   }
 };
 
+const getJobsApplicationCounts = async (maNTD) => {
+  try {
+    // Get all job postings with their application counts
+    const jobStats = await db.Tintuyendung.findAll({
+      where: {
+        MaNTD: maNTD,
+      },
+      attributes: [
+        "id",
+        "tieude",
+        "Ngaytao",
+        "Ngayhethan",
+        "trangthai",
+        "mucluong",
+        "diaChiLamviec",
+        [
+          db.sequelize.literal(
+            "(SELECT COUNT(*) FROM Ungtuyen WHERE Ungtuyen.MaTTD = Tintuyendung.id)"
+          ),
+          "totalApplications",
+        ],
+        [
+          db.sequelize.literal(
+            `(SELECT COUNT(*) FROM Ungtuyen WHERE Ungtuyen.MaTTD = Tintuyendung.id AND Ungtuyen.trangthai = 'Đã nộp')`
+          ),
+          "pendingApplications",
+        ],
+        [
+          db.sequelize.literal(
+            `(SELECT COUNT(*) FROM Ungtuyen WHERE Ungtuyen.MaTTD = Tintuyendung.id AND Ungtuyen.trangthai = 'Đã duyệt')`
+          ),
+          "acceptedApplications",
+        ],
+        [
+          db.sequelize.literal(
+            `(SELECT COUNT(*) FROM Ungtuyen WHERE Ungtuyen.MaTTD = Tintuyendung.id AND Ungtuyen.trangthai = 'Từ chối')`
+          ),
+          "rejectedApplications",
+        ],
+      ],
+      include: [
+        {
+          model: db.Nhatuyendung,
+          as: "employer",
+          attributes: ["ten"],
+          where: { MaNTD: maNTD },
+        },
+      ],
+      order: [["Ngaytao", "DESC"]],
+    });
+
+    // Format the response
+    const formattedJobStats = jobStats.map((job) => ({
+      jobId: job.id,
+      title: job.tieude,
+      createdAt: job.Ngaytao,
+      expiryDate: job.Ngayhethan,
+      status: job.trangthai,
+      salary: job.mucluong,
+      location: job.diaChiLamviec,
+      employerName: job.employer.ten,
+      applications: {
+        total: parseInt(job.dataValues.totalApplications),
+        pending: parseInt(job.dataValues.pendingApplications),
+        accepted: parseInt(job.dataValues.acceptedApplications),
+        rejected: parseInt(job.dataValues.rejectedApplications),
+      },
+    }));
+
+    return {
+      success: true,
+      data: formattedJobStats,
+    };
+  } catch (error) {
+    console.error("Error getting jobs application counts:", error);
+    return {
+      success: false,
+      error: "Failed to get jobs application statistics",
+    };
+  }
+};
+
+// Express route handler
+const getEmployerJobsApplicationStats = async (req, res) => {
+  const maNTD = req.params.maNTD;
+
+  if (!maNTD) {
+    return res.status(400).json({
+      success: false,
+      error: "Employer ID is required",
+    });
+  }
+
+  const result = await getJobsApplicationCounts(maNTD);
+
+  if (!result.success) {
+    return res.status(500).json(result);
+  }
+
+  res.json(result);
+};
+
 module.exports = {
   addJobPostWithDetails,
   getAllTintd,
@@ -280,4 +391,5 @@ module.exports = {
   searchJobPostsByKeyword,
   getAllTintdadmin,
   getTtdntdIddetail,
+  getEmployerJobsApplicationStats,
 };

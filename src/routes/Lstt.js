@@ -4,7 +4,9 @@ const LsttController = require("../controller/Lstt.controller");
 
 // Define routes for LSTT (Payment History)
 router.get("/", LsttController.getLstt); // Get all payment histories
-router.post("/", LsttController.addLstt); // Add new payment history
+router.get("/", LsttController.getLstt); // Get all payment histories
+router.get("/dt", LsttController.getTotalRevenue);
+router.get("/sumnhatd", LsttController.getTotalRevenue); // Add new payment history
 router.delete("/", LsttController.delLstt); // Delete payment history by ID
 router.get("/group", LsttController.getLsttByGroup); // Get payment history by group ID
 router.get("/detail", LsttController.getRoleById); // Get role by ID

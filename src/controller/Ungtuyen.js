@@ -80,6 +80,86 @@ const updateUT = async (req, res) => {
       .json({ code: data.code, message: data.message, data: data.data });
   } catch (error) {}
 };
+const { Op, Sequelize } = require("sequelize");
+
+const getMonthlyApplications = async (maNTD) => {
+  try {
+    // Get all applications for jobs posted by this employer
+    const monthlyStats = await db.Ungtuyen.findAll({
+      attributes: [
+        [
+          Sequelize.fn("DATE_FORMAT", Sequelize.col("NgayNop"), "%Y-%m"),
+          "month",
+        ],
+        [Sequelize.fn("COUNT", "*"), "applicationCount"],
+      ],
+      include: [
+        {
+          model: db.Tintuyendung,
+          as: "UT_TTD",
+          attributes: [],
+          required: true,
+          include: [
+            {
+              model: db.Nhatuyendung,
+              as: "employer",
+              attributes: [],
+              where: { MaND: maNTD },
+              required: true,
+            },
+          ],
+        },
+      ],
+      group: [Sequelize.fn("DATE_FORMAT", Sequelize.col("NgayNop"), "%Y-%m")],
+      order: [
+        [
+          Sequelize.fn("DATE_FORMAT", Sequelize.col("NgayNop"), "%Y-%m"),
+          "DESC",
+        ],
+      ],
+      raw: true,
+    });
+
+    // Format the response
+    const formattedStats = monthlyStats.map((stat) => ({
+      month: stat.month,
+      slhoso: parseInt(stat.applicationCount),
+    }));
+
+    return {
+      success: true,
+      data: formattedStats,
+    };
+  } catch (error) {
+    console.error("Error getting monthly applications:", error);
+    return {
+      success: false,
+      error: "Failed to get monthly applications statistics",
+    };
+  }
+};
+
+// Express route handler
+const getMonthlyApplicationsStats = async (req, res) => {
+  const maNTD = req.query.id;
+  console.log("🚀 ~ getMonthlyApplicationsStats ~ maNTD:", maNTD);
+
+  if (!maNTD) {
+    return res.status(400).json({
+      success: false,
+      error: "Employer ID is required",
+    });
+  }
+
+  const result = await getMonthlyApplications(maNTD);
+
+  if (!result.success) {
+    return res.status(500).json(result);
+  }
+
+  res.json(result);
+};
+
 module.exports = {
   getUT,
   addUT,
@@ -88,4 +168,5 @@ module.exports = {
   updateUT,
   getUTlayhoso,
   getUTNTV,
+  getMonthlyApplicationsStats,
 };

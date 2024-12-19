@@ -9,9 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Associations can be defined here
-      Lichsuthanhtoan.belongsTo(models.Nhatuyendung, {
+      Lichsuthanhtoan.belongsTo(models.Nguoidung, {
         foreignKey: "MaNTT",
-        as: "employer",
+        as: "users",
       });
     }
   }

@@ -193,6 +193,25 @@ const initApiRoutes = (app) => {
 
         console.log("🚀 ~ router.post ~ fee1:", fee1);
       }
+      if (req.body.goimua === "goi2") {
+        const sl2 = fee.Soluongnoibat + sl;
+        const fee1 = await db.Nhatuyendung.update(
+          { Soluongnoibat: sl2 },
+          { where: { id: fee.id } }
+        );
+      }
+      if (req.body.goimua === "goi3") {
+        const ntv = await db.Nguoitimviec.findOne({
+          where: { MaND: req.body.id },
+          raw: true,
+          nest: true,
+        });
+        const sl2 = ntv.Soluongnophoso + sl;
+        const fee2 = await db.Nguoitimviec.update(
+          { Soluongnophoso: sl2 },
+          { where: { id: ntv.id } }
+        );
+      }
       res.status(200).json({ paymentUrl: vnpUrl });
     } catch (error) {
       res.status(500).json({ error: error.message });

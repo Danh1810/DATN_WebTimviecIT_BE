@@ -8,6 +8,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "MaND",
         as: "ND_NTD",
       });
+      Nguoidung.hasMany(models.Lichsuthanhtoan, {
+        foreignKey: "MaNTT",
+        as: "ND_lstt",
+      });
       Nguoidung.hasMany(models.Nguoitimviec, {
         foreignKey: "MaND",
         as: "ND_NTV",

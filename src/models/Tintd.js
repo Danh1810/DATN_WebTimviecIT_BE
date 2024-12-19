@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "MaTTD",
         as: "levels",
       });
+      Tintuyendung.hasMany(models.Ungtuyen, {
+        foreignKey: "MaTTD",
+        as: "jbp",
+      });
     }
   }
 
@@ -48,6 +52,9 @@ module.exports = (sequelize, DataTypes) => {
       MaNTD: {
         type: DataTypes.INTEGER,
       },
+      noibat: {
+        type: DataTypes.INTEGER,
+      },
       Ngaytao: {
         allowNull: true,
         type: DataTypes.DATE,
@@ -64,6 +71,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       kinhNghiem: {
         type: DataTypes.STRING, // Ví dụ: 1-2 năm, 3-5 năm
+        allowNull: true,
+      },
+      noibat: {
+        type: DataTypes.BOOLEAN, // Ví dụ: 1-2 năm, 3-5 năm
         allowNull: true,
       },
     },

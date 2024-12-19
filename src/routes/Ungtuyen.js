@@ -11,7 +11,8 @@ router.get("/hosout", ungtuyenController.getUTlayhoso); // Get all applications
 router.post("/", upload.single("file"), ungtuyenController.addUT); // Add a new application
 router.delete("/", ungtuyenController.delUT);
 
-router.get("/:id", ungtuyenController.getUTById); // Get application by ID
+router.get("/ok", ungtuyenController.getUTById);
 router.put("/", ungtuyenController.updateUT); // Update application
+router.get("/thongke", ungtuyenController.getMonthlyApplicationsStats);
 
 module.exports = router;

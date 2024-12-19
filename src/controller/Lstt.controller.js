@@ -1,5 +1,6 @@
 const LsttService = require("../services/LsThanhtoan.service");
 const db = require("../models/index");
+const { sequelize } = require("../models/index");
 const getLstt = async (req, res) => {
   try {
     const data = await LsttService.getAllLSTT();
@@ -50,17 +51,83 @@ const getRoleById = async (req, res) => {
 };
 const getLsttByNTDId = async (req, res) => {
   try {
-    const employer = await db.Nhatuyendung.findOne({
-      where: { MaND: req.query.id },
-    });
-    console.log("🚀 ~ getLsttByNTDId ~ req.query.id:", req.query.id);
-    const data = await LsttService.getLSTTByNTDId(employer.id);
+    const data = await LsttService.getLSTTByNTDId(req.query.id);
     console.log("🚀 ~ getLsttByNTDId ~ data:", data);
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
   } catch (error) {}
 };
+const getTotalRevenue = async (req, res) => {
+  try {
+    // Truy vấn trực tiếp tổng doanh thu từ cơ sở dữ liệu
+    const [results] = await sequelize.query(
+      "SELECT SUM(sotien) AS totalRevenue FROM Lichsuthanhtoan"
+    );
+
+    const totalRevenue = results[0]?.totalRevenue || 0;
+
+    console.log("🚀 ~ getTotalRevenue ~ totalRevenue:", totalRevenue);
+
+    // Trả về kết quả
+    return res.status(200).json({
+      code: 200,
+      message: "Total revenue fetched successfully",
+      data: { totalRevenue: parseFloat(totalRevenue).toFixed(2) },
+    });
+  } catch (error) {
+    console.error("🚀 ~ getTotalRevenue ~ error:", error);
+
+    return res.status(500).json({
+      code: 500,
+      message: "Internal Server Error",
+      data: null,
+    });
+  }
+};
+
+const getTotalRevenueByNTT = async (req, res) => {
+  try {
+    const { MaNTT } = req.query.id; // Lấy `MaNTT` từ query parameters
+
+    if (!MaNTT) {
+      return res.status(400).json({
+        code: 400,
+        message: "MaNTT is required",
+        data: null,
+      });
+    }
+
+    // Truy vấn tổng doanh thu của một NTT
+    const [results] = await sequelize.query(
+      "SELECT SUM(sotien) AS totalRevenue FROM Lichsuthanhtoan WHERE MaNTT = :MaNTT",
+      {
+        replacements: { MaNTT },
+        type: sequelize.QueryTypes.SELECT,
+      }
+    );
+
+    const totalRevenue = results?.totalRevenue || 0;
+
+    console.log("🚀 ~ getTotalRevenueByNTT ~ totalRevenue:", totalRevenue);
+
+    // Trả về kết quả
+    return res.status(200).json({
+      code: 200,
+      message: "Total revenue fetched successfully",
+      data: { totalRevenue: parseFloat(totalRevenue).toFixed(2) },
+    });
+  } catch (error) {
+    console.error("🚀 ~ getTotalRevenueByNTT ~ error:", error);
+
+    return res.status(500).json({
+      code: 500,
+      message: "Internal Server Error",
+      data: null,
+    });
+  }
+};
+
 const updateLSTT = async (req, res) => {
   try {
     const data = await LsttService.updateLSTT(req.body);
@@ -97,4 +164,6 @@ module.exports = {
   create,
   callback,
   getLsttByNTDId,
+  getTotalRevenue,
+  getTotalRevenueByNTT,
 };

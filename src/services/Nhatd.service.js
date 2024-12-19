@@ -3,8 +3,50 @@ const db = require("../models/index");
 
 const getAllNtd = async () => {
   const res = await db.Nhatuyendung.findAll({});
+  console.log("🚀 ~ getAllNtd ~ res:", res);
   if (res) {
     return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+const getAllNtdtk = async (id) => {
+  const employer = await db.Nhatuyendung.findAll({
+    where: { MaND: id },
+    include: [
+      {
+        model: db.Tintuyendung,
+        as: "jobPosts",
+        include: [
+          {
+            model: db.Kynang,
+            as: "skills",
+            through: { attributes: [] }, // Không hiển thị bảng trung gian
+            attributes: ["ten"], // Lấy tên các kỹ năng
+          },
+          {
+            model: db.Capbac,
+            as: "levels",
+            through: { attributes: [] }, // Không hiển thị bảng trung gian
+            attributes: ["ten"], // Lấy tên các cấp bậc
+          },
+          {
+            model: db.Ungtuyen,
+            as: "jbp",
+            include: [
+              {
+                model: db.Hosocanhan,
+                as: "UT_NTV", // Hồ sơ cá nhân của ứng viên
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  });
+
+  if (employer) {
+    return { status: 200, code: 0, message: "success", data: employer };
   } else {
     return { status: 500, code: -1, message: "error", data: "" };
   }
@@ -106,4 +148,5 @@ module.exports = {
   getAllTintd,
   getNtdByIdNTD,
   updateTrangthaiService,
+  getAllNtdtk,
 };

@@ -1,7 +1,9 @@
 const db = require("../models/index");
 
 const getAllLSTT = async () => {
-  const res = await db.Lichsuthanhtoan.findAll({});
+  const res = await db.Lichsuthanhtoan.findAll({
+    include: [{ model: db.Nguoidung, as: "users" }],
+  });
   if (res) {
     return { status: 200, code: 0, message: "success", data: res };
   } else {
@@ -47,7 +49,7 @@ const getLSTTById = async (id) => {
   try {
     const res = await db.Lichsuthanhtoan.findOne({
       where: { id: id },
-      include: [{ model: db.Nhatuyendung, as: "employer" }],
+      include: [{ model: db.Nguoidung, as: "users" }],
     });
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
@@ -63,7 +65,7 @@ const getLSTTByNTDId = async (id) => {
   try {
     const res = await db.Lichsuthanhtoan.findAll({
       where: { MaNTT: id },
-      include: [{ model: db.Nhatuyendung, as: "employer" }],
+      include: [{ model: db.Nguoidung, as: "users" }],
     });
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };

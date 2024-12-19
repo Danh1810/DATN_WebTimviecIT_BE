@@ -1,6 +1,9 @@
 const HosoService = require("../services/HosoService");
 const db = require("../models/index");
 const { where } = require("sequelize");
+const nodemailer = require("nodemailer");
+const env = require("dotenv");
+env.config();
 const getAllHoso = async (req, res) => {
   try {
     const data = await HosoService.getAllHoso();
@@ -147,6 +150,24 @@ const getHosoByhs = async (req, res) => {
       );
 
       if (updateResult[0] > 0) {
+        // const transporter = nodemailer.createTransport({
+        //   service: "Gmail", // Or your preferred email provider
+        //   auth: {
+        //     user: process.env.email, // Your email
+        //     pass: process.env.password, // Your email password
+        //   },
+        // });
+        // const mailOptions = {
+        //   from: process.env.email,
+        //   to: req.body.email,
+        //   subject: "Xác minh email",
+        //   html: `<p>Chào ${req.body.username},</p>
+        //              <p>Vui lòng xác minh email của bạn bằng cách nhấp vào liên kết bên dưới:</p>
+        //              <a href="${verificationUrl}">Xác minh email</a>
+        //              <p>Liên kết này sẽ hết hạn sau 1 giờ.</p>`,
+        // };
+
+        // await transporter.sendMail(mailOptions);
         console.log(`✅ ~ Record ${id} status updated to 'Đã xem'`);
       } else {
         console.warn(`⚠️ ~ Failed to update status for record ${id}`);

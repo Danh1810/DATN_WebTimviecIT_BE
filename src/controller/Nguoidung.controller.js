@@ -33,6 +33,7 @@ const addnguoidung = async (req, res) => {
       password: hashedPassword, // Lưu mật khẩu mã hóa
       username,
       MaQuyen,
+      isVerified: 1,
     });
 
     // Phản hồi

@@ -13,6 +13,16 @@ const getAllNtd = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
+const getAllNtdtk = async (req, res) => {
+  try {
+    const data = await ntdService.getAllNtdtk(req.query.id);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
 // Assuming the model is in a folder named models
 const addNtd = async (req, res) => {
   try {
@@ -193,4 +203,5 @@ module.exports = {
   getNtdById,
   getNtdByIdNTD,
   updateTrangthaiService,
+  getAllNtdtk,
 };

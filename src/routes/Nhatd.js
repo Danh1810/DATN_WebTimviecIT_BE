@@ -17,7 +17,8 @@ router.get("/", ntdController.getAllNtd);
 router.get("/detail", ntdController.getNtdById);
 router.get("/id", ntdController.getNtdByIdNTD);
 
-// Add new record with file upload
+router.get("/tk", ntdController.getAllNtdtk);
+
 router.post(
   "/",
   upload.single("logo"),

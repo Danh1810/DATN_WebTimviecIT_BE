@@ -1,10 +1,19 @@
 {
   "development": {
-    "username": "admin",
-    "password": "12345678",
-    "database": "datn",
-    "host": "datn.clusmcqm2dv0.ap-southeast-2.rds.amazonaws.com",
-    "port": "3306",
+    "username": "root",
+    "password": null,
+    "database": "database_development",
+    "host": "127.0.0.1",
     "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "use_env_variable": "mysql://admin:12345678@datn.clusmcqm2dv0.ap-southeast-2.rds.amazonaws.com:3306/datn"
   }
 }

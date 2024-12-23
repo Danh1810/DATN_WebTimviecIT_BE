@@ -6,6 +6,12 @@
     "host": "datn.clusmcqm2dv0.ap-southeast-2.rds.amazonaws.com",
     "dialect": "mysql",
     "port": 3306,
-    "logging": false
+    "logging": false,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   }
 }

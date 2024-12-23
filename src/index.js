@@ -19,7 +19,19 @@ app.use(bodyParser.urlencoded({ extended: true })); // For handling form-encoded
 app.use(cookieParser()); // Parse cookies for authentication/other purposes.
 app.use(
   cors({
-    origin: "http://localhost:3000", // Allow requests from your frontend
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        "http://localhost:3000", // Development
+        "https://datn-web-timviec-it-fe.vercel.app", // Production
+      ];
+
+      // Allow requests with no `origin` (e.g., mobile apps or Postman) or valid origins
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // This is required for cookies and Authorization headers

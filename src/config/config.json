@@ -4,7 +4,8 @@
     "password": "12345678",
     "database": "datn",
     "host": "datn.clusmcqm2dv0.ap-southeast-2.rds.amazonaws.com",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "port": 3306
   },
   "production": {
     "use_env_variable": "mysql://admin:12345678@datn.clusmcqm2dv0.ap-southeast-2.rds.amazonaws.com:3306/datn"

@@ -19,6 +19,7 @@ router.get("/ntd/detail", tintdController.getTtdntdIddetail);
 router.post("/", tintdController.addJobPostWithDetails);
 router.get("/tk", tintdController.searchJobPostsByKeyword);
 router.post("/duyet", tintdController.updateTrangthaiService);
+router.post("/update-expired-jobs", tintdController.updateExpiredJobs);
 
 // Route to delete a TTD by ID
 router.delete("/", tintdController.delTtd);

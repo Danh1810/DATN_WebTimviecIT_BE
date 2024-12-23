@@ -318,6 +318,41 @@ const getTtdById = async (data) => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const updateExpiredJobs = async () => {
+  try {
+    const currentDate = new Date();
+
+    // Find all jobs that have expired but haven't been marked as expired
+    const expiredJobs = await db.Tintuyendung.update(
+      {
+        trangthai: "Đã hết hạn",
+      },
+      {
+        where: {
+          Ngayhethan: {
+            [Op.lt]: currentDate, // Less than current date
+          },
+          trangthai: {
+            [Op.ne]: "Đã hết hạn", // Not already marked as expired
+          },
+        },
+      }
+    );
+
+    return {
+      success: true,
+      message: `Updated ${expiredJobs[0]} expired job postings`,
+      updatedCount: expiredJobs[0],
+    };
+  } catch (error) {
+    console.error("Error updating expired jobs:", error);
+    return {
+      success: false,
+      message: "Error updating expired jobs",
+      error: error.message,
+    };
+  }
+};
 
 module.exports = {
   getAllTintd,
@@ -332,4 +367,5 @@ module.exports = {
   updateTrangthaiService,
   getAllTintdcdByEmployer,
   getAllTintdadmin,
+  updateExpiredJobs,
 };

@@ -123,11 +123,24 @@ const initApiRoutes = (app) => {
       console.log("🚀 ~ router.post ~ fee:", fee);
       const amount1 = parseFloat(req.body.sotien);
       const sl = parseFloat(req.body.soluong);
+      let goimua;
+      if (req.body.goimua === "goi1") {
+        goimua = "Gói đăng bài bình thường";
+      } else if (req.body.goimua === "goi2") {
+        goimua = "Gói đăng bài nổi bật";
+      } else if (req.body.goimua === "goi3") {
+        goimua = "Gói nộp hồ sơ ứng tuyển";
+      } else {
+        // Trường hợp gói mua không hợp lệ
+        return res.status(400).json({ error: "Gói mua không hợp lệ" });
+      }
+
+      // Sau khi kiểm tra và thay đổi dữ liệu, thêm vào Lichsuthanhtoan
       const newPayment = await db.Lichsuthanhtoan.create({
-        MaNTT: fee.id,
-        goimua: req.body.goimua,
-        sotien: amount1,
-        Soluongmua: sl,
+        MaNTT: req.body.id,
+        goimua: goimua, // Ghi nhận tên gói đã được thay đổi
+        sotien: amount1, // Giá tiền đã được tính toán lại
+        Soluongmua: sl, // Số lượng mua đã được điều chỉnh
       });
       console.log("🚀 ~ router.post ~ newPayment:", newPayment);
       console.log("🚀 ~ req:", req.body);

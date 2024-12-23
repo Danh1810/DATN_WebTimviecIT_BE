@@ -42,9 +42,15 @@ const getPhanHoiById = async (req, res) => {
 };
 
 const createPhanHoi = async (req, res) => {
-  const data = req.body;
+  const { idUngTuyen, noiDung } = req.body;
+  console.log("🚀 ~ createPhanHoi ~ req.body:", req.body);
+  const filedinhkem = req.fileUrl;
   try {
-    const result = await phanHoiService.createPhanHoi(data);
+    const result = await phanHoiService.createPhanHoi({
+      idUngTuyen,
+      noiDung,
+      filedinhkem,
+    });
     res.status(result.status).json(result);
   } catch (error) {
     res.status(500).json({

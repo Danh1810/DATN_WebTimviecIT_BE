@@ -375,6 +375,23 @@ const getEmployerJobsApplicationStats = async (req, res) => {
 
   res.json(result);
 };
+const updateExpiredJobs = async (req, res) => {
+  try {
+    const result = await jbpservice.updateExpiredJobs();
+
+    if (!result.success) {
+      return res.status(500).json(result);
+    }
+
+    return res.status(200).json(result);
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
 
 module.exports = {
   addJobPostWithDetails,
@@ -392,4 +409,5 @@ module.exports = {
   getAllTintdadmin,
   getTtdntdIddetail,
   getEmployerJobsApplicationStats,
+  updateExpiredJobs,
 };

@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const phanHoiController = require("../controller/Phanhoi");
+const multer = require("multer");
+const { uploadToCloudinary } = require("../middleware/cloudinary");
 
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
+});
 // Lấy tất cả phản hồi
 router.get("/", phanHoiController.getAllPhanHoi);
 
@@ -12,7 +18,12 @@ router.get("/phut", phanHoiController.getPhanHoiByUngTuyen);
 router.get("/detail", phanHoiController.getPhanHoiById);
 
 // Tạo phản hồi mới
-router.post("/", phanHoiController.createPhanHoi);
+router.post(
+  "/",
+  upload.single("filedinhkem"),
+  uploadToCloudinary,
+  phanHoiController.createPhanHoi
+);
 
 // Cập nhật phản hồi
 router.put("/", phanHoiController.updatePhanHoi);

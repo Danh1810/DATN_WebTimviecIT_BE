@@ -10,7 +10,8 @@ dotenv.config(); // Use dotenv for environment variables.
 
 const app = express();
 const { sequelize } = require("./models/index");
-
+const setupExpirationCronJob = require("./config/cron");
+setupExpirationCronJob();
 // Middleware configuration
 app.use(express.json());
 app.use(bodyParser.json()); // Handles JSON payloads.

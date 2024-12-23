@@ -19,6 +19,10 @@ const layTatCaHSTheoTTD = async (id) => {
         model: db.Hosocanhan,
         as: "UT_NTV", // Tên alias đã khai báo trong associate
       },
+      {
+        model: db.Tintuyendung,
+        as: "UT_TTD", // Tên alias đã khai báo trong associate
+      },
     ],
   });
   if (res) {
@@ -41,6 +45,12 @@ const layTatCaHSTheoNTV = async (id) => {
         {
           model: db.Tintuyendung,
           as: "UT_TTD",
+          include: [
+            {
+              model: db.Nhatuyendung, // Assuming Roles is the table for user roles
+              as: "employer",
+            },
+          ],
         },
         {
           model: db.PhanHoiUngTuyen,

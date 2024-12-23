@@ -52,6 +52,7 @@ const nonSecurePaths = [
   "/vtri",
   "/lcv",
   "/tintd/details",
+  "/tintd/update-expired-jobs",
   "/hoso",
   "/hoso/ntv",
   "/hoso/xem",

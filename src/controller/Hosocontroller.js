@@ -126,6 +126,7 @@ const getHosoByhs = async (req, res) => {
   console.log("🚀 ~ getHosoByhs called with query:", req.query);
 
   const id = req.query.id;
+  const id1 = req.query.id1;
 
   // Validate input
   if (!id) {
@@ -146,7 +147,7 @@ const getHosoByhs = async (req, res) => {
     if (data.status === 200) {
       const updateResult = await db.Ungtuyen.update(
         { trangthai: "Đã xem" },
-        { where: { id: id } }
+        { where: { id: id1 } }
       );
 
       if (updateResult[0] > 0) {

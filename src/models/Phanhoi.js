@@ -38,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      filedinhkem: {
+        type: DataTypes.TEXT("long"),
+        allowNull: true,
+      },
     },
     {
       sequelize,

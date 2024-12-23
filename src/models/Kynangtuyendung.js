@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Kynangtuyendung",
-      tableName: "Kynangtuyendung",
+      tableName: "kynangtuyendung",
       timestamps: false,
       freezeTableName: true,
     }

@@ -53,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Lichsuthanhtoan",
-      tableName: "Lichsuthanhtoan",
+      tableName: "lichsuthanhtoan",
       charset: "utf8",
       collate: "utf8_general_ci",
       timestamps: false,

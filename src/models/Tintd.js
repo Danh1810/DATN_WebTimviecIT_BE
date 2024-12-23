@@ -81,7 +81,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Tintuyendung",
-      tableName: "Tintuyendung",
+      tableName: "tintuyendung",
       timestamps: false,
       freezeTableName: true,
     }

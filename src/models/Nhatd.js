@@ -78,7 +78,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Nhatuyendung",
-      tableName: "Nhatuyendung",
+      tableName: "nhatuyendung",
       timestamps: false,
       freezeTableName: true,
     }

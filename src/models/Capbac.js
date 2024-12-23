@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Capbac",
-      tableName: "Capbac",
+      tableName: "capbac",
       timestamps: false,
       freezeTableName: true, // Sẽ tự động thêm createdAt và updatedAt
     }

@@ -11,18 +11,35 @@ const db = {};
 
 let sequelize;
 
-// Check if `use_env_variable` is defined in the config
-if (config.use_env_variable) {
-  // Use the environment variable to initialize Sequelize
-  sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
-  // Fallback to directly using the configuration details
-  sequelize = new Sequelize(config.database, config.username, config.password, {
-    host: config.host,
-    dialect: config.dialect,
-    port: config.port, // Include the port if defined
-    logging: false, // Optional: disable SQL query logging
-  });
+try {
+  // Check if `use_env_variable` is defined in the config
+  if (config.use_env_variable) {
+    if (!process.env[config.use_env_variable]) {
+      throw new Error(
+        `Environment variable ${config.use_env_variable} is not set.`
+      );
+    }
+    // Use the environment variable to initialize Sequelize
+    sequelize = new Sequelize(process.env[config.use_env_variable], config);
+  } else {
+    // Fallback to directly using the configuration details
+    sequelize = new Sequelize(
+      config.database,
+      config.username,
+      config.password,
+      {
+        host: config.host,
+        dialect: config.dialect,
+        port: config.port || 3306, // Include the port if defined or default to 3306
+        logging: false, // Optional: disable SQL query logging
+      }
+    );
+  }
+
+  console.log("Sequelize instance initialized successfully.");
+} catch (error) {
+  console.error("Failed to initialize Sequelize:", error.message);
+  process.exit(1); // Exit process if Sequelize fails to initialize
 }
 
 // Dynamically import all models in the current directory
@@ -50,7 +67,8 @@ Object.keys(db).forEach((modelName) => {
   }
 });
 
-db.sequelize = sequelize; // Attach the Sequelize instance
-db.Sequelize = Sequelize; // Attach the Sequelize library
+// Attach Sequelize instance and library to the `db` object
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
 module.exports = db;

@@ -183,6 +183,18 @@ const addJobPostWithDetails = async (req, res) => {
 
     console.log("🚀 ~ addJobPostWithDetails ~ employerId:", employerId);
     console.log("🚀 ~ Creating Job Post with Title:", tieude);
+    const existingPost = await db.Tintuyendung.findOne({
+      where: {
+        tieude: tieude,
+        MaNTD: employerId,
+      },
+    });
+
+    if (existingPost) {
+      return res.status(400).json({
+        message: "Tin tuyển dụng với tiêu đề này đã tồn tại",
+      });
+    }
 
     // Kiểm tra số lượng đăng tuyển
     const employer = await db.Nhatuyendung.findOne({

@@ -22,7 +22,8 @@ app.use(
     origin: (origin, callback) => {
       const allowedOrigins = [
         "http://localhost:3000", // Development
-        "https://datn-web-timviec-it-fe.vercel.app", // Production
+        "https://datn-web-timviec-it-fe.vercel.app",
+        " https://vieclamit.site ",
       ];
 
       // Allow requests with no `origin` (e.g., mobile apps or Postman) or valid origins

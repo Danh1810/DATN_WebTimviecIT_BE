@@ -22,9 +22,8 @@ const getAllHoso = async (req, res) => {
 };
 
 const createHoso = async (req, res) => {
-  console.log("🚀 ~ createHoso ~ req:", req);
-
   try {
+    // Lấy dữ liệu từ body
     const {
       tenhoso,
       kyNangLapTrinh,
@@ -35,12 +34,51 @@ const createHoso = async (req, res) => {
       kinhNghiemLamViec,
       trinhDoHocVan,
     } = req.body;
-    console.log("🚀 ~ createHoso ~ req.body:", req.body);
+
+    // Lấy URL file nếu có
     const fileHoso = req.fileUrl;
 
+    // Kiểm tra trường bắt buộc
+    if (!tenhoso || !NguoitimviecId || !mucTieuNgheNghiep) {
+      return res.status(400).json({
+        code: -1,
+        message: "Thiếu thông tin bắt buộc",
+        data: null,
+      });
+    }
+
+    // Xử lý kyNangLapTrinh
+    let skillsArray = [];
+    if (kyNangLapTrinh) {
+      if (Array.isArray(kyNangLapTrinh)) {
+        skillsArray = kyNangLapTrinh;
+      } else if (typeof kyNangLapTrinh === "string") {
+        try {
+          // Nếu frontend gửi lên dạng chuỗi JSON, parse thành mảng
+          skillsArray = JSON.parse(kyNangLapTrinh);
+          if (!Array.isArray(skillsArray)) {
+            throw new Error("Kỹ năng lập trình phải là một mảng");
+          }
+        } catch (error) {
+          return res.status(400).json({
+            code: -1,
+            message: "Kỹ năng lập trình không hợp lệ",
+            data: null,
+          });
+        }
+      } else {
+        return res.status(400).json({
+          code: -1,
+          message: "Kỹ năng lập trình phải là một mảng hoặc chuỗi JSON hợp lệ",
+          data: null,
+        });
+      }
+    }
+
+    // Gọi service để tạo hồ sơ
     const data = await HosoService.createHoso({
       tenhoso,
-      kyNangLapTrinh,
+      kyNangLapTrinh: skillsArray,
       capBacHienTai,
       mucTieuNgheNghiep,
       duAnDaThamGia,
@@ -49,16 +87,20 @@ const createHoso = async (req, res) => {
       kinhNghiemLamViec,
       trinhDoHocVan,
     });
-    res.status(data.status).json({
+
+    // Trả về kết quả thành công
+    return res.status(data.status).json({
       code: data.code,
       message: data.message,
       data: data.data,
     });
   } catch (error) {
-    res.status(500).json({
+    // Log lỗi và trả về lỗi
+    console.error("Error in createHoso:", error);
+    return res.status(500).json({
       message: error.message || "Internal Server Error",
       code: -1,
-      data: "",
+      data: null,
     });
   }
 };

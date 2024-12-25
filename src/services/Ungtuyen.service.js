@@ -21,10 +21,26 @@ const layTatCaHSTheoTTD = async (id) => {
       },
       {
         model: db.Tintuyendung,
-        as: "UT_TTD", // Tên alias đã khai báo trong associate
+        as: "UT_TTD",
+        include: [
+          // Corrected from "inlude" to "include"
+          {
+            model: db.Kynang,
+            as: "skills",
+            through: { attributes: [] }, // Không hiển thị bảng trung gian
+            attributes: ["ten"], // Lấy tên các kỹ năng
+          },
+          {
+            model: db.Capbac,
+            as: "levels",
+            through: { attributes: [] }, // Không hiển thị bảng trung gian
+            attributes: ["ten"], // Lấy tên cấp bậc
+          },
+        ],
       },
     ],
   });
+
   if (res) {
     console.log("🚀 ~ layTatCaHSTheoTTD ~ res:", res);
     return { status: 200, code: 0, message: "success", data: res };

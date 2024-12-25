@@ -39,6 +39,19 @@ const addNtd = async (req, res) => {
       thongtin,
     } = req.body;
     const logo = req.fileUrl;
+
+    // Tìm kiếm công ty có tên hoặc email gần giống
+    const similarCompanies = await ntdService.findSimilarCompanies(ten, email);
+
+    if (similarCompanies.length > 0) {
+      return res.status(409).json({
+        code: -1,
+        message: "A company with a similar name or email already exists.",
+        data: similarCompanies, // Trả về thông tin các công ty tương tự (nếu cần)
+      });
+    }
+
+    // Thêm mới công ty
     const newNtd = await ntdService.createNtd({
       ten,
       email,
@@ -46,13 +59,13 @@ const addNtd = async (req, res) => {
       website,
       linhvuc,
       diachi,
-      MaND: MaND,
+      MaND,
       logo,
       thongtin,
-      Soluongdangbai: Soluongdangbai || 3, // Default to 0 if not provided
+      Soluongdangbai: Soluongdangbai || 3, // Mặc định là 3 nếu không có
     });
 
-    // Return a success response
+    // Trả về kết quả thành công
     res.status(201).json({
       code: 0,
       message: "Employer added successfully.",
@@ -61,7 +74,7 @@ const addNtd = async (req, res) => {
   } catch (error) {
     console.error("Error adding employer:", error);
 
-    // Handle specific Sequelize validation errors
+    // Xử lý lỗi Sequelize validation
     if (error.name === "SequelizeValidationError") {
       return res.status(400).json({
         code: -1,
@@ -70,7 +83,7 @@ const addNtd = async (req, res) => {
       });
     }
 
-    // Handle unexpected errors
+    // Xử lý lỗi không mong muốn
     res.status(500).json({
       code: -1,
       message: "Internal Server Error",
@@ -84,7 +97,6 @@ const updateNtd = async (req, res) => {
     // Destructure required fields from the request body
     const { id, ten, email, sdt, website, linhvuc, diachi, thongtin } =
       req.body;
-    console.log("🚀 ~ updateNtd ~ req.body:", req.body);
 
     // Conditionally include 'logo' if it exists in req.fileUrl
     const logo = req.fileUrl || null;

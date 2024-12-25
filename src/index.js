@@ -17,27 +17,31 @@ app.use(express.json());
 app.use(bodyParser.json()); // Handles JSON payloads.
 app.use(bodyParser.urlencoded({ extended: true })); // For handling form-encoded data.
 app.use(cookieParser()); // Parse cookies for authentication/other purposes.
+const allowedOrigins = [
+  // "http://localhost:3000", // Development
+  // "https://datn-web-timviec-it-fe.vercel.app",
+  "https://vieclamit.site",
+];
+
 app.use(
   cors({
     origin: (origin, callback) => {
-      const allowedOrigins = [
-        "http://localhost:3000", // Development
-        "https://datn-web-timviec-it-fe.vercel.app",
-        "https://vieclamit.site",
-      ];
-
-      // Allow requests with no `origin` (e.g., mobile apps or Postman) or valid origins
+      // Allow requests with no origin (e.g., mobile apps, Postman) or valid origins
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        console.error(`Blocked by CORS: ${origin}`); // Log for debugging
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
       }
     },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true, // This is required for cookies and Authorization headers
+    credentials: true, // Required for cookies and Authorization headers
   })
 );
+
+// Handle preflight requests explicitly
+app.options("*", cors());
 
 // Serve static files (e.g., uploads)
 app.use("/uploads", express.static(path.join(__dirname, "src/uploads")));

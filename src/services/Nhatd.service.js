@@ -1,5 +1,5 @@
-const { getAllTintd } = require("../controller/TintdController");
 const db = require("../models/index");
+const { Op } = require("sequelize");
 
 const getAllNtd = async () => {
   const res = await db.Nhatuyendung.findAll({});
@@ -138,6 +138,16 @@ const getNtdByIdNTD = async (id) => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const findSimilarCompanies = async (name, email) => {
+  return await db.Nhatuyendung.findAll({
+    where: {
+      [Op.or]: [
+        { ten: { [Op.like]: `%${name}%` } }, // Tìm tên gần giống
+        { email: { [Op.like]: `%${email}%` } }, // Tìm email gần giống
+      ],
+    },
+  });
+};
 
 module.exports = {
   getAllNtd,
@@ -145,8 +155,8 @@ module.exports = {
   createNtd,
   updateNtd,
   XoaNtd,
-  getAllTintd,
   getNtdByIdNTD,
   updateTrangthaiService,
   getAllNtdtk,
+  findSimilarCompanies,
 };

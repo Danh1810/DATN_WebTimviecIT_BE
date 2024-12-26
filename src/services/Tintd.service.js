@@ -195,7 +195,25 @@ const updateTrangthaiService = async (data) => {
     return { status: 500, code: -1, message: error.message, data: "" };
   }
 };
-
+const updateTrangthaiServicetc = async (data) => {
+  try {
+    const res = await db.Tintuyendung.update(
+      {
+        trangthai: "Đã từ chối",
+      },
+      {
+        where: { id: data.id },
+      }
+    );
+    if (res) {
+      return { status: 200, code: 0, message: "success", data: "" };
+    } else {
+      return { status: 500, code: 1, message: "fail", data: "" };
+    }
+  } catch (error) {
+    return { status: 500, code: -1, message: error.message, data: "" };
+  }
+};
 const searchTinTDd = async (keyword) => {
   console.log("🚀 ~ searchTinTDd ~ keyword:", keyword);
 
@@ -368,4 +386,5 @@ module.exports = {
   getAllTintdcdByEmployer,
   getAllTintdadmin,
   updateExpiredJobs,
+  updateTrangthaiServicetc,
 };

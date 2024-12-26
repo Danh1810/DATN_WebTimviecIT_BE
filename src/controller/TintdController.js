@@ -58,6 +58,43 @@ const updateTrangthaiService = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+const updateTrangthaiServicetc = async (req, res) => {
+  try {
+    const { post, reason } = req.body;
+    console.log("🚀 ~ updateTrangthaiServicetc ~ req.body:", req.body);
+    console.log("🚀 ~ updateTrangthaiServicetc ~ reason:", reason);
+    console.log("🚀 ~ updateTrangthaiServicetc ~ post:", post);
+    const data = await db.Nguoidung.findOne({
+      where: { id: post.employer.MaND },
+    });
+    var response = await jbpservice.updateTrangthaiServicetc(post);
+    const transporter = nodemailer.createTransport({
+      service: "Gmail", // Or your preferred email provider
+      auth: {
+        user: process.env.email, // Your email
+        pass: process.env.password, // Your email password
+      },
+    });
+    const mailOptions = {
+      from: process.env.email,
+      to: data.email,
+      subject: "Xác minh email",
+      html: `<p>Chào ${data.username},</p>
+             <p>Bài đăng tuyển dụng  đã bị từ chối với lý do</p>
+             <p> ${reason}</p>
+             
+             `,
+    };
+    await transporter.sendMail(mailOptions);
+    return res.status(response.status).json({
+      code: response.code,
+      message: response.message,
+      data: response.data,
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
 const getAllTintdcd = async (req, res) => {
   try {
     const data = await jbpservice.getAllTintdcd();
@@ -422,4 +459,5 @@ module.exports = {
   getTtdntdIddetail,
   getEmployerJobsApplicationStats,
   updateExpiredJobs,
+  updateTrangthaiServicetc,
 };

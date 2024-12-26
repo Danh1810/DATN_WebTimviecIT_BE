@@ -23,6 +23,30 @@ const getAllNtdtk = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
+const getCountEmployersByField = async (req, res) => {
+  try {
+    const result = await ntdService.countEmployersByField();
+
+    if (!result || !result.length) {
+      return res.status(404).json({
+        success: false,
+        message: "Không tìm thấy dữ liệu thống kê",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Thống kê số lượng nhà tuyển dụng theo lĩnh vực",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Lỗi tại controller:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Đã xảy ra lỗi khi thống kê nhà tuyển dụng theo lĩnh vực",
+    });
+  }
+};
 // Assuming the model is in a folder named models
 const addNtd = async (req, res) => {
   try {
@@ -175,7 +199,7 @@ const updateTrangthaiService = async (req, res) => {
 
 const deleteNtd = async (req, res) => {
   try {
-    const data = await ntdService.XoaNtd(req.body.id);
+    const data = await ntdService.XoaNtd(req.query.id);
     res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
@@ -216,4 +240,5 @@ module.exports = {
   getNtdByIdNTD,
   updateTrangthaiService,
   getAllNtdtk,
+  getCountEmployersByField,
 };

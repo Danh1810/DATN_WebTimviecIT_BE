@@ -76,6 +76,7 @@ router.put(
 router.post("/duyet", ntdController.updateTrangthaiService);
 
 // Delete record
-router.delete("/delete", ntdController.deleteNtd);
+router.delete("/", ntdController.deleteNtd);
+router.get("/countbylinhvuc", ntdController.getCountEmployersByField);
 
 module.exports = router;

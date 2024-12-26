@@ -1,4 +1,5 @@
 const db = require("../models/index");
+const sequelize = require("../models/index");
 const { Op } = require("sequelize");
 
 const getAllNtd = async () => {
@@ -8,6 +9,30 @@ const getAllNtd = async () => {
     return { status: 200, code: 0, message: "success", data: res };
   } else {
     return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
+const countEmployersByField = async () => {
+  try {
+    const results = await db.Nhatuyendung.findAll({
+      attributes: [
+        "linhvuc",
+        [sequelize.fn("COUNT", sequelize.col("id")), "count"],
+      ],
+      where: {
+        linhvuc: {
+          [sequelize.Op.not]: null,
+        },
+      },
+      group: ["linhvuc"],
+    });
+
+    return results.map((item) => ({
+      linhvuc: item.get("linhvuc") || "Không xác định",
+      count: parseInt(item.get("count")),
+    }));
+  } catch (error) {
+    console.error("Lỗi service:", error);
+    throw error;
   }
 };
 const getAllNtdtk = async (id) => {
@@ -159,4 +184,5 @@ module.exports = {
   updateTrangthaiService,
   getAllNtdtk,
   findSimilarCompanies,
+  countEmployersByField,
 };

@@ -32,6 +32,7 @@ const getAllHosoID = async (id) => {
   }
 };
 const createHoso = async (data) => {
+  console.log("🚀 ~ createHoso ~ data:", data);
   try {
     const res = await db.Hosocanhan.create(data);
     if (res) {

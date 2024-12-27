@@ -23,7 +23,6 @@ const getAllHoso = async (req, res) => {
 
 const createHoso = async (req, res) => {
   try {
-    // Lấy dữ liệu từ body
     const {
       tenhoso,
       kyNangLapTrinh,
@@ -33,52 +32,63 @@ const createHoso = async (req, res) => {
       NguoitimviecId,
       kinhNghiemLamViec,
       trinhDoHocVan,
+      Mucluongmongmuon,
+      hinhThuclamviec,
     } = req.body;
+    console.log("🚀 ~ createHoso ~ kyNangLapTrinh:", kyNangLapTrinh);
 
-    // Lấy URL file nếu có
     const fileHoso = req.fileUrl;
 
-    // Kiểm tra trường bắt buộc
-    if (!tenhoso || !NguoitimviecId || !mucTieuNgheNghiep) {
+    // Validate required fields
+    const requiredFields = {
+      tenhoso,
+      NguoitimviecId,
+      mucTieuNgheNghiep,
+    };
+
+    const missingFields = Object.entries(requiredFields)
+      .filter(([_, value]) => !value)
+      .map(([key]) => key);
+
+    if (missingFields.length > 0) {
       return res.status(400).json({
         code: -1,
-        message: "Thiếu thông tin bắt buộc",
+        message: `Thiếu các trường bắt buộc: ${missingFields.join(", ")}`,
         data: null,
       });
     }
 
-    // Xử lý kyNangLapTrinh
-    let skillsArray = [];
+    // Process programming skills
+    let processedSkills = [];
     if (kyNangLapTrinh) {
       if (Array.isArray(kyNangLapTrinh)) {
-        skillsArray = kyNangLapTrinh;
+        processedSkills = kyNangLapTrinh;
       } else if (typeof kyNangLapTrinh === "string") {
+        // Xử lý chuỗi phân tách bằng dấu phẩy
+        processedSkills = kyNangLapTrinh
+          .split(",")
+          .map((skill) => skill.trim());
+      } else {
         try {
-          // Nếu frontend gửi lên dạng chuỗi JSON, parse thành mảng
-          skillsArray = JSON.parse(kyNangLapTrinh);
-          if (!Array.isArray(skillsArray)) {
-            throw new Error("Kỹ năng lập trình phải là một mảng");
+          // Thử parse JSON nếu là chuỗi JSON
+          processedSkills = JSON.parse(kyNangLapTrinh);
+          if (!Array.isArray(processedSkills)) {
+            throw new Error();
           }
         } catch (error) {
           return res.status(400).json({
             code: -1,
-            message: "Kỹ năng lập trình không hợp lệ",
+            message: "Định dạng kỹ năng lập trình không hợp lệ",
             data: null,
           });
         }
-      } else {
-        return res.status(400).json({
-          code: -1,
-          message: "Kỹ năng lập trình phải là một mảng hoặc chuỗi JSON hợp lệ",
-          data: null,
-        });
       }
     }
 
-    // Gọi service để tạo hồ sơ
-    const data = await HosoService.createHoso({
+    // Create hoso data object
+    const hosoData = {
       tenhoso,
-      kyNangLapTrinh: skillsArray,
+      kyNangLapTrinh: processedSkills,
       capBacHienTai,
       mucTieuNgheNghiep,
       duAnDaThamGia,
@@ -86,20 +96,23 @@ const createHoso = async (req, res) => {
       fileHoso,
       kinhNghiemLamViec,
       trinhDoHocVan,
-    });
+      Mucluongmongmuon,
+      hinhThuclamviec,
+    };
 
-    // Trả về kết quả thành công
-    return res.status(data.status).json({
-      code: data.code,
-      message: data.message,
-      data: data.data,
+    const result = await HosoService.createHoso(hosoData);
+
+    return res.status(result.status).json({
+      code: result.code,
+      message: result.message,
+      data: result.data,
     });
   } catch (error) {
-    // Log lỗi và trả về lỗi
     console.error("Error in createHoso:", error);
+
     return res.status(500).json({
-      message: error.message || "Internal Server Error",
       code: -1,
+      message: error.message || "Lỗi server",
       data: null,
     });
   }
@@ -117,6 +130,8 @@ const updateHoso = async (req, res) => {
       NguoitimviecId,
       kinhNghiemLamViec,
       trinhDoHocVan,
+      hinhThucLamViec,
+      Mucluongmongmuon,
     } = req.body;
     console.log("🚀 ~ createHoso ~ req.body:", req.body);
     const fileHoso = req.fileUrl;
@@ -132,6 +147,8 @@ const updateHoso = async (req, res) => {
       fileHoso,
       kinhNghiemLamViec,
       trinhDoHocVan,
+      hinhThucLamViec,
+      Mucluongmongmuon,
     });
     res.status(data.status).json({
       code: data.code,

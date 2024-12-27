@@ -70,7 +70,7 @@ const addNtd = async (req, res) => {
     if (similarCompanies.length > 0) {
       return res.status(409).json({
         code: -1,
-        message: "A company with a similar name or email already exists.",
+        message: "công ty đã được đăng ký",
         data: similarCompanies, // Trả về thông tin các công ty tương tự (nếu cần)
       });
     }

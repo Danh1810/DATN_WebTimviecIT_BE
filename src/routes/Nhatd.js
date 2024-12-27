@@ -32,27 +32,6 @@ router.post(
   ntdController.addNtd
 );
 
-// Update record with file upload
-// router.put(
-//   "/update",
-//   upload.single("logo"), // Multer middleware for file uploads
-//   async (req, res, next) => {
-//     try {
-//       if (req.file) {
-//         // File exists, upload to Cloudinary
-//         await uploadToCloudinary(req, res, () => {
-//           req.body.logo = req.fileUrl; // Attach Cloudinary URL to request body
-//         });
-//       }
-//       // If no file, skip Cloudinary upload
-//       next();
-//     } catch (error) {
-//       console.error("Error uploading to Cloudinary:", error);
-//       return res.status(500).json({ error: "Failed to upload logo." });
-//     }
-//   },
-//   ntdController.updateNtd
-// );
 router.put(
   "/update",
   upload.single("logo"), // Multer middleware for file uploads

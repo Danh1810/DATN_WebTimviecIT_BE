@@ -219,19 +219,8 @@ const addJobPostWithDetails = async (req, res) => {
     const employerId = parseInt(Ma); // Thay bằng logic để lấy ID của nhà tuyển dụng từ `req` hoặc `token`
 
     console.log("🚀 ~ addJobPostWithDetails ~ employerId:", employerId);
+    console.log("🚀 ~ addJobPostWithDetails ~ employerId:", employerId);
     console.log("🚀 ~ Creating Job Post with Title:", tieude);
-    const existingPost = await db.Tintuyendung.findOne({
-      where: {
-        tieude: tieude,
-        MaNTD: employerId,
-      },
-    });
-
-    if (existingPost) {
-      return res.status(400).json({
-        message: "Tin tuyển dụng với tiêu đề này đã tồn tại",
-      });
-    }
 
     // Kiểm tra số lượng đăng tuyển
     const employer = await db.Nhatuyendung.findOne({
@@ -245,6 +234,19 @@ const addJobPostWithDetails = async (req, res) => {
     if (employer.Soluongdangbai <= 0) {
       return res.status(400).json({
         message: "No remaining job posts available for this employer.",
+      });
+    }
+    const existingPost = await db.Tintuyendung.findOne({
+      where: {
+        tieude: tieude,
+        MaNTD: employer.id,
+      },
+    });
+    console.log("🚀 ~ addJobPostWithDetails ~ existingPost:", existingPost);
+
+    if (existingPost) {
+      return res.status(400).json({
+        message: "Tin tuyển dụng với tiêu đề này đã tồn tại",
       });
     }
 
@@ -306,7 +308,7 @@ const addJobPostWithDetails = async (req, res) => {
     }
 
     res.status(201).json({
-      message: "Job post created successfully with additional details.",
+      message: "Thêm tin thành công chờ admin duyệt.",
       jobPost: newJobPost,
       remainingPosts: employer.SoLuongDangTuyen,
       details: {

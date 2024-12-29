@@ -73,6 +73,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING, // Ví dụ: 1-2 năm, 3-5 năm
         allowNull: true,
       },
+      linhVucCNTT: {
+        type: DataTypes.STRING, // Ví dụ: 1-2 năm, 3-5 năm
+        allowNull: true,
+      },
       noibat: {
         type: DataTypes.BOOLEAN, // Ví dụ: 1-2 năm, 3-5 năm
         allowNull: true,

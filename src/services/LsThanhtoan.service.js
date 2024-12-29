@@ -65,7 +65,18 @@ const getLSTTByNTDId = async (id) => {
   try {
     const res = await db.Lichsuthanhtoan.findAll({
       where: { MaNTT: id },
-      include: [{ model: db.Nguoidung, as: "users" }],
+      include: [
+        {
+          model: db.Nguoidung,
+          as: "users",
+          include: [
+            {
+              model: db.Nhatuyendung,
+              as: "ND_NTD",
+            },
+          ],
+        },
+      ],
     });
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
@@ -73,9 +84,11 @@ const getLSTTByNTDId = async (id) => {
       return { status: 500, code: -1, message: "error", data: "" };
     }
   } catch (error) {
+    console.error("🚀 ~ getLSTTByNTDId ~ error:", error);
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+
 const axios = require("axios");
 const crypto = require("crypto");
 const env = require("dotenv");

@@ -214,6 +214,33 @@ const updateTrangthaiServicetc = async (data) => {
     return { status: 500, code: -1, message: error.message, data: "" };
   }
 };
+const updateTrangthaiServiceAnorGiahan = async (data) => {
+  try {
+    const post = await db.Tintuyendung.findById(data.id);
+
+    if (!post) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Không tìm thấy bài đăng" });
+    }
+
+    if (post.trangthai === "Đã duyệt") {
+      post.trangthai = "Tạm dừng";
+    } else {
+      post.trangthai = "Đã duyệt";
+      post.ngayHetHan = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // +30 days
+    }
+
+    await post.save();
+    if (post) {
+      return { status: 200, code: 0, message: "success", data: post };
+    } else {
+      return { status: 500, code: 1, message: "fail", data: "" };
+    }
+  } catch (error) {
+    return { status: 500, code: -1, message: error.message, data: "" };
+  }
+};
 const searchTinTDd = async (keyword) => {
   console.log("🚀 ~ searchTinTDd ~ keyword:", keyword);
 
@@ -387,4 +414,5 @@ module.exports = {
   getAllTintdadmin,
   updateExpiredJobs,
   updateTrangthaiServicetc,
+  updateTrangthaiServiceAnorGiahan,
 };

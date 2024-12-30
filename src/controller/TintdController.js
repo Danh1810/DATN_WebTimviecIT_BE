@@ -58,6 +58,56 @@ const updateTrangthaiService = async (req, res) => {
     return res.status(500).json({ error: err.message });
   }
 };
+const updateTrangthaiServiceAnorGiahan = async (req, res) => {
+  try {
+    const user = await db.Nguoidung.findOne({
+      where: { id: req.body.employer.MaND },
+    });
+
+    const response = await jbpservice.updateTrangthaiServiceAnorGiahan(
+      req.body
+    );
+
+    const transporter = nodemailer.createTransport({
+      service: "Gmail",
+      auth: {
+        user: process.env.email,
+        pass: process.env.password,
+      },
+    });
+
+    const isExtending = req.body.trangthai === "Đã duyệt";
+
+    const mailOptions = {
+      from: process.env.email,
+      to: user.email,
+      subject: "Thông báo trạng thái bài đăng",
+      html: `
+        <p>Chào ${user.username},</p>
+        <p>Bài đăng tuyển dụng <h3>${req.body.tieude}</h3> đã được 
+        ${isExtending ? `gia hạn thêm 30 ngày` : `tạm dừng`}
+        </p>
+        ${
+          isExtending
+            ? `<p>Thời hạn mới: ${new Date(
+                req.body.ngayHetHan
+              ).toLocaleDateString("vi-VN")}</p>`
+            : `<p>Bạn có thể gia hạn bài đăng bất cứ lúc nào</p>`
+        }
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return res.status(response.status).json({
+      code: response.code,
+      message: response.message,
+      data: response.data,
+    });
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
+  }
+};
 const updateTrangthaiServicetc = async (req, res) => {
   try {
     const { post, reason } = req.body;
@@ -462,4 +512,5 @@ module.exports = {
   getEmployerJobsApplicationStats,
   updateExpiredJobs,
   updateTrangthaiServicetc,
+  updateTrangthaiServiceAnorGiahan,
 };

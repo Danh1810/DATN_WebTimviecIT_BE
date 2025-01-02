@@ -1,5 +1,5 @@
 const db = require("../models/index"); // Gồm models và sequelize instance
-const { Op } = require("sequelize"); // Các toán tử của Sequelize
+const { Op, where } = require("sequelize"); // Các toán tử của Sequelize
 const { sequelize } = db; // Lấy instance sequelize từ db
 
 const getAllTintd = async () => {
@@ -215,8 +215,12 @@ const updateTrangthaiServicetc = async (data) => {
   }
 };
 const updateTrangthaiServiceAnorGiahan = async (data) => {
+  console.log("🚀 ~ updateTrangthaiServiceAnorGiahan ~ data:", data);
   try {
-    const post = await db.Tintuyendung.findById(data.id);
+    const post = await db.Tintuyendung.findOne({
+      where: { id: data.id },
+    });
+    console.log("🚀 ~ updateTrangthaiServiceAnorGiahan ~ post:", post);
 
     if (!post) {
       return res

@@ -59,14 +59,35 @@ const updateTrangthaiService = async (req, res) => {
   }
 };
 const updateTrangthaiServiceAnorGiahan = async (req, res) => {
+  console.log("🚀 ~ updateTrangthaiServiceAnorGiahan ~ req:", req.body);
+
   try {
+    // Fetch employer details
     const user = await db.Nguoidung.findOne({
       where: { id: req.body.employer.MaND },
     });
+    console.log("🚀 ~ updateTrangthaiServiceAnorGiahan ~ user:", user);
 
+    if (!user || !user.email) {
+      return res.status(404).json({
+        code: 1,
+        message: "Người dùng không tồn tại hoặc thiếu email.",
+      });
+    }
+
+    // Update the status
     const response = await jbpservice.updateTrangthaiServiceAnorGiahan(
       req.body
     );
+
+    // Configure nodemailer
+    if (!process.env.email || !process.env.password) {
+      console.error("Missing email configuration in environment variables.");
+      return res.status(500).json({
+        code: 1,
+        message: "Cấu hình email không đầy đủ.",
+      });
+    }
 
     const transporter = nodemailer.createTransport({
       service: "Gmail",
@@ -76,38 +97,49 @@ const updateTrangthaiServiceAnorGiahan = async (req, res) => {
       },
     });
 
+    // Determine the email content based on status
     const isExtending = req.body.trangthai === "Đã duyệt";
-
+    console.log(
+      "🚀 ~ updateTrangthaiServiceAnorGiahan ~ isExtending:",
+      isExtending
+    );
     const mailOptions = {
       from: process.env.email,
       to: user.email,
       subject: "Thông báo trạng thái bài đăng",
       html: `
         <p>Chào ${user.username},</p>
-        <p>Bài đăng tuyển dụng <h3>${req.body.tieude}</h3> đã được 
-        ${isExtending ? `gia hạn thêm 30 ngày` : `tạm dừng`}
-        </p>
+        <p>Bài đăng tuyển dụng <strong>${req.body.tieude}</strong> đã được 
+        ${isExtending ? `gia hạn thêm 30 ngày` : `tạm dừng`}.</p>
         ${
           isExtending
             ? `<p>Thời hạn mới: ${new Date(
                 req.body.ngayHetHan
               ).toLocaleDateString("vi-VN")}</p>`
-            : `<p>Bạn có thể gia hạn bài đăng bất cứ lúc nào</p>`
+            : `<p>Bạn có thể gia hạn bài đăng bất cứ lúc nào.</p>`
         }
       `,
     };
 
+    // Send the email
     await transporter.sendMail(mailOptions);
 
+    // Return the response
     return res.status(response.status).json({
       code: response.code,
       message: response.message,
       data: response.data,
     });
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    console.error("Error in updateTrangthaiServiceAnorGiahan:", err.message);
+    return res.status(500).json({
+      code: 1,
+      message: "Đã xảy ra lỗi trong quá trình xử lý.",
+      error: err.message,
+    });
   }
 };
+
 const updateTrangthaiServicetc = async (req, res) => {
   try {
     const { post, reason } = req.body;

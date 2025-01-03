@@ -35,6 +35,40 @@ const countEmployersByField = async () => {
     throw error;
   }
 };
+const searchNhatuyendung = async (keyword) => {
+  try {
+    if (!keyword) {
+      return {
+        status: 200,
+        code: 0,
+        message: "Thành công",
+        data: [],
+      };
+    }
+
+    const jobPosts = await db.Nhatuyendung.findAll({
+      where: {
+        // trangthai: "Đã duyệt",
+        [Op.or]: [{ ten: { [Op.like]: `%${keyword}%` } }],
+      },
+    });
+
+    return {
+      status: 200,
+      code: 0,
+      message: "Thành công",
+      data: jobPosts,
+    };
+  } catch (error) {
+    console.error("Search job posts error:", error);
+    return {
+      status: 500,
+      code: -1,
+      message: "Lỗi nhà tuyển dụng: " + error.message,
+      data: null,
+    };
+  }
+};
 const getAllNtdtk = async (id) => {
   const employer = await db.Nhatuyendung.findAll({
     where: { MaND: id },
@@ -185,4 +219,5 @@ module.exports = {
   getAllNtdtk,
   findSimilarCompanies,
   countEmployersByField,
+  searchNhatuyendung,
 };

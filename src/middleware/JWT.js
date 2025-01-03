@@ -29,6 +29,7 @@ const nonSecurePaths = [
   "/nhatd/detail",
   "/nhatd/id",
   "/nhatd/tk",
+  "/nhatd/tkiem",
   "/ngtviec",
   "/ngtviec/update",
   "/ngtviec/detail",

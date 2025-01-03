@@ -246,44 +246,63 @@ const updateTrangthaiServiceAnorGiahan = async (data) => {
   }
 };
 const searchTinTDd = async (keyword) => {
-  console.log("🚀 ~ searchTinTDd ~ keyword:", keyword);
+  try {
+    if (!keyword) {
+      return {
+        status: 200,
+        code: 0,
+        message: "Thành công",
+        data: [],
+      };
+    }
 
-  const jobPosts = await db.Tintuyendung.findAll({
-    include: [
-      {
-        model: db.Kynang,
-        as: "skills",
-        // where: keyword ? { name: { [Op.like]: `%${keyword}%` } } : {},
-        attributes: ["ten"],
-        through: { attributes: [] },
-        required: false, // Không bắt buộc phải có Skills
-      },
-      {
-        model: db.Nhatuyendung,
-        as: "employer",
-        // where: keyword ? { name: { [Op.like]: `%${keyword}%` } } : {},
-        required: false, // Không bắt buộc phải có Employers
-      },
-    ],
-    where: {
-      [Op.or]: [
-        // Nếu có Skills phù hợp
+    const jobPosts = await db.Tintuyendung.findAll({
+      include: [
         {
-          "$skills.ten$": { [Op.like]: `%${keyword}%` },
+          model: db.Kynang,
+          as: "skills",
+          attributes: ["ten"],
+          through: { attributes: [] },
+          required: false,
         },
-        // Nếu có Employers phù hợp
         {
-          "$employer.ten$": { [Op.like]: `%${keyword}%` },
+          model: db.Nhatuyendung,
+          as: "employer",
+          required: false,
+        },
+        {
+          model: db.Capbac,
+          as: "levels",
+          attributes: ["ten"],
+          through: { attributes: [] },
+          required: false,
         },
       ],
-    },
-  });
-  console.log("🚀 ~ searchTinTDd ~ jobPosts:", jobPosts);
+      where: {
+        [Op.or]: [
+          { tieude: { [Op.like]: `%${keyword}%` } },
+          { "$skills.ten$": { [Op.like]: `%${keyword}%` } },
+          { "$employer.ten$": { [Op.like]: `%${keyword}%` } },
+          { "$levels.ten$": { [Op.like]: `%${keyword}%` } },
+        ],
+      },
+      order: [["Ngaytao", "DESC"]],
+    });
 
-  if (jobPosts) {
-    return { status: 200, code: 0, message: "Thành công", data: jobPosts };
-  } else {
-    return { status: 500, code: -1, message: "Lỗi", data: "" };
+    return {
+      status: 200,
+      code: 0,
+      message: "Thành công",
+      data: jobPosts,
+    };
+  } catch (error) {
+    console.error("Search job posts error:", error);
+    return {
+      status: 500,
+      code: -1,
+      message: "Lỗi tìm kiếm tin tuyển dụng: " + error.message,
+      data: null,
+    };
   }
 };
 

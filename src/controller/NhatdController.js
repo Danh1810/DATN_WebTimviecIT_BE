@@ -13,6 +13,21 @@ const getAllNtd = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
+const searchJNTDByKeyword = async (req, res) => {
+  const keyword = req.query.keyword;
+  console.log("jdjsa", keyword);
+  if (!keyword) {
+    return res.status(400).json({ message: "Keyword is required" });
+  }
+  try {
+    const data = await ntdService.searchNhatuyendung(keyword);
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
 const getAllNtdtk = async (req, res) => {
   try {
     const data = await ntdService.getAllNtdtk(req.query.id);
@@ -241,4 +256,5 @@ module.exports = {
   updateTrangthaiService,
   getAllNtdtk,
   getCountEmployersByField,
+  searchJNTDByKeyword,
 };

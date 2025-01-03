@@ -18,6 +18,7 @@ router.get("/detail", ntdController.getNtdById);
 router.get("/id", ntdController.getNtdByIdNTD);
 
 router.get("/tk", ntdController.getAllNtdtk);
+router.get("/tkiem", ntdController.searchJNTDByKeyword);
 
 router.post(
   "/",

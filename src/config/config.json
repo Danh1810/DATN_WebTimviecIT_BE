@@ -2,8 +2,8 @@
   "development": {
     "username": "admin",
     "password": "12345678",
-    "database": "datn",
-    "host": "datn.clusmcqm2dv0.ap-southeast-2.rds.amazonaws.com",
+    "database": "webtimviecit",
+    "host": "wentimviecit.chsaa6eoyx20.ap-southeast-1.rds.amazonaws.com",
     "dialect": "mysql",
     "port": 3306,
     "logging": false,
@@ -13,5 +13,13 @@
         "rejectUnauthorized": false
       }
     }
+  },
+  "test": {
+    "username": "root",
+    "password": "123456",
+    "database": "datn",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": 3306
   }
 }

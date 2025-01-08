@@ -11,6 +11,43 @@ const getAllNtd = async () => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const getAllNtdtka = async () => {
+  const res = await db.Nhatuyendung.findAll({
+    include: [
+      {
+        model: db.Tintuyendung,
+        as: "jobPosts", // Alias trong association
+        attributes: ["id", "tieude", "mota", "mucluong", "Ngayhethan"], // Chọn cột cần thiết
+      },
+      {
+        model: db.Nguoidung,
+        as: "user", // Alias trong association
+        attributes: ["id", "email", "username", "Trangthai"], // Chọn cột từ bảng Nguoidung
+        include: [
+          {
+            model: db.Lichsuthanhtoan,
+            as: "ND_lstt", // Alias liên kết từ Nguoidung
+            attributes: [
+              "id",
+              "loaiThanhtoan",
+              "sotien",
+              "Ngaythanhtoan",
+              "trangthai",
+            ],
+            order: [["Ngaythanhtoan", "DESC"]], // Sắp xếp theo ngày thanh toán giảm dần
+          },
+        ],
+      },
+    ],
+    attributes: ["id", "ten", "email", "sdt", "diachi", "trangthai"], // Chọn cột từ Nhatuyendung
+  });
+  console.log("🚀 ~ getAllNtd ~ res:", res);
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 const countEmployersByField = async () => {
   try {
     const results = await db.Nhatuyendung.findAll({
@@ -220,4 +257,5 @@ module.exports = {
   findSimilarCompanies,
   countEmployersByField,
   searchNhatuyendung,
+  getAllNtdtka,
 };

@@ -20,6 +20,7 @@
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.5",
+    "events": "^3.3.0",
     "express": "^4.19.2",
     "generate-password": "^1.7.1",
     "jade": "^1.11.0",

@@ -2,7 +2,33 @@ const ntdService = require("../services/Nhatd.service");
 const db = require("../models/index");
 const nodemailer = require("nodemailer");
 const env = require("dotenv");
+const EventEmitter = require("events");
+const applicationEvents = new EventEmitter();
+
 env.config();
+applicationEvents.on("sendEmail", async (data) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "Gmail", // Or your preferred email provider
+      auth: {
+        user: process.env.email, // Your email
+        pass: process.env.password, // Your email password
+      },
+    });
+
+    const mailOptions = {
+      from: process.env.email,
+      to: data.to,
+      subject: data.subject,
+      html: data.html,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully to:", data.to);
+  } catch (error) {
+    console.error("Error sending email:", error.message);
+  }
+});
 const getAllNtd = async (req, res) => {
   try {
     const data = await ntdService.getAllNtd();
@@ -13,9 +39,19 @@ const getAllNtd = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
+const getAllNtdtka = async (req, res) => {
+  try {
+    const data = await ntdService.getAllNtdtka();
+    res
+      .status(data.status)
+      .json({ code: data.code, message: data.message, data: data.data });
+  } catch (error) {
+    return res.status(500).json({ message: error.message, code: -1, data: "" });
+  }
+};
 const searchJNTDByKeyword = async (req, res) => {
   const keyword = req.query.keyword;
-  console.log("jdjsa", keyword);
+
   if (!keyword) {
     return res.status(400).json({ message: "Keyword is required" });
   }
@@ -175,32 +211,21 @@ const updateNtd = async (req, res) => {
 };
 
 const updateTrangthaiService = async (req, res) => {
-  console.log("🚀 ~ updateTrangthaiService ~ req.body:", req.body.MaND);
   try {
     const data = await db.Nguoidung.findOne({
       where: { id: req.body.MaND },
     });
-    console.log("🚀 ~ updateTrangthaiService ~ data:", data);
-    const response = await ntdService.updateTrangthaiService(req.body);
-    console.log("🚀 ~ updateTrangthaiService ~ response:", response);
 
-    const transporter = nodemailer.createTransport({
-      service: "Gmail", // Or your preferred email provider
-      auth: {
-        user: process.env.email, // Your email
-        pass: process.env.password, // Your email password
-      },
-    });
-    const mailOptions = {
-      from: process.env.email,
+    const response = await ntdService.updateTrangthaiService(req.body);
+
+    applicationEvents.emit("sendEmail", {
       to: data.email,
       subject: "Kiểm duyệt thành công",
       html: `<p>Chào ${data.username},</p>
              <h2>   ${req.body.ten}</h2>
              <p>Đã được kiểm duyệt.</p>
             <p>và giờ đây bạn có thể đăng tuyển dụng</p> `,
-    };
-    await transporter.sendMail(mailOptions);
+    });
 
     return res.status(response.status).json({
       code: response.code,
@@ -226,7 +251,7 @@ const deleteNtd = async (req, res) => {
 const getNtdById = async (req, res) => {
   try {
     const data = await ntdService.getNtdById(req.query.id);
-    console.log("🚀 ~ getNtdById ~ req.query.id:", req.query.id);
+
     res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
@@ -235,7 +260,6 @@ const getNtdById = async (req, res) => {
   }
 };
 const getNtdByIdNTD = async (req, res) => {
-  console.log("🚀 ~ getNtdByIdNTD ~ req:", req.query.id);
   try {
     const data = await ntdService.getNtdByIdNTD(req.query.id);
     res
@@ -257,4 +281,5 @@ module.exports = {
   getAllNtdtk,
   getCountEmployersByField,
   searchJNTDByKeyword,
+  getAllNtdtka,
 };

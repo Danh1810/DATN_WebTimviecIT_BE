@@ -168,7 +168,6 @@ const getTinTdByID = async (id) => {
       },
     ],
   });
-  console.log("fdsf", jbp.dataValues);
   if (jbp) {
     return { status: 200, code: 0, message: "success", data: jbp.dataValues };
   } else {
@@ -215,7 +214,6 @@ const updateTrangthaiServicetc = async (data) => {
   }
 };
 const updateTrangthaiServiceAnorGiahan = async (data) => {
-  console.log("🚀 ~ updateTrangthaiServiceAnorGiahan ~ data:", data);
   try {
     const post = await db.Tintuyendung.findOne({
       where: { id: data.id },
@@ -375,8 +373,6 @@ const getTtdById = async (data) => {
         },
       ],
     });
-    console.log("🚀 ~ getTtdById ~ id:", data);
-    console.log("res", res);
     if (res) {
       return { status: 200, code: 0, message: "success", data: res };
     } else {

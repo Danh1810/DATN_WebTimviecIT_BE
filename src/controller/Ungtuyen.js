@@ -1,5 +1,15 @@
 const UTService = require("../services/Ungtuyen.service");
 const db = require("../models/index");
+const EventEmitter = require("events");
+const applicationEvents = new EventEmitter();
+const nodemailer = require("nodemailer");
+const emailTransporter = nodemailer.createTransport({
+  service: "Gmail",
+  auth: {
+    user: process.env.email,
+    pass: process.env.password,
+  },
+});
 const getUT = async (req, res) => {
   try {
     const data = await UTService.getAllUT();
@@ -36,6 +46,71 @@ const getUTNTV = async (req, res) => {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
 };
+applicationEvents.on("newApplication", async ({ MaTTD, MaHS, NgayNop }) => {
+  try {
+    // Lấy thông tin tin tuyển dụng và nhà tuyển dụng
+    const jobPosting = await db.Tintuyendung.findOne({
+      where: { id: MaTTD },
+      include: [
+        {
+          model: db.Nhatuyendung,
+          as: "employer",
+          include: [
+            {
+              model: db.Nguoidung,
+              as: "user",
+            },
+          ],
+        },
+      ],
+    });
+    console.log("🚀 ~ applicationEvents.on ~ jobPosting:", jobPosting);
+    // Lấy thông tin hồ sơ ứng viên
+    const profile = await db.Hosocanhan.findOne({
+      where: { id: MaHS },
+      include: [
+        {
+          model: db.Nguoitimviec,
+          as: "nguoitimviec",
+        },
+      ],
+    });
+    console.log("🚀 ~ applicationEvents.on ~ profile:", profile);
+    if (!jobPosting?.employer?.user.email) {
+      console.log("Không tìm thấy email nhà tuyển dụng");
+      return;
+    }
+    console.log(
+      "🚀 ~ applicationEvents.on ~ jobPosting.employer.user.email:",
+      jobPosting.employer.user.email
+    );
+
+    const mailOptions = {
+      from: process.env.email,
+      to: jobPosting.employer.user.email,
+      subject: "Thông báo: Có ứng viên mới ứng tuyển",
+      html: `
+        <h2>Thông báo ứng tuyển mới</h2>
+        <p>Có ứng viên mới đã ứng tuyển vào vị trí <strong>${
+          jobPosting.tieude || "N/A"
+        }</strong></p>
+        <p><strong>Thông tin ứng viên:</strong></p>
+        <ul>
+          <li>Họ tên: ${profile?.nguoitimviec?.hoVaTen || "N/A"}</li>
+          <li>Ngày nộp: ${new Date(NgayNop).toLocaleString("vi-VN")}</li>
+        </ul>
+        <p>Vui lòng đăng nhập vào hệ thống để xem chi tiết hồ sơ ứng viên.</p>
+      `,
+    };
+
+    await emailTransporter.sendMail(mailOptions);
+    console.log("Đã gửi email thông báo thành công");
+  } catch (error) {
+    console.error("Lỗi khi gửi email thông báo:", error);
+    // Không throw error để không ảnh hưởng đến luồng chính
+  }
+});
+
 const addUT = async (req, res) => {
   try {
     const { MaTTD, MaHS } = req.body;
@@ -47,6 +122,9 @@ const addUT = async (req, res) => {
 
     // Lưu thông tin đơn ứng tuyển vào database
     await UTService.createUT(newApplication);
+
+    // Emit event để gửi email
+    applicationEvents.emit("newApplication", newApplication);
 
     res.status(201).json({ message: "Application submitted successfully!" });
   } catch (error) {

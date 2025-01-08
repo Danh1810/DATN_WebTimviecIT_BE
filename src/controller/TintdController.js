@@ -3,9 +3,33 @@ const db = require("../models/index");
 const Nhatd = require("../services/Nhatd.service");
 const { sequelize, where } = require("sequelize");
 const nodemailer = require("nodemailer");
+const EventEmitter = require("events");
+const applicationEvents = new EventEmitter();
 const env = require("dotenv");
 env.config();
+applicationEvents.on("sendEmail", async (data) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      service: "Gmail", // Or your preferred email provider
+      auth: {
+        user: process.env.email, // Your email
+        pass: process.env.password, // Your email password
+      },
+    });
 
+    const mailOptions = {
+      from: process.env.email,
+      to: data.to,
+      subject: data.subject,
+      html: data.html,
+    };
+
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent successfully to:", data.to);
+  } catch (error) {
+    console.error("Error sending email:", error.message);
+  }
+});
 const getAllTintd = async (req, res) => {
   try {
     const data = await jbpservice.getAllTintd();
@@ -17,6 +41,7 @@ const getAllTintd = async (req, res) => {
   }
 };
 const getAllTintdadmin = async (req, res) => {
+  console.time("ad");
   try {
     const data = await jbpservice.getAllTintdadmin();
     res
@@ -25,30 +50,23 @@ const getAllTintdadmin = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message, code: -1, data: "" });
   }
+  console.timeEnd("ad");
 };
 const updateTrangthaiService = async (req, res) => {
   try {
     const data = await db.Nguoidung.findOne({
       where: { id: req.body.employer.MaND },
     });
-    var response = await jbpservice.updateTrangthaiService(req.body);
-    const transporter = nodemailer.createTransport({
-      service: "Gmail", // Or your preferred email provider
-      auth: {
-        user: process.env.email, // Your email
-        pass: process.env.password, // Your email password
-      },
-    });
-    const mailOptions = {
-      from: process.env.email,
+    const response = await jbpservice.updateTrangthaiService(req.body);
+
+    // Phát sự kiện gửi email
+    applicationEvents.emit("sendEmail", {
       to: data.email,
       subject: "Xác minh email",
       html: `<p>Chào ${data.username},</p>
-             <p>Bài đăng tuyển dụng <h3> ${req.body.tieude}</h3> đã được duyệt</p>
-             
-             `,
-    };
-    await transporter.sendMail(mailOptions);
+             <p>Bài đăng tuyển dụng <h3>${req.body.tieude}</h3> đã được duyệt.</p>`,
+    });
+
     return res.status(response.status).json({
       code: response.code,
       message: response.message,
@@ -59,14 +77,11 @@ const updateTrangthaiService = async (req, res) => {
   }
 };
 const updateTrangthaiServiceAnorGiahan = async (req, res) => {
-  console.log("🚀 ~ updateTrangthaiServiceAnorGiahan ~ req:", req.body);
-
   try {
     // Fetch employer details
     const user = await db.Nguoidung.findOne({
       where: { id: req.body.employer.MaND },
     });
-    console.log("🚀 ~ updateTrangthaiServiceAnorGiahan ~ user:", user);
 
     if (!user || !user.email) {
       return res.status(404).json({
@@ -82,29 +97,16 @@ const updateTrangthaiServiceAnorGiahan = async (req, res) => {
 
     // Configure nodemailer
     if (!process.env.email || !process.env.password) {
-      console.error("Missing email configuration in environment variables.");
       return res.status(500).json({
         code: 1,
         message: "Cấu hình email không đầy đủ.",
       });
     }
 
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: process.env.email,
-        pass: process.env.password,
-      },
-    });
-
     // Determine the email content based on status
     const isExtending = req.body.trangthai === "Đã duyệt";
-    console.log(
-      "🚀 ~ updateTrangthaiServiceAnorGiahan ~ isExtending:",
-      isExtending
-    );
-    const mailOptions = {
-      from: process.env.email,
+
+    applicationEvents.emit("sendEmail", {
       to: user.email,
       subject: "Thông báo trạng thái bài đăng",
       html: `
@@ -114,16 +116,12 @@ const updateTrangthaiServiceAnorGiahan = async (req, res) => {
         ${
           isExtending
             ? `<p>Thời hạn mới: ${new Date(
-                req.body.ngayHetHan
+                response.data.Ngayhethan
               ).toLocaleDateString("vi-VN")}</p>`
             : `<p>Bạn có thể gia hạn bài đăng bất cứ lúc nào.</p>`
         }
       `,
-    };
-
-    // Send the email
-    await transporter.sendMail(mailOptions);
-
+    });
     // Return the response
     return res.status(response.status).json({
       code: response.code,
@@ -131,7 +129,6 @@ const updateTrangthaiServiceAnorGiahan = async (req, res) => {
       data: response.data,
     });
   } catch (err) {
-    console.error("Error in updateTrangthaiServiceAnorGiahan:", err.message);
     return res.status(500).json({
       code: 1,
       message: "Đã xảy ra lỗi trong quá trình xử lý.",
@@ -143,22 +140,13 @@ const updateTrangthaiServiceAnorGiahan = async (req, res) => {
 const updateTrangthaiServicetc = async (req, res) => {
   try {
     const { post, reason } = req.body;
-    console.log("🚀 ~ updateTrangthaiServicetc ~ req.body:", req.body);
-    console.log("🚀 ~ updateTrangthaiServicetc ~ reason:", reason);
-    console.log("🚀 ~ updateTrangthaiServicetc ~ post:", post);
+
     const data = await db.Nguoidung.findOne({
       where: { id: post.employer.MaND },
     });
     var response = await jbpservice.updateTrangthaiServicetc(post);
-    const transporter = nodemailer.createTransport({
-      service: "Gmail", // Or your preferred email provider
-      auth: {
-        user: process.env.email, // Your email
-        pass: process.env.password, // Your email password
-      },
-    });
-    const mailOptions = {
-      from: process.env.email,
+
+    applicationEvents.emit("sendEmail", {
       to: data.email,
       subject: "Xác minh email",
       html: `<p>Chào ${data.username},</p>
@@ -166,8 +154,8 @@ const updateTrangthaiServicetc = async (req, res) => {
              <p> ${reason}</p>
              
              `,
-    };
-    await transporter.sendMail(mailOptions);
+    });
+
     return res.status(response.status).json({
       code: response.code,
       message: response.message,
@@ -199,7 +187,7 @@ const getTintdByID = async (req, res) => {
 };
 const searchJobPostsByKeyword = async (req, res) => {
   const keyword = req.query.keyword;
-  console.log("jdjsa", keyword);
+
   if (!keyword) {
     return res.status(400).json({ message: "Keyword is required" });
   }
@@ -256,7 +244,7 @@ const getTtdntdId = async (req, res) => {
       where: { MaND: req.query.id },
     });
     const data = await jbpservice.getAllTintdcdByEmployer(employer.id);
-    console.log("🚀 ~ getTtdById ~ req:", req.query.id);
+
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
@@ -265,7 +253,7 @@ const getTtdntdId = async (req, res) => {
 const getTtdntdIddetail = async (req, res) => {
   try {
     const data = await jbpservice.getAllTintdcdByEmployer(req.query.id);
-    console.log("🚀 ~ getTtdById ~ req:", req.query.id);
+
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
@@ -274,8 +262,7 @@ const getTtdntdIddetail = async (req, res) => {
 const updateTtd = async (req, res) => {
   try {
     const data = await jbpservice.updateTtd(req.body);
-    console.log("🚀 ~ updateTtd ~ data:", data);
-    console.log("🚀 ~ updateTtd ~ req.body:", req.body);
+
     return res
       .status(data.status)
       .json({ code: data.code, message: data.message, data: data.data });
@@ -296,19 +283,14 @@ const addJobPostWithDetails = async (req, res) => {
       Ma,
       noibatnline,
     } = req.body;
-    console.log("🚀 ~ addJobPostWithDetails ~ req.body:", req.body);
 
     const employerId = parseInt(Ma); // Thay bằng logic để lấy ID của nhà tuyển dụng từ `req` hoặc `token`
-
-    console.log("🚀 ~ addJobPostWithDetails ~ employerId:", employerId);
-    console.log("🚀 ~ addJobPostWithDetails ~ employerId:", employerId);
-    console.log("🚀 ~ Creating Job Post with Title:", tieude);
 
     // Kiểm tra số lượng đăng tuyển
     const employer = await db.Nhatuyendung.findOne({
       where: { MaND: employerId },
     });
-    console.log("🚀 ~ addJobPostWithDetails ~ employer:", employer);
+
     if (!employer) {
       return res.status(404).json({ message: "Employer not found." });
     }
@@ -324,7 +306,6 @@ const addJobPostWithDetails = async (req, res) => {
         MaNTD: employer.id,
       },
     });
-    console.log("🚀 ~ addJobPostWithDetails ~ existingPost:", existingPost);
 
     if (existingPost) {
       return res.status(400).json({
@@ -344,7 +325,6 @@ const addJobPostWithDetails = async (req, res) => {
       kinhNghiem,
       noibat: noibatnline,
     });
-    console.log("🚀 ~ addJobPostWithDetails ~ newJobPost:", newJobPost);
 
     if (noibatnline === false) {
       await employer.update({
@@ -355,20 +335,18 @@ const addJobPostWithDetails = async (req, res) => {
         Soluongnoibat: employer.Soluongnoibat - 1,
       });
     }
-    console.log("🚀 ~ Updated employer's job posting count.");
 
     // Validate and process skills
     const validSkills = Array.isArray(Kynang)
       ? Kynang.filter((id) => id != null)
       : [];
-    console.log("🚀 ~ Valid Skills:", validSkills);
+
     if (validSkills.length > 0) {
       const jobSkillLinks = validSkills.map((skillId) => ({
         MaTTD: newJobPost.id,
         MaKN: skillId,
       }));
       await db.Kynangtuyendung.bulkCreate(jobSkillLinks);
-      console.log("🚀 ~ Successfully inserted skills:", jobSkillLinks);
     } else {
       console.warn("⚠️ ~ No valid skills provided. Skipping skill insertion.");
     }
@@ -377,14 +355,12 @@ const addJobPostWithDetails = async (req, res) => {
     const validLevels = Array.isArray(Capbac)
       ? Capbac.filter((id) => id != null)
       : [];
-    console.log("🚀 ~ Valid Levels after filter:", validLevels);
     if (validLevels.length > 0) {
       const jobLevelLinks = validLevels.map((levelId) => ({
         MaTTD: newJobPost.id,
         MaCB: levelId,
       }));
       await db.Vitrituyendung.bulkCreate(jobLevelLinks);
-      console.log("🚀 ~ Successfully inserted levels:", jobLevelLinks);
     } else {
       console.warn("⚠️ ~ No valid levels provided. Skipping level insertion.");
     }

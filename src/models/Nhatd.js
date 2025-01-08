@@ -13,14 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "MaNTD",
         as: "jobPosts",
       });
-
-      // Một Employer có nhiều SaveJobs
-      // Employers.hasMany(models.SaveJob, {
-      //   foreignKey: 'employers_id',
-      //   as: 'saveJobs',
-      // });
-
-      // Một Employer thuộc về một User
       Nhatuyendung.belongsTo(models.Nguoidung, {
         foreignKey: "MaND",
         as: "user",

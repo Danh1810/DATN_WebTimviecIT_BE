@@ -56,6 +56,17 @@ const updateHoso = async (data) => {
     return { status: 500, code: -1, message: "error", data: "" };
   }
 };
+const updatettHoso = async (data) => {
+  console.log(data);
+  const res = await db.Hosocanhan.update(data, {
+    where: { id: data.id },
+  });
+  if (res) {
+    return { status: 200, code: 0, message: "success", data: res };
+  } else {
+    return { status: 500, code: -1, message: "error", data: "" };
+  }
+};
 
 const XoaHoso = async (id) => {
   const res = await db.Hosocanhan.destroy({
@@ -91,4 +102,5 @@ module.exports = {
   updateHoso,
   XoaHoso,
   getAllHosoID,
+  updatettHoso,
 };

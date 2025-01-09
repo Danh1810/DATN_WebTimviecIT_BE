@@ -38,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: "Đang hoạt động",
       },
+      timkiem: {
+        type: DataTypes.BOOLEAN, // Ví dụ: 1-2 năm, 3-5 năm
+        allowNull: true,
+        defaultValue: false, // Set the default value to false
+      },
     },
     {
       sequelize,

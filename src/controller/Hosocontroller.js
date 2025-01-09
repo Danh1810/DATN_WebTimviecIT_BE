@@ -163,6 +163,29 @@ const updateHoso = async (req, res) => {
     });
   }
 };
+const updatettHoso = async (req, res) => {
+  try {
+    const { id, timkiem } = req.body;
+    console.log("🚀 ~ createHoso ~ req.body:", req.body);
+    const fileHoso = req.fileUrl;
+
+    const data = await HosoService.updatettHoso({
+      id,
+      timkiem,
+    });
+    res.status(data.status).json({
+      code: data.code,
+      message: data.message,
+      data: data.data,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message || "Internal Server Error",
+      code: -1,
+      data: "",
+    });
+  }
+};
 
 const XoaHoso = async (req, res) => {
   try {
@@ -274,4 +297,5 @@ module.exports = {
   XoaHoso,
   getHosoById,
   getHosoByhs,
+  updatettHoso,
 };

@@ -3,7 +3,7 @@ const router = express.Router();
 const LuucongviecController = require("../controller/Lcvcontroller");
 
 // Get all saved jobs
-router.get("/", LuucongviecController.getSavedJobs);
+router.get("/d", LuucongviecController.getSavedJobs);
 
 // Get a single saved job by ID
 router.get("/", LuucongviecController.getSavedJobById);

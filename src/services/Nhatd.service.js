@@ -17,7 +17,6 @@ const getAllNtdtka = async () => {
       {
         model: db.Tintuyendung,
         as: "jobPosts", // Alias trong association
-        attributes: ["id", "tieude", "mota", "mucluong", "Ngayhethan"], // Chọn cột cần thiết
       },
       {
         model: db.Nguoidung,
@@ -39,7 +38,7 @@ const getAllNtdtka = async () => {
         ],
       },
     ],
-    attributes: ["id", "ten", "email", "sdt", "diachi", "trangthai"], // Chọn cột từ Nhatuyendung
+    attributes: ["id", "ten", "email", "sdt", "diachi", "logo", "trangthai"], // Chọn cột từ Nhatuyendung
   });
   console.log("🚀 ~ getAllNtd ~ res:", res);
   if (res) {

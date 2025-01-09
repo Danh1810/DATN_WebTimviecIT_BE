@@ -25,6 +25,7 @@ const Ungtuyenroute = require("../routes/Ungtuyen.js");
 const Vitrituyendungroute = require("../routes/Vitriungtuyen.js");
 const LuucongviecController = require("./luucongviec.js");
 const hosoroute = require("./hoso.js");
+const luuhoso = require("./luuhoso.js");
 
 const router = Router();
 const initApiRoutes = (app) => {
@@ -112,6 +113,7 @@ const initApiRoutes = (app) => {
   router.use("/Ut", Ungtuyenroute);
   router.use("/vtri", Vitrituyendungroute);
   router.use("/lcv", LuucongviecController);
+  router.use("/luuhs", luuhoso);
   router.use("/hoso", hosoroute);
   router.post("/create_payment_url", async (req, res) => {
     try {

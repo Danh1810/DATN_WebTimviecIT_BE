@@ -1,9 +1,55 @@
 const phanHoiService = require("../services/Phanhoi");
 const db = require("../models/index");
 const nodemailer = require("nodemailer");
+const EventEmitter = require("events");
+const applicationEvents = new EventEmitter();
 const env = require("dotenv");
 env.config();
+applicationEvents.on("sendPhanHoiEmail", async (data) => {
+  const { userEmail, userName, jobTitle, noiDung, filedinhkem } = data;
 
+  const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: process.env.email,
+      pass: process.env.password,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.email,
+    to: userEmail,
+    subject: "Phản hồi đơn ứng tuyển",
+    html: `
+      <p>Chào ${userName},</p>
+      <p>Bạn có phản hồi mới cho đơn ứng tuyển vị trí <strong>${jobTitle}</strong></p>
+      <p>Nội dung phản hồi:</p>
+      <p>${noiDung}</p>
+      ${
+        filedinhkem
+          ? `<p>File đính kèm: <a href="${filedinhkem}">${filedinhkem}</a></p>`
+          : ""
+      }
+      <p>Trân trọng,</p>
+      <p>Đội ngũ tuyển dụng</p>
+    `,
+    ...(filedinhkem && {
+      attachments: [
+        {
+          filename: "filedinhkem.pdf",
+          path: filedinhkem,
+        },
+      ],
+    }),
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Email phản hồi đã được gửi thành công.");
+  } catch (error) {
+    console.error("Lỗi khi gửi email phản hồi:", error);
+  }
+});
 const getAllPhanHoi = async (req, res) => {
   try {
     const result = await phanHoiService.getAllPhanHoi();
@@ -92,32 +138,13 @@ const createPhanHoi = async (req, res) => {
     const jobTitle = ungtuyen.UT_TTD.tieude;
 
     // Configure email transport
-    const transporter = nodemailer.createTransport({
-      service: "Gmail",
-      auth: {
-        user: process.env.email,
-        pass: process.env.password,
-      },
+    applicationEvents.emit("sendPhanHoiEmail", {
+      userEmail,
+      userName,
+      jobTitle,
+      noiDung,
+      filedinhkem,
     });
-
-    // Create email content
-    const mailOptions = {
-      from: process.env.email,
-      to: userEmail,
-      subject: "Phản hồi đơn ứng tuyển",
-      html: `
-        <p>Chào ${userName},</p>
-        <p>Bạn có phản hồi mới cho đơn ứng tuyển vị trí <strong>${jobTitle}</strong></p>
-        <p>Nội dung phản hồi:</p>
-        <p>${noiDung}</p>
-        ${filedinhkem ? `<p>File đính kèm: ${filedinhkem}</p>` : ""}
-        <p>Trân trọng,</p>
-        <p>Đội ngũ tuyển dụng</p>
-      `,
-    };
-
-    // Send email
-    await transporter.sendMail(mailOptions);
 
     // Create feedback record
     const result = await phanHoiService.createPhanHoi({

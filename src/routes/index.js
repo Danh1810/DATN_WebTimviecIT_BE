@@ -6,7 +6,8 @@ const request = require("request");
 const moment = require("moment");
 const dayjs = require("dayjs");
 const db = require("../models/index.js");
-
+const env = require("dotenv");
+env.config();
 const { checkUserJWT, checkUserPermission } = require("../middleware/JWT.js");
 const authController = require("../controller/Authcontroller.js");
 const emCtl = require("../controller/NhatdController.js");
@@ -160,7 +161,7 @@ const initApiRoutes = (app) => {
       let tmnCode = "6C7KFJWF";
       let secretKey = "0VMTHOONRW9VW6T4QAT5GI1AXJDDOOR2";
       let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-      let returnUrl = `http://localhost:3000/ntd/thanhcong/${newPayment.id}`;
+      let returnUrl = `${process.env.URL}/ntd/thanhcong/${newPayment.id}`;
       let orderId = moment(date).format("DDHHmmss");
       let amount = req.body.sotien;
       let bankCode = "";

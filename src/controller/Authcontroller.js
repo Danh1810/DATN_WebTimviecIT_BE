@@ -6,65 +6,77 @@ const db = require("../models/index.js");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const EventEmitter = require("events");
+const applicationEvents = new EventEmitter();
 const env = require("dotenv");
 env.config();
-const register = async (req, res) => {
+applicationEvents.on("sendVerificationEmail", async (userData) => {
   try {
-    console.log("🚀 ~ register ~ req.body:", req.body);
-
-    // Check if the user already exists
-    const existingUser = await db.Nguoidung.findOne({
-      where: { [Op.or]: [{ email: req.body.email }] },
-    });
-    console.log("🚀 ~ register ~ existingUser:", existingUser);
-
-    if (existingUser) {
-      return res.status(409).json({ error: "Người dùng đã tồn tại" });
-    }
-
-    // Hash the password
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
-
-    // Generate email verification token
-    const verificationToken = jwt.sign(
-      { email: req.body.email },
-      process.env.JWT_SECRET, // Use a secret key from your environment variables
-      { expiresIn: "1h" } // Token expires in 1 hour
-    );
-    console.log("🚀 ~ register ~ verificationToken:", verificationToken);
-
-    // Create a new user
-    const newUser = await db.Nguoidung.create({
-      username: req.body.username,
-      email: req.body.email,
-      password: hash,
-      MaQuyen: 3,
-      isVerified: false, // Add a field for email verification status
-      verificationToken: verificationToken, // Store the verification token in the database
-    });
-
-    // Send verification email
     const transporter = nodemailer.createTransport({
-      service: "Gmail", // Or your preferred email provider
+      service: "Gmail",
       auth: {
-        user: process.env.email, // Your email
-        pass: process.env.password, // Your email password
+        user: process.env.email, // Email của bạn
+        pass: process.env.password, // Mật khẩu email
       },
     });
 
-    const verificationUrl = `${process.env.URL}/verify?token=${verificationToken}`;
+    const verificationUrl = `${process.env.URL}/verify?token=${userData.token}`;
     const mailOptions = {
       from: process.env.email,
-      to: req.body.email,
+      to: userData.email,
       subject: "Xác minh email",
-      html: `<p>Chào ${req.body.username},</p>
+      html: `<p>Chào ${userData.username},</p>
              <p>Vui lòng xác minh email của bạn bằng cách nhấp vào liên kết bên dưới:</p>
              <a href="${verificationUrl}">Xác minh email</a>
              <p>Liên kết này sẽ hết hạn sau 1 giờ.</p>`,
     };
 
     await transporter.sendMail(mailOptions);
+    console.log(`📧 Đã gửi email xác minh đến ${userData.email}`);
+  } catch (error) {
+    console.error("❌ Lỗi khi gửi email xác minh:", error);
+  }
+});
+const register = async (req, res) => {
+  try {
+    console.log("🚀 ~ register ~ req.body:", req.body);
+
+    // Kiểm tra người dùng đã tồn tại
+    const existingUser = await db.Nguoidung.findOne({
+      where: { [Op.or]: [{ email: req.body.email }] },
+    });
+
+    if (existingUser) {
+      return res.status(409).json({ error: "Người dùng đã tồn tại" });
+    }
+
+    // Hash mật khẩu
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
+
+    // Tạo token xác minh
+    const verificationToken = jwt.sign(
+      { email: req.body.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    // Tạo người dùng mới
+    const newUser = await db.Nguoidung.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: hash,
+      MaQuyen: 3,
+      isVerified: false,
+      verificationToken: verificationToken,
+    });
+
+    // Kích hoạt sự kiện gửi email
+    applicationEvents.emit("sendVerificationEmail", {
+      username: req.body.username,
+      email: req.body.email,
+      token: verificationToken,
+    });
 
     return res
       .status(200)
@@ -76,39 +88,38 @@ const register = async (req, res) => {
 };
 const registerNTD = async (req, res) => {
   try {
-    console.log("🚀 ~ register ~ req.body:", req.body);
+    console.log("🚀 ~ registerNTD ~ req.body:", req.body);
 
-    // Check if the user already exists
+    // Kiểm tra người dùng đã tồn tại
     const existingUser = await db.Nguoidung.findOne({
       where: { [Op.or]: [{ email: req.body.email }] },
     });
-    console.log("🚀 ~ register ~ existingUser:", existingUser);
 
     if (existingUser) {
       return res.status(409).json({ error: "Người dùng đã tồn tại" });
     }
 
-    // Hash the password
+    // Hash mật khẩu
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
 
-    // Generate email verification token
+    // Tạo token xác minh
     const verificationToken = jwt.sign(
       { email: req.body.email },
-      process.env.JWT_SECRET, // Use a secret key from your environment variables
-      { expiresIn: "1h" } // Token expires in 1 hour
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
     );
-    console.log("🚀 ~ register ~ verificationToken:", verificationToken);
 
-    // Create a new user
+    // Tạo người dùng mới
     const newUser = await db.Nguoidung.create({
       username: req.body.username,
       email: req.body.email,
       password: hash,
       MaQuyen: 2,
-      isVerified: false, // Add a field for email verification status
-      verificationToken: verificationToken, // Store the verification token in the database
+      isVerified: false,
+      verificationToken: verificationToken,
     });
+
     const employer = await db.Nhatuyendung.create({
       ten: req.body.ten,
       email: req.body.emailNTD,
@@ -119,27 +130,12 @@ const registerNTD = async (req, res) => {
       MaND: newUser.id,
     });
 
-    // Send verification email
-    const transporter = nodemailer.createTransport({
-      service: "Gmail", // Or your preferred email provider
-      auth: {
-        user: process.env.email, // Your email
-        pass: process.env.password, // Your email password
-      },
+    // Kích hoạt sự kiện gửi email
+    applicationEvents.emit("sendVerificationEmail", {
+      username: req.body.username,
+      email: req.body.email,
+      token: verificationToken,
     });
-
-    const verificationUrl = `${process.env.URL}/verify?token=${verificationToken}`;
-    const mailOptions = {
-      from: process.env.email,
-      to: req.body.email,
-      subject: "Xác minh email",
-      html: `<p>Chào ${req.body.username},</p>
-             <p>Vui lòng xác minh email của bạn bằng cách nhấp vào liên kết bên dưới:</p>
-             <a href="${verificationUrl}">Xác minh email</a>
-             <p>Liên kết này sẽ hết hạn sau 1 giờ.</p>`,
-    };
-
-    await transporter.sendMail(mailOptions);
 
     return res
       .status(200)

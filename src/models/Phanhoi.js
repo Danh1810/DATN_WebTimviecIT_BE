@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       noiDung: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT("long"),
         allowNull: true,
       },
       ngayPhanHoi: {
@@ -32,10 +32,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       trangThaiPhanHoi: {
         type: DataTypes.STRING,
-        allowNull: true,
-      },
-      trangThaiPhanHoi: {
-        type: DataTypes.TEXT,
         allowNull: true,
       },
       filedinhkem: {

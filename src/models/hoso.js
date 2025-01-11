@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       trinhDoHocVan: DataTypes.STRING,
       Mucluongmongmuon: DataTypes.DECIMAL(10, 2),
       hinhThuclamviec: DataTypes.TEXT,
-      fileHoso: DataTypes.STRING,
+      fileHoso: DataTypes.TEXT("long"),
       ngayCapNhat: {
         type: DataTypes.DATE, // Kiểu dữ liệu DATE
         defaultValue: DataTypes.NOW, // Giá trị mặc định là ngày/giờ hiện tại

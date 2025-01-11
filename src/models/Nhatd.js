@@ -54,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       logo: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT("long"),
         allowNull: true,
       },
       Soluongdangbai: {

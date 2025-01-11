@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Nguoitimviec.init(
     {
-      anhDaiDien: DataTypes.STRING,
+      anhDaiDien: DataTypes.TEXT("long"),
       hoVaTen: DataTypes.STRING,
       ngaySinh: DataTypes.DATE,
       thanhPho: DataTypes.STRING,

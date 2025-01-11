@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   Ungtuyen.init(
     {
       file: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT("long"),
         allowNull: true,
       },
       trangthai: {

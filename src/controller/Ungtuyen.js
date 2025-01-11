@@ -120,6 +120,27 @@ const addUT = async (req, res) => {
       NgayNop: new Date(),
     };
 
+    const hoso = await db.Hosocanhan.findOne({ where: { id: MaHS } });
+
+    if (!hoso) {
+      return res.status(404).json({ message: "Hồ sơ không tồn tại" });
+    }
+
+    // Tìm người tìm việc liên quan đến hồ sơ này
+    const nguoitimviec = await db.Nguoitimviec.findOne({
+      where: { id: hoso.NguoitimviecId },
+    });
+
+    if (!nguoitimviec) {
+      return res.status(404).json({ message: "Người tìm việc không tồn tại" });
+    }
+
+    // Giảm số lượng nộp hồ sơ đi 1 (nếu lớn hơn 0)
+    if (nguoitimviec.Soluongnophoso > 0) {
+      nguoitimviec.Soluongnophoso -= 1;
+      await nguoitimviec.save();
+    }
+
     // Lưu thông tin đơn ứng tuyển vào database
     await UTService.createUT(newApplication);
 
